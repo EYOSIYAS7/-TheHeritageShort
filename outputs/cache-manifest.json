@@ -14,6 +14,11 @@
     "path": "outputs/script/tomorrow-1-0d28989d3c51.json",
     "stage": "script"
   },
+  "0da6fade42a366c95419d7a48a70b50a879e062b92a0f3567d681a5ac7f778c4": {
+    "item": "closing-03",
+    "path": "outputs/narration/closing-03-enceladus-0da6fade42a3.wav",
+    "stage": "narration"
+  },
   "16151abe18381de8bee6974bfc12f80cc6649ee283e64e9f3b7e6fb4c3aade1d": {
     "item": "closing-01",
     "path": "outputs/narration/closing-01-16151abe1838.wav",
@@ -24,9 +29,19 @@
     "path": "outputs/narration/closing-03-1b79db7fb82f.wav",
     "stage": "narration"
   },
+  "1cd72d3d91054c7d72486daa504ea351b3be6f85100ecdbb999f238cb45ba9e4": {
+    "item": "closing-02",
+    "path": "outputs/narration/closing-02-enceladus-1cd72d3d9105.wav",
+    "stage": "narration"
+  },
   "1fa78edc67f7e29f58096f513cc58187abe195aace9c183c12d70235bef639b1": {
     "item": "closing-06",
     "path": "outputs/narration/closing-06-1fa78edc67f7.wav",
+    "stage": "narration"
+  },
+  "33e84b8875b5576e3c298832a5f05f04a14f63e558834eeb6d295d34d12c68a6": {
+    "item": "tomorrow-1",
+    "path": "outputs/narration/tomorrow-1-enceladus-33e84b8875b5.wav",
     "stage": "narration"
   },
   "38086518423307d5513ba46e766193b11a62bb8c9682609156546864fbf65b84": {
@@ -39,6 +54,11 @@
     "path": "outputs/narration/closing-06-3b5554f5deaf.wav",
     "stage": "narration"
   },
+  "3fda18b1151af91eee93f708dd83f1b898f3430a0dbde0a38e67482c22503515": {
+    "item": "closing-04",
+    "path": "outputs/narration/closing-04-enceladus-3fda18b1151a.wav",
+    "stage": "narration"
+  },
   "414ba9215f8f778ad04a01d6d368cc7a7bcea159d58909509fa284caf612da47": {
     "item": "closing-08",
     "path": "outputs/narration/closing-08-414ba9215f8f.wav",
@@ -47,6 +67,11 @@
   "46aad99d9248a11423a7eec0183b7d5fa1a4547ea817b222c9fd4daf23945243": {
     "item": "hospital",
     "path": "outputs/narration/hospital-46aad99d9248.wav",
+    "stage": "narration"
+  },
+  "4b7c221f6363999dc2ba0142c014c9bd8680d7a10d2d4e1221f020c70ef7b4d0": {
+    "item": "hospital",
+    "path": "outputs/narration/hospital-enceladus-4b7c221f6363.wav",
     "stage": "narration"
   },
   "54802c5e17c7fd01fffbc2a6d7e862d916cb7318d88ffbaf575f06ac361d295e": {
@@ -79,6 +104,11 @@
     "path": "outputs/narration/closing-07-75fe34901e2c.wav",
     "stage": "narration"
   },
+  "77e9d9f32c89b3d76a88c0b1a361ac8bf6d6d56d66dceada9d88c747eeb9928f": {
+    "item": "closing-06",
+    "path": "outputs/narration/closing-06-enceladus-77e9d9f32c89.wav",
+    "stage": "narration"
+  },
   "7c32e77f840a2622cf7937406b2c5128156e6a3039a76259e4c1b6dd1ae46586": {
     "item": "hospital",
     "path": "outputs/narration/hospital-7c32e77f840a.wav",
@@ -93,6 +123,11 @@
     "item": "hospital",
     "path": "outputs/script/hospital-90dc9fb105f4.json",
     "stage": "script"
+  },
+  "94b37e8b7e21f60e331e32be04f62588e2b88b389707bda94988a1c7da401f86": {
+    "item": "closing-01",
+    "path": "outputs/narration/closing-01-enceladus-94b37e8b7e21.wav",
+    "stage": "narration"
   },
   "984bc0a7ca559828a59af461fc139625f2da87f4df16d2b04a2477da2925d79e": {
     "item": "closing-05@Iapetus",
@@ -168,6 +203,11 @@
     "item": "closing-10",
     "path": "outputs/script/closing-10-d66586b8a320.json",
     "stage": "script"
+  },
+  "d818e3aabc28436218033f36ec88452370695370304b95aff242d8ea057e1ab4": {
+    "item": "tomorrow-2",
+    "path": "outputs/narration/tomorrow-2-enceladus-d818e3aabc28.wav",
+    "stage": "narration"
   },
   "e07939182dd0281b61c8aeb71711e7e9f6e88c041949c90d51d6f648f766dbde": {
     "item": "closing-05@Charon",
