@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
-from pipeline.adapters import GeminiSpeech, GeminiText
+from pipeline.adapters import CloudflareImage, GeminiSpeech, GeminiText
 from pipeline.env import load_env
 
 
@@ -36,9 +36,10 @@ class TextProvider(Protocol):
 
 
 class ImageProvider(Protocol):
-    """Text (plus optional reference images) to one image file (PNG)."""
+    """Text (plus optional reference images) to one image file."""
 
     model: str
+    available: bool  # False without credentials: only cached images can be used
 
     def generate(self, prompt: str, *, seed: int, width: int, height: int, out_path: Path,
                  references: tuple[Path, ...] = ()) -> None: ...
@@ -62,6 +63,7 @@ TEXT_MODELS = ("gemini-3.5-flash", "gemini-3.8-flash")
 @dataclass(frozen=True)
 class Providers:
     speech: SpeechProvider
+    image: ImageProvider
     text: tuple[TextProvider, ...] = ()  # tried in order; empty means no drafting (no key)
 
 
@@ -75,4 +77,5 @@ def default_providers(root: Path) -> Providers:
     env = load_env(root / ".env")
     key = env.get("GEMINI_API_KEY")
     text: tuple[TextProvider, ...] = tuple(GeminiText(key, model) for model in TEXT_MODELS) if key else ()
-    return Providers(speech=GeminiSpeech(key or ""), text=text)
+    image = CloudflareImage(env.get("CLOUDFLARE_ACCOUNT_ID", ""), env.get("CLOUDFLARE_API_TOKEN", ""))
+    return Providers(speech=GeminiSpeech(key or ""), image=image, text=text)

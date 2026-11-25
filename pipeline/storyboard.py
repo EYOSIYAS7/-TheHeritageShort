@@ -30,6 +30,19 @@ class StoryboardError(Exception):
 
 
 @dataclass(frozen=True)
+class View:
+    """Centre of the view (fractions of the keyframe) and zoom (1 = the whole frame for that aspect ratio)."""
+
+    x: float
+    y: float
+    zoom: float
+
+
+Aspect = Literal["16:9", "9:16"]
+ASPECTS: tuple[Aspect, ...] = ("16:9", "9:16")
+
+
+@dataclass(frozen=True)
 class Shot:
     id: int
     act: str
@@ -39,6 +52,8 @@ class Shot:
     motion_prompt: str
     seed: int
     grade: Literal["copper", "gold"]
+    characters: list[str]
+    pan: dict[Aspect, tuple[View, View]]  # start and end view per aspect ratio
 
 
 @dataclass(frozen=True)
@@ -63,6 +78,20 @@ class Narrator:
 
 
 @dataclass(frozen=True)
+class Character:
+    description: str
+    seed: int
+
+
+@dataclass(frozen=True)
+class Style:
+    words: str
+    character_sheet: str
+    reference_images: bool
+    grades: dict[str, str]
+
+
+@dataclass(frozen=True)
 class Script:
     """How the script stage drafts the Amharic: the translation instruction and seed."""
 
@@ -76,6 +105,8 @@ class Storyboard:
     narration: list[Line]
     script: Script
     narrator: Narrator
+    style: Style
+    characters: dict[str, Character]
     saying_card_s: float
     end_card_s: float
     music_volume: list[tuple[float, float]]  # (time s, gain) points; the gain is linear between them
@@ -212,6 +243,8 @@ def _to_storyboard(raw: dict[str, Any]) -> Storyboard:
             motion_prompt=s["motion_prompt"],
             seed=s["seed"],
             grade=s["grade"],
+            characters=s["characters"],
+            pan={aspect: (View(**s["pan"][aspect]["start"]), View(**s["pan"][aspect]["end"])) for aspect in ASPECTS},
         )
         for s in raw["shots"]
     ]
@@ -233,6 +266,9 @@ def _to_storyboard(raw: dict[str, Any]) -> Storyboard:
         shots=shots,
         narration=narration,
         script=Script(instruction=raw["script"]["instruction"], seed=raw["script"]["seed"]),
+        style=Style(words=raw["style"]["words"], character_sheet=raw["style"]["character_sheet"],
+                    reference_images=raw["style"]["reference_images"], grades=raw["style"]["grades"]),
+        characters={name: Character(c["description"], c["seed"]) for name, c in raw["characters"].items()},
         narrator=Narrator(voice=narrator["voice"], style=narrator["style"], seed=narrator["seed"],
                           trial_line=narrator["voice_trial"]["line"], trial_voices=narrator["voice_trial"]["voices"]),
         saying_card_s=float(raw["saying"]["duration_s"]),

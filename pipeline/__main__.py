@@ -14,8 +14,8 @@ from pipeline.storyboard import StoryboardError
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m pipeline")
-    parser.add_argument("target", choices=["film", "radio-cut", "review", "voices"],
-                        help="build the film or the radio cut, list unreviewed Amharic, or run the voice trial")
+    parser.add_argument("target", choices=["film", "rough-cut", "radio-cut", "review", "voices"],
+                        help="build a cut, list unreviewed Amharic, or run the voice trial")
     parser.add_argument("--root", type=Path, default=Path.cwd(), help="project directory (default: current)")
     args = parser.parse_args(argv)
 
@@ -28,11 +28,15 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"{voice}: {path.relative_to(root)}")
             print("Listen, then set narrator.voice and narrator.voice_reason in storyboard.json.")
             return 0
-        result = run.film(root, default_providers(root), cut="radio-cut" if args.target == "radio-cut" else "film")
+        cut: run.Cut = "radio-cut" if args.target == "radio-cut" else "rough-cut" if args.target == "rough-cut" else "film"
+        result = run.film(root, default_providers(root), cut=cut)
     except StoryboardError as e:
         print(e, file=sys.stderr)
         return 2
-    print(f"film: {result.video} ({result.duration_s:g} s)")
+    for aspect, video in result.videos.items():
+        print(f"{aspect}: {video.relative_to(root)} ({result.duration_s:g} s)")
+    if result.missing_keyframes:
+        print(f"No keyframe for shot(s) {result.missing_keyframes} (no Cloudflare keys): labelled placeholders.")
     if result.drafted:
         print(f"Amharic drafted for {len(result.drafted)} line(s); review them with `make review`.")
     if result.undrafted:

@@ -14,6 +14,8 @@
   },
   "style": {
     "words": "warm illustrated film still, painterly brushwork, soft film grain, gentle diffused light, rich textured fabrics, quiet intimate composition, subject in the central third of a 16:9 frame",
+    "character_sheet": "character reference image: a single subject alone, centred, full view, on a plain light neutral background, soft even light, nothing else in frame",
+    "reference_images": true,
     "grades": {
       "copper": "muted copper and grey-green palette, dull cool light, faded colours, only a faint warm glow near the coffee corner",
       "gold": "full warm gold palette, honeyed morning sunlight, glowing amber highlights, soft warm shadows"

@@ -24,6 +24,11 @@
     "path": "outputs/narration/tomorrow-1-enceladus-101cda72cbe8.wav",
     "stage": "narration"
   },
+  "144afa333ada5576cd65133f51e22c5bc33d4cbb02510cb6e6cef0c0c689b283": {
+    "item": "shot-06",
+    "path": "outputs/keyframes/shot-06-144afa333ada.jpg",
+    "stage": "keyframes"
+  },
   "16151abe18381de8bee6974bfc12f80cc6649ee283e64e9f3b7e6fb4c3aade1d": {
     "item": "closing-01",
     "path": "outputs/narration/closing-01-16151abe1838.wav",
@@ -39,10 +44,30 @@
     "path": "outputs/narration/closing-02-enceladus-1cd72d3d9105.wav",
     "stage": "narration"
   },
+  "1d24ba98bd46654822cfb8bed33447a17c2ad699dca5c7ac58db3d1258077095": {
+    "item": "shot-03",
+    "path": "outputs/keyframes/shot-03-1d24ba98bd46.jpg",
+    "stage": "keyframes"
+  },
   "1fa78edc67f7e29f58096f513cc58187abe195aace9c183c12d70235bef639b1": {
     "item": "closing-06",
     "path": "outputs/narration/closing-06-1fa78edc67f7.wav",
     "stage": "narration"
+  },
+  "20817dd1be8b29df0e45877e886aa8baf1f9b62478ad5d257670583680b50eb4": {
+    "item": "shot-10",
+    "path": "outputs/keyframes/shot-10-20817dd1be8b.jpg",
+    "stage": "keyframes"
+  },
+  "21fb8dea6000df7d9d1aac2fea1af1dda6239b6cc0f768235c8bf74826a6a54e": {
+    "item": "shot-05",
+    "path": "outputs/keyframes/shot-05-21fb8dea6000.jpg",
+    "stage": "keyframes"
+  },
+  "2260cdbe8d05ba4ab6ec2dc8af013477badf37cf3e39c88f4512b66239917109": {
+    "item": "son",
+    "path": "outputs/characters/son-2260cdbe8d05.jpg",
+    "stage": "characters"
   },
   "2617f0f8c31fb85ab7b241baaa66901ef5bbb8f9f82b5671637e3038cb4414b0": {
     "item": "closing-08",
@@ -88,6 +113,11 @@
     "item": "hospital",
     "path": "outputs/narration/hospital-enceladus-4b7c221f6363.wav",
     "stage": "narration"
+  },
+  "4ee1c3e6a161d0be59cb7eab31b4cfd4ecde33618510e97390533ca5039d665b": {
+    "item": "shot-11",
+    "path": "outputs/keyframes/shot-11-4ee1c3e6a161.jpg",
+    "stage": "keyframes"
   },
   "54802c5e17c7fd01fffbc2a6d7e862d916cb7318d88ffbaf575f06ac361d295e": {
     "item": "closing-09",
@@ -139,10 +169,25 @@
     "path": "outputs/narration/closing-09-enceladus-8b591fd3fefa.wav",
     "stage": "narration"
   },
+  "8e21fd68908c211a9d932a6fec27a1202ba661860da98ccf8a47145c4b4cd611": {
+    "item": "shot-04",
+    "path": "outputs/keyframes/shot-04-8e21fd68908c.jpg",
+    "stage": "keyframes"
+  },
+  "8e5de7a101ee8dc6e312ab2169b43b09a415725b9ac8326b1b71be1124878f3a": {
+    "item": "coffee_corner",
+    "path": "outputs/characters/coffee_corner-8e5de7a101ee.jpg",
+    "stage": "characters"
+  },
   "90dc9fb105f4f1881e4fc71fc40edb6a0bf829c50296cef4de5281c8bf141311": {
     "item": "hospital",
     "path": "outputs/script/hospital-90dc9fb105f4.json",
     "stage": "script"
+  },
+  "91b407c5e792adf528744904c415d8097a6aedcc950f19e06c6f6c40b7276972": {
+    "item": "father",
+    "path": "outputs/characters/father-91b407c5e792.jpg",
+    "stage": "characters"
   },
   "94b37e8b7e21f60e331e32be04f62588e2b88b389707bda94988a1c7da401f86": {
     "item": "closing-01",
@@ -153,6 +198,11 @@
     "item": "closing-05@Iapetus",
     "path": "outputs/narration/closing-05-iapetus-984bc0a7ca55.wav",
     "stage": "voices"
+  },
+  "9c4e06dd66142dafd8226cecb8943051dd8d0798821dc7be470029e409ae4c79": {
+    "item": "shot-07",
+    "path": "outputs/keyframes/shot-07-9c4e06dd6614.jpg",
+    "stage": "keyframes"
   },
   "9ec3dc8623df773c669e391f83be0c3a304f38f4ae986ed55355d22ca42b027e": {
     "item": "closing-09",
@@ -184,6 +234,11 @@
     "path": "outputs/script/closing-04-b1d5311d275f.json",
     "stage": "script"
   },
+  "b3b7cfd128732ab6f8aab744d0a2327d0b03d02aad9634b1f411485437f8f995": {
+    "item": "shot-08",
+    "path": "outputs/keyframes/shot-08-b3b7cfd12873.jpg",
+    "stage": "keyframes"
+  },
   "b70213dbe30212ee0637573d3e18b113b5cd0a58246ee0f13a45cf18dc908641": {
     "item": "closing-05",
     "path": "outputs/narration/closing-05-b70213dbe302.wav",
@@ -198,6 +253,11 @@
     "item": "closing-07",
     "path": "outputs/script/closing-07-bb04807a3106.json",
     "stage": "script"
+  },
+  "c21ea6c0fcf5f81b6171c78240e8417a27fa6941e6202283ae8d93c51173ba22": {
+    "item": "shot-02",
+    "path": "outputs/keyframes/shot-02-c21ea6c0fcf5.jpg",
+    "stage": "keyframes"
   },
   "c5664b144e99c0256c67b9b8b705afe9c4101e3b64132b4bfeaa419687b45b54": {
     "item": "closing-04",
@@ -218,6 +278,11 @@
     "item": "closing-06",
     "path": "outputs/script/closing-06-d035bfebc032.json",
     "stage": "script"
+  },
+  "d3e8055802af7d2a0f07f23275d00d19c26cc3054eb66b0b2bf43b1b0020ee0b": {
+    "item": "shot-01",
+    "path": "outputs/keyframes/shot-01-d3e8055802af.jpg",
+    "stage": "keyframes"
   },
   "d66586b8a3208bc56fff52d71396fce9a2989ed1fbff23a21612a55076f545f4": {
     "item": "closing-10",
@@ -249,6 +314,11 @@
     "path": "outputs/narration/closing-10-enceladus-e58defc3d882.wav",
     "stage": "narration"
   },
+  "e6ab094d4bdfc1c0a6c205e6d0ffc9c8999b463762c7d30789a6eebe1efa3533": {
+    "item": "shot-12",
+    "path": "outputs/keyframes/shot-12-e6ab094d4bdf.jpg",
+    "stage": "keyframes"
+  },
   "ecfdba04e1ddda226ddb5a254058b7ddc97d02c667faec8dd29a0a8c09b8c99e": {
     "item": "closing-09",
     "path": "outputs/narration/closing-09-ecfdba04e1dd.wav",
@@ -278,6 +348,11 @@
     "item": "closing-09",
     "path": "outputs/narration/closing-09-enceladus-f613076d5a1f.wav",
     "stage": "narration"
+  },
+  "feca2945aed0a6bbd3032aa03a792910b13a098f5a372b75a3a1621225e73a60": {
+    "item": "shot-09",
+    "path": "outputs/keyframes/shot-09-feca2945aed0.jpg",
+    "stage": "keyframes"
   },
   "fee6850f177a8ea147aa7b5fbdc8845b51df0bd571d2b867caf6a8306030b2c3": {
     "item": "closing-08",

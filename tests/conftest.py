@@ -40,7 +40,8 @@ TINY_STORYBOARD: dict[str, Any] = {
     "title": {"en": "Test", "am": "ሙከራ"},
     "saying": {"am": "በእጅ የያዙት ወርቅ እንደ መዳብ ይቆጠራል", "en": "Gold held in the hand is counted as copper.", "duration_s": 4},
     "end_card": {"text": "Made with AI.", "duration_s": 3},
-    "style": {"words": "painterly", "grades": {"copper": "muted copper", "gold": "warm gold"}},
+    "style": {"words": "painterly", "character_sheet": "reference image", "reference_images": True,
+              "grades": {"copper": "muted copper", "gold": "warm gold"}},
     "characters": {
         "father": {"description": "an old man", "seed": 1},
         "son": {"description": "a young man", "seed": 2},
@@ -100,6 +101,25 @@ class FakeText:
         return 0.0
 
 
+class FakeImage:
+    """Records every image prompt and writes a placeholder file (enough for the picture stages)."""
+
+    model = "fake-image"
+
+    def __init__(self, available: bool = True) -> None:
+        self.available = available
+        self.prompts: list[str] = []
+
+    def generate(self, prompt: str, *, seed: int, width: int, height: int, out_path: Path,
+                 references: tuple[Path, ...] = ()) -> None:
+        self.prompts.append(prompt)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_bytes(prompt.encode("utf-8"))
+
+    def cost_estimate_usd(self, prompt: str) -> float:
+        return 0.0
+
+
 class Project:
     def __init__(self, root: Path) -> None:
         self.root = root
@@ -130,8 +150,8 @@ def project(tmp_path: Path) -> Project:
     return Project(tmp_path)
 
 
-def providers(speech: FakeSpeech, text: FakeText | None = None) -> Providers:
-    return Providers(speech=speech, text=(text,) if text else ())
+def providers(speech: FakeSpeech, text: FakeText | None = None, image: FakeImage | None = None) -> Providers:
+    return Providers(speech=speech, image=image or FakeImage(available=False), text=(text,) if text else ())
 
 
 def no_sleep(_: float) -> None:

@@ -18,8 +18,10 @@ from pipeline import storyboard, timing
 from pipeline.cache import Cache
 from pipeline.providers import Providers
 from pipeline.runlog import RunLog
-from pipeline.storyboard import StoryboardError
-from pipeline.stages import assemble, narration, script, voices
+from pipeline.storyboard import ASPECTS, Aspect, StoryboardError
+
+Cut = Literal["film", "rough-cut", "radio-cut"]
+from pipeline.stages import assemble, characters, keyframes, narration, pans, script, voices
 
 
 def voice_trial(root: Path, providers: Providers, *, sleep: Callable[[float], None] = time.sleep) -> dict[str, Path]:
@@ -31,18 +33,26 @@ def voice_trial(root: Path, providers: Providers, *, sleep: Callable[[float], No
 
 @dataclass(frozen=True)
 class FilmResult:
-    video: Path
+    videos: dict[Aspect, Path]
     duration_s: float
+    missing_keyframes: list[int]  # shots shown as a labelled placeholder (no keyframe, no image keys)
     drafted: list[str]  # narration lines whose Amharic was just drafted (need review)
     undrafted: list[str]  # narration lines still without Amharic (no text model available)
 
+    @property
+    def video(self) -> Path:
+        return self.videos["16:9"]
 
-def film(root: Path, providers: Providers, *, cut: Literal["film", "radio-cut"] = "film",
+
+def film(root: Path, providers: Providers, *, cut: Cut = "film",
          sleep: Callable[[float], None] = time.sleep) -> FilmResult:
-    """Build the film (or the radio cut) from `root/storyboard.json` into `root/outputs/film/`.
+    """Build a cut from `root/storyboard.json` into `root/outputs/film/`.
 
-    Every model call is logged to `root/runs.jsonl`. The final film refuses
-    unreviewed Amharic; the radio cut allows it, for early user tests.
+    - radio-cut: narration, subtitles and music on a black screen, 16:9 (user test 1)
+    - rough-cut: plus character sheet, keyframes and pan shots, 16:9 and 9:16
+    - film: the rough cut's stages, refusing unreviewed Amharic
+
+    Every model call is logged to `root/runs.jsonl`.
     """
     path = root / "storyboard.json"
     board = storyboard.load(path)  # raises StoryboardError before any provider call
@@ -62,5 +72,16 @@ def film(root: Path, providers: Providers, *, cut: Literal["film", "radio-cut"] 
     audio = narration.run(board, providers.speech, cache, log, outputs)
     placed = timing.place(board, audio)
     timing.check(board, placed)
-    video = assemble.run(board, placed, outputs, name="film" if cut == "film" else cut)
-    return FilmResult(video=video, duration_s=board.total_s, drafted=drafts.drafted, undrafted=drafts.undrafted)
+    if cut == "radio-cut":
+        video = assemble.run(board, placed, outputs, name=cut, aspect="16:9", clips=None)
+        return FilmResult(videos={"16:9": video}, duration_s=board.total_s, missing_keyframes=[],
+                          drafted=drafts.drafted, undrafted=drafts.undrafted)
+
+    sheet = characters.run(board, providers.image, cache, log, outputs)
+    frames = keyframes.run(board, providers.image, sheet, cache, log, outputs)
+    clips = pans.run(board, frames, outputs)
+    videos = {aspect: assemble.run(board, placed, outputs, name=cut, aspect=aspect, clips=clips[aspect])
+              for aspect in ASPECTS}
+    return FilmResult(videos=videos, duration_s=board.total_s,
+                      missing_keyframes=[s.id for s in board.shots if s.id not in frames],
+                      drafted=drafts.drafted, undrafted=drafts.undrafted)

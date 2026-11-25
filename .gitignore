@@ -13,3 +13,6 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 *.egg-info/
+
+# rendered pan clips: rebuilt locally from the committed keyframes (no model calls)
+outputs/shots/

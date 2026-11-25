@@ -1,10 +1,11 @@
 """Assembly stage: pure FFmpeg, no model calls; the same inputs give the same output.
 
-Radio-cut version: a black screen for the whole film (shots, saying card, end
-card), each narration line at its shot's start plus offset, burned-in English
-subtitles timed from the measured audio, and a placeholder music bed (a soft
-generated chord, no third-party audio) that follows the storyboard's volume
-points and is ducked under the voice by sidechain compression.
+The picture is the shot clips in storyboard order (or a black screen for the
+radio cut), then black under the saying card and end card. Each narration
+line plays at its shot's start plus offset; English subtitles are timed from
+the measured audio and burned in. A placeholder music bed (a soft generated
+chord, no third-party audio) follows the storyboard's volume points and is
+ducked under the voice by sidechain compression.
 """
 
 from __future__ import annotations
@@ -12,54 +13,78 @@ from __future__ import annotations
 from pathlib import Path
 
 from pipeline.media import run_ffmpeg
-from pipeline.storyboard import Storyboard
+from pipeline.stages.pans import FPS, SIZE
+from pipeline.storyboard import Aspect, Storyboard
 from pipeline.timing import Placed
 
-WIDTH, HEIGHT, FPS = 1920, 1080, 24
 AUDIO_RATE = 48_000
 SUBTITLE_HOLD_S = 0.4  # subtitles stay up a little after the voice ends (never past the next line)
-SUBTITLE_STYLE = "FontName=Noto Sans,FontSize=20,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,Outline=1.5,Shadow=0,MarginV=40"
+SUBTITLE_STYLE: dict[Aspect, str] = {
+    "16:9": "FontName=Noto Sans,FontSize=20,Outline=1.5,Shadow=0,MarginV=40",
+    "9:16": "FontName=Noto Sans,FontSize=11,Outline=1,Shadow=0,MarginV=70,MarginL=30,MarginR=30",
+}
 # A quiet A-minor pad with a slow swell: a stand-in until the ACE-Step score exists.
 PAD = ("0.10*sin(2*PI*110*t)+0.07*sin(2*PI*130.81*t)+0.06*sin(2*PI*164.81*t)+0.04*sin(2*PI*220*t)")
 PAD_SWELL = "(0.75+0.25*sin(2*PI*t/9))"
 
 
-def run(storyboard: Storyboard, placed: list[Placed], outputs: Path, *, name: str) -> Path:
-    out = outputs / "film" / f"{name}-16x9.mp4"
+def run(storyboard: Storyboard, placed: list[Placed], outputs: Path, *, name: str, aspect: Aspect,
+        clips: list[Path] | None) -> Path:
+    """Export one cut at one aspect ratio. `clips` None means a black picture (the radio cut)."""
+    out = outputs / "film" / f"{name}-{aspect.replace(':', 'x')}.mp4"
     out.parent.mkdir(parents=True, exist_ok=True)
     srt = write_subtitles(placed, out.with_suffix(".en.srt"))
+    width, height = SIZE[aspect]
     total = f"{storyboard.total_s:.3f}"
+    cards = f"{storyboard.saying_card_s + storyboard.end_card_s:.3f}"
 
+    # Inputs: 0 silent bed, 1 music pad, then the narration lines, then the picture.
     inputs = [
-        "-f", "lavfi", "-t", total, "-i", f"color=c=black:s={WIDTH}x{HEIGHT}:r={FPS}",
         "-f", "lavfi", "-t", total, "-i", f"anullsrc=r={AUDIO_RATE}:cl=stereo",
         "-f", "lavfi", "-t", total, "-i", f"aevalsrc=({PAD})*{PAD_SWELL}:s={AUDIO_RATE}:c=stereo",
     ]
     filters: list[str] = []
-    voice = ["[1:a]"]
-    for n, p in enumerate(placed, start=3):
+    voice = ["[0:a]"]
+    n = 2
+    for p in placed:
         inputs += ["-i", str(p.line_audio)]
         delay_ms = round(p.start_s * 1000)
         filters.append(
             f"[{n}:a]aresample={AUDIO_RATE},aformat=channel_layouts=stereo,adelay=delays={delay_ms}:all=1[l{n}]"
         )
         voice.append(f"[l{n}]")
+        n += 1
+
+    black = f"color=c=black:s={width}x{height}:r={FPS}"
+    if clips is None:
+        inputs += ["-f", "lavfi", "-t", total, "-i", black]
+        filters.append(f"[{n}:v]null[pic]")
+    else:
+        parts = []
+        for clip in clips:
+            inputs += ["-i", str(clip)]
+            parts.append(f"[{n}:v]")
+            n += 1
+        inputs += ["-f", "lavfi", "-t", cards, "-i", black]
+        parts.append(f"[{n}:v]")
+        filters.append(f"{''.join(parts)}concat=n={len(parts)}:v=1:a=0,setsar=1[pic]")
+
     # duration=first: the silent bed sets the length, so the audio is exactly the film's length.
+    # Gemini TTS clips peak at 0 dBFS: the voice is lowered 2 dB and the limiter keeps voice + music
+    # under about -1 dBFS, so AAC encoding doesn't clip.
     filters += [
         f"{''.join(voice)}amix=inputs={len(voice)}:duration=first:normalize=0,volume=-2dB,asplit[voice][key]",
-        f"[2:a]lowpass=f=1800,volume='{volume_expression(storyboard)}':eval=frame[music]",
+        f"[1:a]lowpass=f=1800,volume='{volume_expression(storyboard)}':eval=frame[music]",
         "[music][key]sidechaincompress=threshold=0.015:ratio=10:attack=30:release=600[ducked]",
-        # Gemini TTS clips peak at 0 dBFS: the voice is lowered 2 dB above and the limiter keeps
-        # voice + music under about -1 dBFS, so AAC encoding doesn't clip.
         "[voice][ducked]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.89:level=false[aout]",
-        f"[0:v]subtitles='{_escape(srt)}':force_style='{SUBTITLE_STYLE}'[vout]",
+        f"[pic]subtitles='{_escape(srt)}':force_style='{SUBTITLE_STYLE[aspect]}'[vout]",
     ]
 
     run_ffmpeg([
         *inputs,
         "-filter_complex", ";".join(filters),
         "-map", "[vout]", "-map", "[aout]",
-        "-c:v", "libx264", "-preset", "ultrafast", "-tune", "stillimage", "-pix_fmt", "yuv420p",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", "-r", str(FPS),
         "-c:a", "aac", "-b:a", "192k",
         "-t", total,
         "-movflags", "+faststart",

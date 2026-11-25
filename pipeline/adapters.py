@@ -176,6 +176,7 @@ class CloudflareImage:
         self.account_id = account_id
         self.api_token = api_token
         self.model = model
+        self.available = bool(account_id and api_token)
 
     def generate(self, prompt: str, *, seed: int, width: int, height: int, out_path: Path,
                  references: tuple[Path, ...] = ()) -> None:

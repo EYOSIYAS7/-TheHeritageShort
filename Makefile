@@ -5,11 +5,15 @@
 VENV := .venv
 PY := $(VENV)/bin/python
 
-.PHONY: film radio-cut review voices test typecheck check
+.PHONY: film rough-cut radio-cut review voices test typecheck check
 
 ## Build the film into outputs/film/ (validates storyboard.json first)
 film: $(VENV)/.deps
 	$(PY) -m pipeline film
+
+## Rough cut: character sheet, keyframes and pan shots with narration, subtitles and music; 16:9 and 9:16
+rough-cut: $(VENV)/.deps
+	$(PY) -m pipeline rough-cut
 
 ## Radio cut (user test 1): narration, subtitles and placeholder music on a black screen; unreviewed Amharic allowed
 radio-cut: $(VENV)/.deps

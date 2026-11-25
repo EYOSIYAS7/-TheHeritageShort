@@ -40,11 +40,19 @@
     "style": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["words", "grades"],
+      "required": ["words", "grades", "character_sheet", "reference_images"],
       "properties": {
         "words": {
           "description": "Global style, described by qualities; no artist names.",
           "$ref": "#/$defs/text"
+        },
+        "character_sheet": {
+          "description": "Prompt text for each character-sheet image, before the character's description.",
+          "$ref": "#/$defs/text"
+        },
+        "reference_images": {
+          "description": "True: keyframes are conditioned on the character-sheet images (FLUX.2 klein reference images). False: on the fixed descriptions and seeds only.",
+          "type": "boolean"
         },
         "grades": {
           "type": "object",
