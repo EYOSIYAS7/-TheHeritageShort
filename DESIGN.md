@@ -29,7 +29,7 @@ Four acts, 12 shots, 82.5 s, then the saying card (4 s) and the AI end card (3 s
 
 | Act | Shots | What happens |
 |---|---|---|
-| Mornings | 1–4 | The coffee ceremony; the Son leaves twice: "Let's talk tomorrow, Dad." / "Tomorrow, Dad." |
+| Mornings | 1–4 | The coffee ceremony; the Son leaves twice: "Dad, we'll have coffee together tomorrow." / "Tomorrow, Dad." |
 | The fall | 5–6 | The jebena falls; the Son alone in a hospital corridor. |
 | After | 7–8 | The Father's weak hand beside a jebena he can't lift; the empty coffee corner. |
 | Two cups | 9–12 | The Son makes the coffee himself, two cups, phone face-down, holds his father's hand; the closing passage. |
@@ -43,4 +43,20 @@ Four acts, 12 shots, 82.5 s, then the saying card (4 s) and the AI end card (3 s
 
 ## User tests and what changed
 
-_To be filled in after each user test (radio cut first, then rough cut)._
+### User test 1: radio cut (2026-11-26)
+
+**What they saw:** `make radio-cut`: the full Amharic narration (Gemini TTS, voice Enceladus) with burned-in English subtitles and a placeholder music bed, over a black screen, 89.5 s. No pictures yet, so this tested the words, the voice and the pacing alone.
+
+**Who:** three close friends (the target audience), shown it without any explanation first.
+
+**What they said:**
+- Friend 1: "That is deep."
+- Friend 2: "I will from now on, for sure." This is the intent (they should want to call someone they love tonight) landing on sound alone.
+- Friend 3: "That is the problem with this generation." The story reads as being about a shared habit, not one family, which is what the composite story aims for.
+- The author: likes it.
+
+**What changed:** nothing, as a result of this test. No one was confused or lost interest, and the intent came through. The changes in this cut were made before the test, while fitting the real narration to the timeline:
+- The real Amharic voice is slower than planned. Two closing lines ("Another cup of coffee." / "Another story to hear.") were cut, and Act 4 was retimed (see Structure).
+- The author rewrote three lines' Amharic to sound more like natural speech. tomorrow-1 became an invitation to coffee ("Dad, we'll have coffee together tomorrow."), which ties the Son's promise to the coffee ceremony. closing-08 became "Talk with them while they can still talk." and closing-09 became "Spend time with them while they are still beside you."
+
+**Limits of this test:** the reactions are short and all positive, from friends. The rough-cut test (user test 2) should ask specific questions: which moment hit hardest, whether the pictures make the fall and the hospital clear without words, and whether the gold grade in Act 4 reads as the turn.
