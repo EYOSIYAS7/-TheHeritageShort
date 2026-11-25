@@ -53,7 +53,7 @@
   },
   "music": {
     "caption": "slow reflective instrumental in the spirit of Ethiopian tizita, longing and nostalgia; krar and masenqo with soft piano; sparse at the start, warmer and fuller at the end; no vocals",
-    "duration_s": 86,
+    "duration_s": 92,
     "candidates": 3,
     "chosen": null,
     "reason": null,
@@ -71,19 +71,19 @@
         "gain": 0.05
       },
       {
-        "t_s": 37,
+        "t_s": 35.0,
         "gain": 0.05
       },
       {
-        "t_s": 40,
+        "t_s": 38.0,
         "gain": 0.9
       },
       {
-        "t_s": 82,
+        "t_s": 87.5,
         "gain": 0.9
       },
       {
-        "t_s": 84,
+        "t_s": 89.5,
         "gain": 0.0
       }
     ]
@@ -332,7 +332,7 @@
     {
       "id": 7,
       "act": "After",
-      "duration_s": 5,
+      "duration_s": 4.0,
       "type": "pan",
       "characters": [
         "father",
@@ -372,7 +372,7 @@
     {
       "id": 8,
       "act": "After",
-      "duration_s": 5,
+      "duration_s": 4.0,
       "type": "pan",
       "characters": [
         "coffee_corner"
@@ -411,7 +411,7 @@
     {
       "id": 9,
       "act": "Two cups",
-      "duration_s": 7,
+      "duration_s": 5.0,
       "type": "pan",
       "characters": [
         "son",
@@ -451,7 +451,7 @@
     {
       "id": 10,
       "act": "Two cups",
-      "duration_s": 7,
+      "duration_s": 7.1,
       "type": "pan",
       "characters": [
         "father",
@@ -492,7 +492,7 @@
     {
       "id": 11,
       "act": "Two cups",
-      "duration_s": 8,
+      "duration_s": 13.7,
       "type": "moving",
       "characters": [
         "father",
@@ -532,7 +532,7 @@
     {
       "id": 12,
       "act": "Two cups",
-      "duration_s": 16,
+      "duration_s": 19.7,
       "type": "pan",
       "characters": [
         "father",
@@ -604,32 +604,12 @@
     {
       "id": "closing-01",
       "shot": 9,
-      "offset_s": 0.5,
+      "offset_s": 1.0,
       "en": "We thought there would always be another morning.",
       "am": "ሁልጊዜ ሌላ ጠዋት የሚኖር ይመስለን ነበር።",
       "am_pinned": false,
       "am_reviewed": true,
       "am_from_en": "We thought there would always be another morning."
-    },
-    {
-      "id": "closing-02",
-      "shot": 9,
-      "offset_s": 3.5,
-      "en": "Another cup of coffee.",
-      "am": "ሌላ ሲኒ ቡና።",
-      "am_pinned": false,
-      "am_reviewed": true,
-      "am_from_en": "Another cup of coffee."
-    },
-    {
-      "id": "closing-03",
-      "shot": 9,
-      "offset_s": 5.3,
-      "en": "Another story to hear.",
-      "am": "ሌላ የምሰማው ታሪክ።",
-      "am_pinned": false,
-      "am_reviewed": true,
-      "am_from_en": "Another story to hear."
     },
     {
       "id": "closing-04",
@@ -654,7 +634,7 @@
     {
       "id": "closing-06",
       "shot": 11,
-      "offset_s": 3.3,
+      "offset_s": 4.8,
       "en": "Sometimes, we don't realize how precious an ordinary moment is until it becomes a memory.",
       "am": "አንዳንዴ ተራ የሚመስል ቅጽበት ትዝታ እስኪሆን ድረስ ምን ያህል ውድ እንደሆነ አይገባንም።",
       "am_pinned": false,
@@ -664,7 +644,7 @@
     {
       "id": "closing-07",
       "shot": 12,
-      "offset_s": 2.0,
+      "offset_s": 0.3,
       "en": "So love while you can.",
       "am": "ስለዚህ እድሉ እያለ ውደዱ።",
       "am_pinned": false,
@@ -674,7 +654,7 @@
     {
       "id": "closing-08",
       "shot": 12,
-      "offset_s": 4.8,
+      "offset_s": 4.2,
       "en": "Listen while they can speak.",
       "am": "መናገር በሚችሉበት ጊዜ አዳምጧቸው።",
       "am_pinned": false,
@@ -684,7 +664,7 @@
     {
       "id": "closing-09",
       "shot": 12,
-      "offset_s": 7.6,
+      "offset_s": 8.8,
       "en": "Sit with them while they are still beside you.",
       "am": "ገና ከጎናችሁ እያሉ ከእነሱ ጋር ተቀመጡ።",
       "am_pinned": false,
@@ -694,7 +674,7 @@
     {
       "id": "closing-10",
       "shot": 12,
-      "offset_s": 12.0,
+      "offset_s": 14.2,
       "en": "Because not every tomorrow is promised.",
       "am": "ምክንያቱም ነገ ለሁላችንም የተረጋገጠ አይደለም።",
       "am_pinned": false,

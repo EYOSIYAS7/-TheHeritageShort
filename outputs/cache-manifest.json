@@ -39,6 +39,11 @@
     "path": "outputs/narration/closing-06-1fa78edc67f7.wav",
     "stage": "narration"
   },
+  "2617f0f8c31fb85ab7b241baaa66901ef5bbb8f9f82b5671637e3038cb4414b0": {
+    "item": "closing-08",
+    "path": "outputs/narration/closing-08-enceladus-2617f0f8c31f.wav",
+    "stage": "narration"
+  },
   "33e84b8875b5576e3c298832a5f05f04a14f63e558834eeb6d295d34d12c68a6": {
     "item": "tomorrow-1",
     "path": "outputs/narration/tomorrow-1-enceladus-33e84b8875b5.wav",
@@ -209,6 +214,11 @@
     "path": "outputs/narration/tomorrow-2-enceladus-d818e3aabc28.wav",
     "stage": "narration"
   },
+  "d8a26751a26a8cb08370edfaffe7a39682e9d3e7702c1b4008f19b7d96d02e71": {
+    "item": "closing-07",
+    "path": "outputs/narration/closing-07-enceladus-d8a26751a26a.wav",
+    "stage": "narration"
+  },
   "e07939182dd0281b61c8aeb71711e7e9f6e88c041949c90d51d6f648f766dbde": {
     "item": "closing-05@Charon",
     "path": "outputs/narration/closing-05-charon-e07939182dd0.wav",
@@ -217,6 +227,11 @@
   "e2bba96316a0ad9d612d5503d4d8db681f593898d36b22241d016f25701083c3": {
     "item": "closing-10",
     "path": "outputs/narration/closing-10-e2bba96316a0.wav",
+    "stage": "narration"
+  },
+  "e58defc3d8824debf2c69d3908e9268275706cca9926ced383cb0a17f573dcbe": {
+    "item": "closing-10",
+    "path": "outputs/narration/closing-10-enceladus-e58defc3d882.wav",
     "stage": "narration"
   },
   "ecfdba04e1ddda226ddb5a254058b7ddc97d02c667faec8dd29a0a8c09b8c99e": {
@@ -243,6 +258,11 @@
     "item": "closing-05@Enceladus",
     "path": "outputs/narration/closing-05-enceladus-f33242053b7e.wav",
     "stage": "voices"
+  },
+  "f613076d5a1f6f1aff5838d07f9f95eb4f9c8124ae70ee5cca290890fadc8185": {
+    "item": "closing-09",
+    "path": "outputs/narration/closing-09-enceladus-f613076d5a1f.wav",
+    "stage": "narration"
   },
   "fee6850f177a8ea147aa7b5fbdc8845b51df0bd571d2b867caf6a8306030b2c3": {
     "item": "closing-08",

@@ -25,7 +25,7 @@ The Father is the gold. The Son counts him as copper until he nearly loses him.
 
 ## Structure
 
-Four acts, 12 shots, about 77 s, then the saying card (4 s) and the AI end card (3 s): about 84 s in all. Shot 12 runs 16 s so the end of the closing passage has room to breathe. The storyboard (`storyboard.json`) is the source of truth for every shot.
+Four acts, 12 shots, 82.5 s, then the saying card (4 s) and the AI end card (3 s): 89.5 s in all. The shot lengths in Act 4 were set from the measured Amharic narration (ticket 04). The real voice is slower than planned, so two short closing lines ("Another cup of coffee." / "Another story to hear.") were cut, the narration-free "After" shots 7–8 went from 5 s to 4 s, and each Act 4 cut lands 0.3 s before its first line, with 0.5 s between lines. The storyboard (`storyboard.json`) is the source of truth for every shot.
 
 | Act | Shots | What happens |
 |---|---|---|

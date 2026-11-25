@@ -46,10 +46,12 @@ def run(storyboard: Storyboard, placed: list[Placed], outputs: Path, *, name: st
         voice.append(f"[l{n}]")
     # duration=first: the silent bed sets the length, so the audio is exactly the film's length.
     filters += [
-        f"{''.join(voice)}amix=inputs={len(voice)}:duration=first:normalize=0,asplit[voice][key]",
+        f"{''.join(voice)}amix=inputs={len(voice)}:duration=first:normalize=0,volume=-2dB,asplit[voice][key]",
         f"[2:a]lowpass=f=1800,volume='{volume_expression(storyboard)}':eval=frame[music]",
         "[music][key]sidechaincompress=threshold=0.015:ratio=10:attack=30:release=600[ducked]",
-        "[voice][ducked]amix=inputs=2:duration=first:normalize=0[aout]",
+        # Gemini TTS clips peak at 0 dBFS: the voice is lowered 2 dB above and the limiter keeps
+        # voice + music under about -1 dBFS, so AAC encoding doesn't clip.
+        "[voice][ducked]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.89:level=false[aout]",
         f"[0:v]subtitles='{_escape(srt)}':force_style='{SUBTITLE_STYLE}'[vout]",
     ]
 
