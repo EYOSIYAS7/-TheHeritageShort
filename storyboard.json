@@ -40,7 +40,7 @@
   },
   "music": {
     "caption": "slow reflective instrumental in the spirit of Ethiopian tizita, longing and nostalgia; krar and masenqo with soft piano; sparse at the start, warmer and fuller at the end; no vocals",
-    "duration_s": 80,
+    "duration_s": 86,
     "candidates": 3,
     "chosen": null,
     "reason": null,
@@ -66,11 +66,11 @@
         "gain": 0.9
       },
       {
-        "t_s": 76,
+        "t_s": 82,
         "gain": 0.9
       },
       {
-        "t_s": 78,
+        "t_s": 84,
         "gain": 0.0
       }
     ]
@@ -519,7 +519,7 @@
     {
       "id": 12,
       "act": "Two cups",
-      "duration_s": 10,
+      "duration_s": 16,
       "type": "pan",
       "characters": [
         "father",
@@ -643,7 +643,7 @@
     {
       "id": "closing-07",
       "shot": 12,
-      "offset_s": 1.0,
+      "offset_s": 2.0,
       "en": "So love while you can.",
       "am": null,
       "am_pinned": false,
@@ -652,7 +652,7 @@
     {
       "id": "closing-08",
       "shot": 12,
-      "offset_s": 2.8,
+      "offset_s": 4.8,
       "en": "Listen while they can speak.",
       "am": null,
       "am_pinned": false,
@@ -661,7 +661,7 @@
     {
       "id": "closing-09",
       "shot": 12,
-      "offset_s": 4.6,
+      "offset_s": 7.6,
       "en": "Sit with them while they are still beside you.",
       "am": null,
       "am_pinned": false,
@@ -670,7 +670,7 @@
     {
       "id": "closing-10",
       "shot": 12,
-      "offset_s": 7.3,
+      "offset_s": 12.0,
       "en": "Because not every tomorrow is promised.",
       "am": null,
       "am_pinned": false,

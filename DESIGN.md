@@ -25,7 +25,7 @@ The Father is the gold. The Son counts him as copper until he nearly loses him.
 
 ## Structure
 
-Four acts, 12 shots, about 71 s, then the saying card (4 s) and the AI end card (3 s): about 78 s in all. The storyboard (`storyboard.json`) is the source of truth for every shot.
+Four acts, 12 shots, about 77 s, then the saying card (4 s) and the AI end card (3 s): about 84 s in all. Shot 12 runs 16 s so the end of the closing passage has room to breathe. The storyboard (`storyboard.json`) is the source of truth for every shot.
 
 | Act | Shots | What happens |
 |---|---|---|
