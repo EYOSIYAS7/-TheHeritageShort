@@ -1,0 +1,181 @@
+# 07 Appendix A: Glossary (look up terms as needed). Format: `Term: meaning`
+
+## How media models differ from text models
+- Text model: writes one token at a time, each chosen from what came before; remembers the conversation.
+- Most image/video/music models: start from random noise and refine over a number of steps, guided by the prompt, until a whole image/clip/track appears at once. Output is continuous (pixels, audio samples), not a word sequence.
+- Consequences:
+  - Same prompt gives different result per seed; generating several candidates and choosing one is normal.
+  - Model has no memory of the previous clip. Consistency comes from what you give each time: reference image, fixed seed, same style description.
+  - More steps = usually better quality + more waiting. Distilled models reach good results in few steps (why some are fast).
+  - Cost is GPU time and memory: limits are quota, queue time, out-of-memory errors, not tokens.
+  - Hands, text inside images, face identity are common weak spots; easier to fix in the plan (better keyframe, simpler prompt) than in the clip.
+
+## Story and production
+- Logline: one sentence summing up the story.
+- Treatment: short prose description of the whole film, written before the script.
+- Script: written text of the film; here mostly narration lines plus a description of each shot.
+- Storyboard: sequence of pictures/descriptions, one per shot, planning what the audience sees. `storyboard.json` is a machine-readable one.
+- Shot: one continuous piece of footage between two cuts.
+- Scene: group of shots in one place and time.
+- Beat: small unit of story in which something changes (decision, surprise, feeling).
+- Motif: image, sound or idea that returns and gains meaning each time.
+- Pacing: how fast the story moves; set by shot length, cutting, music.
+- Continuity: keeping things consistent across shots (character, costume, light, place).
+- Pre-production: planning before anything is made (story, script, storyboard, look, schedule).
+- Production: making raw material (filming, or here generating images and clips).
+- Post-production: everything after (editing, sound, music, colour, subtitles, export).
+- Animatic: storyboard turned into a timed video with rough sound; tests pacing before expensive work. Radio cut is its audio-only ancestor.
+- Radio cut: narration over placeholder music on a black screen, to test story and timing before any pictures exist.
+- Rough cut, fine cut, picture lock, final cut: successive edit versions from first assembly to the version no longer changed.
+- B-roll: supporting footage covering the narration (places, hands, objects).
+- Reference sheet / character sheet: set of images fixing how a character or style looks (front, side, expression), used as input for every later shot.
+- Style block: fixed prompt text describing the look (palette, light, medium), added to every prompt.
+- Mood board: collection of images and colours capturing the feeling.
+- Golden reference: the one approved image later shots are checked against.
+
+## Camera and picture
+- Frame: one still image of a video, or the rectangle the audience sees.
+- Aspect ratio: width:height. 16:9 horizontal (TV, YouTube); 9:16 vertical (phone feeds).
+- Resolution: pixel size (480p, 720p, 1080p). Draft low, finish high.
+- Frame rate (fps): frames per second. Cinema 24, also what Wan 2.2 produces.
+- Extreme wide / long shot: subject tiny in a large place; often establishes where we are.
+- Wide / long shot: whole person and good part of surroundings.
+- Medium shot: person from about the waist up, some surroundings.
+- Medium close-up: from about the chest up, mostly the person.
+- Close-up: face or single object fills the frame; carries emotion or a key detail.
+- Extreme close-up: part of a face (eyes) or tiny detail.
+- Establishing shot: first shot telling where and when the scene happens.
+- Insert, cut-in: close shot of an object in the scene (hand, radio dial).
+- Cutaway: shot of something else that relieves or comments on main action.
+- Over-the-shoulder, POV: view from behind one person, or through someone's eyes.
+- Eye-level, high-angle, low-angle: camera height relative to subject. High looks down, can make subject small; low looks up, can make it large.
+- Pan, tilt: camera turns left/right, or up/down, without moving position.
+- Dolly, push-in, track: camera physically moves toward, away from, or alongside subject.
+- Zoom: lens changes focal length; looks different from a dolly because perspective doesn't change.
+- Orbit: camera circles the subject.
+- Locked-off, static: camera does not move.
+- Handheld: slightly shaky camera, immediate and human.
+- Depth of field, bokeh: how much is in focus; soft blur of out-of-focus parts.
+- Composition: arrangement in frame (rule of thirds, headroom, leading lines, symmetry, negative space).
+- Key light, backlight, rim light: main light; light from behind; thin bright edge around a subject.
+- Hard and soft light: sharp-edged vs gradual shadows.
+- Golden hour: warm low light shortly after sunrise / before sunset.
+- Low-key, high-key: mostly dark and contrasty vs bright and even.
+- Colour temperature: warm (orange) to cool (blue) light.
+- Colour grading, LUT: adjusting colour/contrast in the edit to set mood; a LUT is a saved grade applicable to every shot.
+- Ken Burns effect: slow pan and zoom across a still so it feels alive; easy in FFmpeg with `zoompan`.
+- Parallax: layers at different distances move at different speeds, giving a flat image depth.
+
+## Editing and delivery
+- Cut: moment one shot is replaced by the next.
+- Jump cut: cut within same scene that visibly jumps in time/position.
+- Match cut: links two shots through similar shape, movement or idea.
+- Crossfade, dissolve: one shot gradually blends into the next.
+- Fade to black: picture fades out to black; often for endings.
+- Montage: run of short shots compressing time or building a feeling.
+- J-cut, L-cut: audio of next shot starts before the picture changes (J); audio of previous shot continues after picture changes (L).
+- Timeline: arrangement of picture and sound tracks over time.
+- Timecode: time address in video, hours:minutes:seconds:frames.
+- Keyframe: two meanings. In animation, a key moment/pose. In this challenge, the generated still image a shot starts from.
+- Subtitles, captions: on-screen text of narration. Burned-in (open) = part of the picture. A subtitle file (SRT) is separate and switchable.
+- Safe area: part of the frame where text isn't covered by platform buttons or cropped; matters most in vertical video.
+- End card: final still carrying a message; here, that the film was made with AI.
+- Codec, container: codec compresses video (H.264 common); container (MP4) holds picture, sound, subtitles together.
+- Bitrate: data per second; higher usually = better quality and bigger file.
+- Render, export: producing the final video file from the edit.
+- Proxy, draft: low-resolution version used while working because it's fast.
+
+## Sound and music
+- Soundtrack: everything the audience hears.
+- Score: original music for the film; usually no words, so it supports without competing with the narrator.
+- Song: music with lyrics; can stand alone.
+- Source music: music inside the story (e.g. a radio playing).
+- Cue: one piece of music for one moment.
+- Spotting: deciding where music starts/stops and what each cue does; professionals do it with the director and write timecodes.
+- Temp track: placeholder music used while editing to give a target feeling.
+- Theme, leitmotif: short musical idea tied to a character/feeling, brought back.
+- Underscore: quiet music under dialogue or narration.
+- Tempo, BPM: speed in beats per minute.
+- Key, time signature: set of notes the piece is built on; how beats are grouped (4/4 most common).
+- Melody, harmony, rhythm: the tune; chords supporting it; the pattern of beats.
+- Timbre, instrumentation: colour of a sound; which instruments play.
+- Dynamics: loud and soft within the music.
+- Stem: separate audio file for one group of sounds (voice, music, effects) so each can be balanced alone.
+- Dialogue, narration, voice-over: speech. Narration is a voice telling the story, not part of a scene.
+- Sound effects (SFX): added sounds (door, step, gust of wind).
+- Foley: everyday effects performed live to match picture (footsteps, cloth).
+- Ambience, backgrounds: continuous sound of a place (market noise, rain, quiet room).
+- Room tone: sound of an empty space; fills gaps so silence doesn't feel dead.
+- Mix: balancing all sound layers into one track.
+- Level, gain, dB: how loud a signal is, and the decibel scale used.
+- Headroom, clipping: space left before signal gets too loud; past it, distortion = clipping.
+- Peak, true peak: loudest instant; true peak estimates real loudest point after conversion; about -1 dB is a common ceiling.
+- Loudness, LUFS: how loud something seems to a listener, in LUFS. YouTube and Spotify reference about -14 LUFS.
+- Normalisation: adjusting a file to a target level, by peak or loudness.
+- Ducking: automatically lowering music while the narrator speaks, raising it in pauses.
+- Sidechain compression: technique behind ducking: the voice controls a compressor on the music. FFmpeg: `sidechaincompress`.
+- Compressor, limiter: reduce loud peaks so levels are even; stop signal exceeding a ceiling.
+- EQ: equalisation; boosting/cutting parts of the frequency range to give each sound its own space.
+- Fade, crossfade: gradual rise/fall of volume, or one sound blending into another.
+- Sample rate: audio samples per second; 44.1 or 48 kHz normal.
+- Mono, stereo: one channel; two (left/right).
+- Mastering: final polishing and level setting of a finished mix.
+- Prosody: rhythm, stress, melody of speech; good narration gets it right.
+- TTS: text to speech; model turns written text into spoken audio.
+- Voice cloning: making a model speak in a specific person's voice; needs that person's recorded consent.
+
+## Design thinking and testing
+- Design thinking: starts from the people you design for. Five stages: empathise, define, ideate, prototype, test. They repeat and overlap.
+- Empathise: learn about your audience by listening to and watching them.
+- Define: state the need/problem in a sentence (e.g. "how might we help my cousins in the diaspora feel close to their grandmother's village?").
+- Ideate: produce many possible approaches before choosing one.
+- Prototype: build the cheapest thing that can be reacted to. The radio cut is a prototype.
+- Test: put the prototype in front of people; learn from what they do and say.
+- Audience, persona: people you make the film for; persona = made-up but realistic person standing for them.
+- Intent: what you want the audience to feel or understand at the end.
+- Brief: short written statement of audience, intent, constraints.
+- Low-fidelity, high-fidelity: rough vs polished prototype. Start low; feedback is cheaper.
+- User test, feedback session: showing work to a few people and noting what they say and where they react.
+- Think-aloud: asking a viewer to say what they think as they watch.
+- Insight: conclusion from feedback that changes your plan.
+- Iteration: one more loop of change and test.
+- Blind preference test: showing two versions without saying which is which, asking which people prefer.
+- Constraint, tradeoff: a limit (quota, time, language support) and the choice it forces between quality, speed, cost.
+
+## Generative model terms
+- Diffusion model: creates something by removing noise step by step, guided by the prompt.
+- Step, inference step: one round of noise removal. Fewer = faster; more = usually better.
+- Seed: number fixing the starting noise. Same seed + same inputs = same result; makes experiments comparable.
+- Guidance (CFG): how strongly output is pushed to follow the prompt. Too high can look harsh/artificial; too low drifts from the prompt.
+- Latent space, latent: compressed numerical representation of an image/video/sound in which the model works; much cheaper than raw pixels.
+- VAE: component compressing picture/video into a latent and expanding it back; stronger compression lets a larger clip fit in memory.
+- Text encoder: part that turns your prompt into numbers the model follows.
+- Transformer, DiT: kind of neural network doing the work; DiT = diffusion transformer.
+- Flow matching, rectified flow: training method where the model learns a smooth path from noise to result. FLUX models use it.
+- Mixture of experts (MoE): several specialist parts, only some used each step, so large but not slow. Wan 2.2's larger models use it.
+- Distillation: training a faster/smaller model to imitate a bigger one; a distilled image model may need 4 steps instead of 50.
+- Parameters (5B, 14B): model size in billions of learned numbers; bigger usually better and heavier.
+- VRAM: GPU memory; decides which models fit.
+- Precision, quantisation (fp16, bf16, fp8): storing numbers with fewer bits to fit in less memory, small quality cost.
+- Offloading: moving parts of a model between GPU and ordinary memory to fit a small GPU, at cost of speed.
+- Weights, checkpoint: saved numbers that are the trained model.
+- Open-weight: weights can be downloaded and run by you. Not always the same as fully open-source: read the licence.
+- Licence (Apache 2.0, MIT, non-commercial): terms of use. Apache 2.0 and MIT permissive; non-commercial limits paid use.
+- Inference, training, finetuning: using a trained model; creating one; adapting one to your own data.
+- LoRA: small add-on trained on a few examples that teaches a model a character or style without retraining it all.
+- Text-to-image, text-to-video, image-to-video: generate a picture/clip from text, or animate a given image under text guidance. TI2V models do both.
+- Conditioning, reference image: extra input steering the output (e.g. an image the result should follow).
+- First-frame and last-frame control: some video models accept the picture a clip should start from, sometimes the one it should end on.
+- Inpainting, repainting: regenerating only a chosen part of an image, or a chosen stretch of a song.
+- Upscaling, frame interpolation: increasing resolution after generation; adding in-between frames for smoother motion.
+- Negative prompt: description of what to avoid. Some models use it, some don't.
+- Prompt adherence: how faithfully output follows the prompt.
+- Temporal consistency: whether things stay the same frame to frame. Failures: flicker, morphing, warping.
+- Identity drift: a character slowly or suddenly turning into a different person across shots or within a clip.
+- Artifact: visible/audible model error (extra fingers, garbled text).
+- Batch: several results in one run, usually different seeds.
+- Latency, throughput: how long one result takes; how many you get per hour.
+- Quota, rate limit, free tier: amount a provider lets you use; how fast it lets you call; the part of a service that costs nothing.
+- Watermark, SynthID, C2PA: marks/metadata showing a file was AI-made. Leave in place.
+
+Model/tool descriptions (Gemini, TTS, FLUX, Wan, HunyuanVideo, ACE-Step, FFmpeg, Remotion, Kaggle/Colab, Cloudflare, HF, agents) are in `02-stack.md`.

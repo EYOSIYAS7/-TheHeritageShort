@@ -1,0 +1,3 @@
+# Committed outputs as cache; GPU stages are optional
+
+Generated outputs and a cache manifest (hash of each stage's inputs → output file) are committed to the repo, and `make film` only calls a model for shots whose inputs changed. The GPU stages (Wan 2.2 moving shots, ACE-Step score) run by pushing a Kaggle notebook via the Kaggle CLI and polling it; with no Kaggle credentials or a failed job, each moving shot falls back to its pan shot and the score stage reuses the last chosen track, and every fallback is logged to `runs.jsonl`. We chose this so a stranger with no API keys or GPU can clone and regenerate the film in one command, at the cost of a larger repo (move media to Git LFS if it grows too big).

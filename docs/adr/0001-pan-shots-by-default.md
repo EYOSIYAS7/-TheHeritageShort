@@ -1,0 +1,3 @@
+# Pan shots by default, moving shots only for three key moments
+
+Every shot is first produced as a pan shot (slow pan/zoom across its keyframe in FFmpeg); only three shots (the coffee pour with steam, the jebena falling, the hand-hold) are planned as moving shots generated with Wan 2.2 on Kaggle. We chose this because the deadline is under two days, there is no local GPU, and a Wan 2.2 clip takes minutes on a Kaggle T4 under a weekly quota, so a pipeline that needs video for every shot could end with no film. Any moving shot falls back to its pan shot if generation fails, so the film is always complete; the pan-vs-moving comparison on the same shot is recorded in EXPERIMENTS.md.
