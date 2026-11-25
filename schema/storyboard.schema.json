@@ -203,6 +203,11 @@
         "motion_prompt": { "$ref": "#/$defs/text" },
         "seed": { "$ref": "#/$defs/seed" },
         "grade": { "enum": ["copper", "gold"] },
+        "references": {
+          "description": "Which character-sheet images to pass as reference images for this keyframe (overrides the default: all of the shot's characters when style.reference_images is true). An empty list means descriptions and seed only.",
+          "type": "array",
+          "items": { "enum": ["father", "son", "coffee_corner"] }
+        },
         "pan": {
           "description": "Pan path per aspect ratio. Every shot has one, so a moving shot can fall back to its pan shot.",
           "type": "object",

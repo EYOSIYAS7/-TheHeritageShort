@@ -30,7 +30,7 @@ Four acts, 12 shots, 82.5 s, then the saying card (4 s) and the AI end card (3 s
 | Act | Shots | What happens |
 |---|---|---|
 | Mornings | 1–4 | The coffee ceremony; the Son leaves twice: "Dad, we'll have coffee together tomorrow." / "Tomorrow, Dad." |
-| The fall | 5–6 | The jebena falls; the Son alone in a hospital corridor. |
+| The fall | 5–6 | The jebena falls; the Father in a hospital bed, the Son beside him with his head in his hands. |
 | After | 7–8 | The Father's weak hand beside a jebena he can't lift; the empty coffee corner. |
 | Two cups | 9–12 | The Son makes the coffee himself, two cups, phone face-down, holds his father's hand; the closing passage. |
 

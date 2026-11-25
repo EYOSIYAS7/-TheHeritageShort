@@ -53,6 +53,7 @@ class Shot:
     seed: int
     grade: Literal["copper", "gold"]
     characters: list[str]
+    references: list[str] | None  # character-sheet images for this keyframe; None = the default
     pan: dict[Aspect, tuple[View, View]]  # start and end view per aspect ratio
 
 
@@ -244,6 +245,7 @@ def _to_storyboard(raw: dict[str, Any]) -> Storyboard:
             seed=s["seed"],
             grade=s["grade"],
             characters=s["characters"],
+            references=s.get("references"),
             pan={aspect: (View(**s["pan"][aspect]["start"]), View(**s["pan"][aspect]["end"])) for aspect in ASPECTS},
         )
         for s in raw["shots"]

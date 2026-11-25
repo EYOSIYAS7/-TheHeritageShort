@@ -4,7 +4,9 @@ The prompt is built only from storyboard text: the shot's keyframe prompt,
 the fixed description of each character in the shot, the global style words
 and the shot's grade words. When `style.reference_images` is true, the
 character-sheet images of the shot's characters are passed as FLUX.2 klein
-reference images; either way the choice is in the logged parameters. The
+reference images, unless the shot lists its own `references` (two or three
+references made the model paste a reference figure instead of composing the
+scene: EXPERIMENTS.md E3). Either way the choice is in the logged parameters. The
 cache key covers the prompt (so style, grade and descriptions), the seed, the
 size, the model and the reference images used.
 """
@@ -28,8 +30,9 @@ def run(board: Storyboard, image: ImageProvider, sheet: dict[str, Path], cache: 
     """The keyframe of every shot that has one; shots left out get a labelled placeholder downstream."""
     frames: dict[int, Path] = {}
     for shot in board.shots:
-        references = tuple(sheet[name] for name in shot.characters if name in sheet) \
-            if board.style.reference_images else ()
+        names = shot.references if shot.references is not None else \
+            (shot.characters if board.style.reference_images else [])
+        references = tuple(sheet[name] for name in names if name in sheet)
         made = draw(STAGE, f"shot-{shot.id:02}", prompt_for(board, shot), shot.seed, SIZE, references,
                     image, cache, log, outputs / STAGE)
         if made is not None:

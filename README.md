@@ -19,7 +19,7 @@ What it does, in order:
 
 Every model call (and every cache hit) is logged as one JSON line in `runs.jsonl`. The cache manifest (`outputs/cache-manifest.json`, input hash → file) is committed with the outputs, so a clean clone with no API keys rebuilds the film.
 
-**Current state (radio cut):** real Amharic narration with burned-in English subtitles and a generated placeholder music bed over a black screen, 89.5 s. Keyframes, moving shots, the ACE-Step score and the 9:16 export arrive in later stages.
+**Current state (rough cut):** 12 illustrated keyframes (Cloudflare Workers AI, FLUX.2 klein 4B) as pan shots, with real Amharic narration, burned-in English subtitles and a placeholder music bed, 89.5 s, in 16:9 and 9:16. The moving shots (Wan 2.2), the ACE-Step score and the saying and end cards arrive in later stages.
 
 **Cost so far:** $0. The placeholder runs locally.
 
@@ -29,6 +29,7 @@ Every model call (and every cache hit) is logged as one JSON line in `runs.jsonl
 |---|---|
 | `make review` | lists narration lines whose Amharic hasn't been reviewed, English beside Amharic. Correct `am` in `storyboard.json`, then set `am_reviewed: true`. |
 | `make voices` | the voice trial: one narration line in each candidate voice (`narrator.voice_trial`), for picking the narrator by ear |
+| `make rough-cut` | the character sheet, a FLUX.2 klein keyframe per shot and FFmpeg pan shots, with narration, subtitles and music: `outputs/film/rough-cut-16x9.mp4` and `-9x16.mp4`. A shot without a keyframe (no Cloudflare keys and nothing cached) shows a labelled placeholder. |
 | `make radio-cut` | narration, burned-in English subtitles and a placeholder music bed (ducked under the voice) on a black screen: `outputs/film/radio-cut-16x9.mp4`, for user test 1. Allows unreviewed Amharic; `make film` refuses it. |
 | `make test` | pytest suite at the pipeline entry point (fake providers, real FFmpeg) |
 | `make typecheck` | mypy, strict |

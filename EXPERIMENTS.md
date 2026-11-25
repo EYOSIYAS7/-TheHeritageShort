@@ -19,3 +19,22 @@ Hypothesis → change → result. Every call made for an experiment is in `runs.
   - The Son's sheet holds a phone, so the phone appears in shot 12, where he should have put it away.
   - The Son is drawn as a child in shots 2, 10 and 12, despite "about thirty".
   - The copper grade barely shows in Acts 1–3.
+
+## E3. How many reference images per keyframe (2026-11-26)
+
+- **Hypothesis:** the E2 side effects come from the prompts and the Son's description, not from the references themselves.
+- **Change 1 (prompts only):**
+  - The Son is described as "a grown man… an adult not a boy", and his phone is taken out of his description (it stays only where a shot's prompt asks for it).
+  - Room setting added to shots 2, 4, 5 and 8, stronger copper words, and shot 6 rewritten to show the Father in a hospital bed (the author's note: without him there, the fall is unreadable).
+  - 13 images (the Son's sheet plus 12 keyframes), all references still passed.
+- **Result 1:** the rooms, the copper grade and the Son's age are fixed (shots 1, 2, 5, 7, 8). But every shot with 2–3 references got worse: the model pasted a reference figure instead of composing the scene.
+  - shot 3: the Son in the Father's netela
+  - shot 4: two Fathers
+  - shot 6: the Son alone on white, no hospital
+  - shot 10: no people
+  - shot 11: a handshake with a stranger
+  - shot 12: the Son alone
+- **Change 2:** a per-shot `references` list in the storyboard: only the main character's sheet for shots 3, 4, 6, 9, 10, 11 and 12 (7 images).
+- **Result 2:** shots 3, 6, 11 and 12 now compose correctly (the hospital bed with the Son beside it; the hand-hold; side by side). Shot 10 still failed (two old men in a garden).
+- **Change 3:** shot 10 with no references, descriptions only (1 image). **Result:** correct staging (the Son laying his phone face-down beside the Father). The cost is likeness: the Father is drawn in a blue shirt.
+- **Conclusion:** on Workers AI FLUX.2 klein 4B, one reference image keeps a character; two or three make the model copy instead of compose. Total for the keyframes so far: 36 images (3 + 12, then 13, 7 and 1).
