@@ -13,8 +13,9 @@ Requirements: `python3` with `venv`, and `ffmpeg`/`ffprobe` on the PATH (Ubuntu:
 What it does, in order:
 
 1. **Validates** `storyboard.json` against `schema/storyboard.schema.json`, then checks shot references and that the film is 60–90 s long. Any problem stops the run before a single model call, with a message naming the shot or line and the field.
-2. **Narration:** one audio file per narration line. Cached by a hash of the line's inputs, so only changed lines are regenerated.
-3. **Assembly:** FFmpeg places each line at its shot's start plus offset and exports `outputs/film/film-16x9.mp4`.
+2. **Script:** Gemini drafts the Amharic for every narration line that isn't pinned (`gemini-3.5-flash`, with `gemini-3.8-flash` as fallback), from its English and the translation instruction in `storyboard.json`. Drafts are written back marked unreviewed. A line is redrafted only when its English changes. Without `GEMINI_API_KEY` the committed drafts are reused.
+3. **Narration:** one audio file per narration line. Cached by a hash of the line's inputs, so only changed lines are regenerated.
+4. **Assembly:** FFmpeg places each line at its shot's start plus offset and exports `outputs/film/film-16x9.mp4`.
 
 Every model call (and every cache hit) is logged as one JSON line in `runs.jsonl`. The cache manifest (`outputs/cache-manifest.json`, input hash → file) is committed with the outputs, so a clean clone with no API keys rebuilds the film.
 
@@ -26,6 +27,7 @@ Every model call (and every cache hit) is logged as one JSON line in `runs.jsonl
 
 | Command | What it does |
 |---|---|
+| `make review` | lists narration lines whose Amharic hasn't been reviewed, English beside Amharic. Correct `am` in `storyboard.json`, then set `am_reviewed: true`. |
 | `make test` | pytest suite at the pipeline entry point (fake providers, real FFmpeg) |
 | `make typecheck` | mypy, strict |
 

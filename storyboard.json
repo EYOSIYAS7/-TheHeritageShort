@@ -33,6 +33,10 @@
       "seed": 7003
     }
   },
+  "script": {
+    "instruction": "Translate one line of narration from a short Ethiopian film into Amharic. The narrator is the Son, an Ethiopian man in his thirties, looking back on the mornings his father made coffee for him and wanted to talk, and on the day his father had a stroke and nearly died. Write natural spoken Amharic, the way he would say it quietly to close friends: warm, simple, heartfelt, not formal or literary, and no longer than the English so it fits its time. Call the father አባባ. Reply with the Amharic line only, in Ethiopic script: no quotes, no transliteration, no explanation.",
+    "seed": 3003
+  },
   "narrator": {
     "voice": "Charon",
     "style": "slow, warm, quiet, reflective; a man in his thirties looking back",
@@ -564,9 +568,10 @@
       "shot": 2,
       "offset_s": 1.5,
       "en": "Let's talk tomorrow, Dad.",
-      "am": null,
+      "am": "አባባ ነገ እንነጋገር።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "Let's talk tomorrow, Dad."
     },
     {
       "id": "tomorrow-2",
@@ -582,99 +587,110 @@
       "shot": 6,
       "offset_s": 1.5,
       "en": "I had always said tomorrow.",
-      "am": null,
+      "am": "ሁልጊዜ ነገ ነበር የምለው።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "I had always said tomorrow."
     },
     {
       "id": "closing-01",
       "shot": 9,
       "offset_s": 0.5,
       "en": "We thought there would always be another morning.",
-      "am": null,
+      "am": "ሁልጊዜ ሌላ ጠዋት የሚኖር ይመስለን ነበር።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "We thought there would always be another morning."
     },
     {
       "id": "closing-02",
       "shot": 9,
       "offset_s": 3.5,
       "en": "Another cup of coffee.",
-      "am": null,
+      "am": "ሌላ ሲኒ ቡና።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "Another cup of coffee."
     },
     {
       "id": "closing-03",
       "shot": 9,
       "offset_s": 5.3,
       "en": "Another story to hear.",
-      "am": null,
+      "am": "ሌላ የምሰማው ታሪክ።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "Another story to hear."
     },
     {
       "id": "closing-04",
       "shot": 10,
       "offset_s": 0.3,
       "en": "We kept postponing the moments that mattered, believing time would wait for us.",
-      "am": null,
+      "am": "ጊዜ የሚጠብቀን መስሎን፣ ትርጉም ያላቸውን አጋጣሚዎች እናራዝማቸው ነበር።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "We kept postponing the moments that mattered, believing time would wait for us."
     },
     {
       "id": "closing-05",
       "shot": 11,
       "offset_s": 0.3,
       "en": "But life does not promise us another tomorrow.",
-      "am": null,
+      "am": "ግን ህይወት ሌላ ነገን ቃል አትገባልንም።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "But life does not promise us another tomorrow."
     },
     {
       "id": "closing-06",
       "shot": 11,
       "offset_s": 3.3,
       "en": "Sometimes, we don't realize how precious an ordinary moment is until it becomes a memory.",
-      "am": null,
+      "am": "አንዳንዴ ተራ የሚመስል ቅጽበት ትዝታ እስኪሆን ድረስ ምን ያህል ውድ እንደሆነ አይገባንም።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "Sometimes, we don't realize how precious an ordinary moment is until it becomes a memory."
     },
     {
       "id": "closing-07",
       "shot": 12,
       "offset_s": 2.0,
       "en": "So love while you can.",
-      "am": null,
+      "am": "ስለዚህ እድሉ እያለ ውደዱ።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "So love while you can."
     },
     {
       "id": "closing-08",
       "shot": 12,
       "offset_s": 4.8,
       "en": "Listen while they can speak.",
-      "am": null,
+      "am": "መናገር በሚችሉበት ጊዜ አዳምጧቸው።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "Listen while they can speak."
     },
     {
       "id": "closing-09",
       "shot": 12,
       "offset_s": 7.6,
       "en": "Sit with them while they are still beside you.",
-      "am": null,
+      "am": "ገና ከጎንህ እያሉ አብረሃቸው ተቀመጥ።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "Sit with them while they are still beside you."
     },
     {
       "id": "closing-10",
       "shot": 12,
       "offset_s": 12.0,
       "en": "Because not every tomorrow is promised.",
-      "am": null,
+      "am": "ምክንያቱም ነገ ለሁላችንም የተረጋገጠ አይደለም።",
       "am_pinned": false,
-      "am_reviewed": false
+      "am_reviewed": false,
+      "am_from_en": "Because not every tomorrow is promised."
     }
   ]
 }

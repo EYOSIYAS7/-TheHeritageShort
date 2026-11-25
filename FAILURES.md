@@ -6,7 +6,9 @@ What broke, what was tried, what fixed it. Evidence for each entry is in `runs.j
 
 - **What broke:** Gemini text (`gemini-3.8-flash`), called once per run by a smoke test (since removed; its calls are in `runs.jsonl`, stage `smoke`). Across 5 smoke runs on 2026-11-25 the text call succeeded twice and failed 3 times: 16 attempts answered `HTTP 503: This model is currently experiencing high demand`. Successful calls took 71–90 s.
 - **Tried:** the run log's default 3 attempts (backoff 2 s, 4 s) were not enough; then 5 attempts (2+4+8+16 = 30 s of backoff). The last run still failed after 5 attempts.
-- **Status:** open. The TTS model (`gemini-3.8-flash-tts`) on the same key answered every time (one 503 retried). Options for the script stage (ticket 03): longer backoff for text calls, or fall back to `gemini-3.8-flash-lite`/`gemini-3.5-flash` and log which model answered. Because the Amharic draft is written back into `storyboard.json` and cached, the script stage only needs to succeed once.
+- **Again in the first script-stage run (new key, same day):** `gemini-3.8-flash` failed every one of the 12 lines: 8 attempts answered 503, 28 answered `429` (quota). The fallback `gemini-3.5-flash` drafted all 12 (one 503 retried).
+- **Fixed (worked around):** the script stage tries text models in order and logs which one answered (`pipeline/providers.py: TEXT_MODELS`). `gemini-3.5-flash` now goes first and `gemini-3.8-flash` is the fallback. Drafts are written into `storyboard.json` and cached, so they are made once.
+- **Earlier note:** The TTS model (`gemini-3.8-flash-tts`) on the same key answered every time (one 503 retried). 
 
 ## F2. Gemini TTS read more than the line with a one-line style prefix (2026-11-25)
 

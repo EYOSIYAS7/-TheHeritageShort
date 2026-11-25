@@ -4,9 +4,29 @@
     "path": "outputs/narration/tomorrow-1-035d1d458280.wav",
     "stage": "narration"
   },
+  "03972fea6c5f74a34f6b85a52bf40a892f4f4d83ea6d00694ead51e62e0b2802": {
+    "item": "closing-04",
+    "path": "outputs/narration/closing-04-03972fea6c5f.wav",
+    "stage": "narration"
+  },
+  "0d28989d3c515bd96d8f0eaaabeae66e690d24e8368dddbca8b2c828218468ac": {
+    "item": "tomorrow-1",
+    "path": "outputs/script/tomorrow-1-0d28989d3c51.json",
+    "stage": "script"
+  },
   "16151abe18381de8bee6974bfc12f80cc6649ee283e64e9f3b7e6fb4c3aade1d": {
     "item": "closing-01",
     "path": "outputs/narration/closing-01-16151abe1838.wav",
+    "stage": "narration"
+  },
+  "1b79db7fb82fd83243675b2f7053a6faa27d212b9552235f2f5c5a37d10c8763": {
+    "item": "closing-03",
+    "path": "outputs/narration/closing-03-1b79db7fb82f.wav",
+    "stage": "narration"
+  },
+  "1fa78edc67f7e29f58096f513cc58187abe195aace9c183c12d70235bef639b1": {
+    "item": "closing-06",
+    "path": "outputs/narration/closing-06-1fa78edc67f7.wav",
     "stage": "narration"
   },
   "38086518423307d5513ba46e766193b11a62bb8c9682609156546864fbf65b84": {
@@ -29,19 +49,79 @@
     "path": "outputs/narration/hospital-46aad99d9248.wav",
     "stage": "narration"
   },
+  "54802c5e17c7fd01fffbc2a6d7e862d916cb7318d88ffbaf575f06ac361d295e": {
+    "item": "closing-09",
+    "path": "outputs/narration/closing-09-54802c5e17c7.wav",
+    "stage": "narration"
+  },
+  "6402c1313c82e1df7577b8d1e318733153f1977fc24a8c064ddcadb3c050cfc4": {
+    "item": "tomorrow-1",
+    "path": "outputs/narration/tomorrow-1-6402c1313c82.wav",
+    "stage": "narration"
+  },
   "70cd0d5f3f538feb77b69e31464026be9241cdfd176f43769ed575fd4997a3a9": {
     "item": "closing-07",
     "path": "outputs/narration/closing-07-70cd0d5f3f53.wav",
     "stage": "narration"
+  },
+  "7153cb9ee6df4d7be19a91ed1ba198fe21979cd3258081b4dbd331898382df8c": {
+    "item": "closing-05",
+    "path": "outputs/script/closing-05-7153cb9ee6df.json",
+    "stage": "script"
+  },
+  "75fe34901e2ccc48ab68ef1ba6df039cc0f312577c4db13b9f952d010d4ad37b": {
+    "item": "closing-07",
+    "path": "outputs/narration/closing-07-75fe34901e2c.wav",
+    "stage": "narration"
+  },
+  "7c32e77f840a2622cf7937406b2c5128156e6a3039a76259e4c1b6dd1ae46586": {
+    "item": "hospital",
+    "path": "outputs/narration/hospital-7c32e77f840a.wav",
+    "stage": "narration"
+  },
+  "8901f2ec7f2eea8b04ff0d7c97c5a5599b5a5aabe23b2c2ceb7a640fd94314d6": {
+    "item": "closing-03",
+    "path": "outputs/script/closing-03-8901f2ec7f2e.json",
+    "stage": "script"
+  },
+  "90dc9fb105f4f1881e4fc71fc40edb6a0bf829c50296cef4de5281c8bf141311": {
+    "item": "hospital",
+    "path": "outputs/script/hospital-90dc9fb105f4.json",
+    "stage": "script"
   },
   "9ec3dc8623df773c669e391f83be0c3a304f38f4ae986ed55355d22ca42b027e": {
     "item": "closing-09",
     "path": "outputs/narration/closing-09-9ec3dc8623df.wav",
     "stage": "narration"
   },
+  "a3c6109ad8eef7bb64da61ac1c84dd9214a6fa5e14f84583096571a819278870": {
+    "item": "closing-08",
+    "path": "outputs/narration/closing-08-a3c6109ad8ee.wav",
+    "stage": "narration"
+  },
+  "abbba6b3272b9a58fba9ef97eff7b27d157812b6ac8f1637e6299c464701677a": {
+    "item": "closing-09",
+    "path": "outputs/script/closing-09-abbba6b3272b.json",
+    "stage": "script"
+  },
   "acce4c97e6275ca79338d955757fa282aa3c398da577be6b890e7aa8996cba20": {
     "item": "closing-03",
     "path": "outputs/narration/closing-03-acce4c97e627.wav",
+    "stage": "narration"
+  },
+  "b0a5d2d8f0c8601edfa68414ccc9fec9b1a2607d0d1a5a84ba4b1382b44aeea0": {
+    "item": "closing-02",
+    "path": "outputs/narration/closing-02-b0a5d2d8f0c8.wav",
+    "stage": "narration"
+  },
+  "b1d5311d275f4252955ae78bd453167cf32bd3ebbb275b99caa73b1ccccb95b7": {
+    "item": "closing-04",
+    "path": "outputs/script/closing-04-b1d5311d275f.json",
+    "stage": "script"
+  },
+  "b70213dbe30212ee0637573d3e18b113b5cd0a58246ee0f13a45cf18dc908641": {
+    "item": "closing-05",
+    "path": "outputs/narration/closing-05-b70213dbe302.wav",
     "stage": "narration"
   },
   "b77305cc686bc65c97cd403370b21a00dc80d18a3e64a3a9614ebcd248d16bb5": {
@@ -49,19 +129,59 @@
     "path": "outputs/narration/closing-05-b77305cc686b.wav",
     "stage": "narration"
   },
+  "bb04807a3106b0bd6b2305427fb7932594b5703e522b305f40574a7a42d37660": {
+    "item": "closing-07",
+    "path": "outputs/script/closing-07-bb04807a3106.json",
+    "stage": "script"
+  },
   "c5664b144e99c0256c67b9b8b705afe9c4101e3b64132b4bfeaa419687b45b54": {
     "item": "closing-04",
     "path": "outputs/narration/closing-04-c5664b144e99.wav",
     "stage": "narration"
+  },
+  "cb7788231a6865d67130040b39483f33bbac724936e8317de894bfc7cd9b052f": {
+    "item": "closing-02",
+    "path": "outputs/script/closing-02-cb7788231a68.json",
+    "stage": "script"
   },
   "cc8a51d33d2b706b14a67af3d442e2a0db25c7eb7f8dd3fdfcbb6e6a21baf69b": {
     "item": "closing-02",
     "path": "outputs/narration/closing-02-cc8a51d33d2b.wav",
     "stage": "narration"
   },
+  "d035bfebc0328ec2b130cc1fc7196f8c658f8a6e689ca59bc28deaa46906d962": {
+    "item": "closing-06",
+    "path": "outputs/script/closing-06-d035bfebc032.json",
+    "stage": "script"
+  },
+  "d66586b8a3208bc56fff52d71396fce9a2989ed1fbff23a21612a55076f545f4": {
+    "item": "closing-10",
+    "path": "outputs/script/closing-10-d66586b8a320.json",
+    "stage": "script"
+  },
+  "e2bba96316a0ad9d612d5503d4d8db681f593898d36b22241d016f25701083c3": {
+    "item": "closing-10",
+    "path": "outputs/narration/closing-10-e2bba96316a0.wav",
+    "stage": "narration"
+  },
+  "ed12d3bd7c7ef23acde7be90d9449b461289a4966971e4e222617d022abddef9": {
+    "item": "closing-01",
+    "path": "outputs/narration/closing-01-ed12d3bd7c7e.wav",
+    "stage": "narration"
+  },
   "f0e05370aa2833fe4d91795d0922abb72cee84ac6e0ac76f656d3e91172367e8": {
     "item": "tomorrow-2",
     "path": "outputs/narration/tomorrow-2-f0e05370aa28.wav",
     "stage": "narration"
+  },
+  "f156fc3a2d125f7ef11527a4e674a7c449b2080a8a30bc4782f93e7d42730f0d": {
+    "item": "closing-01",
+    "path": "outputs/script/closing-01-f156fc3a2d12.json",
+    "stage": "script"
+  },
+  "fee6850f177a8ea147aa7b5fbdc8845b51df0bd571d2b867caf6a8306030b2c3": {
+    "item": "closing-08",
+    "path": "outputs/script/closing-08-fee6850f177a.json",
+    "stage": "script"
   }
 }

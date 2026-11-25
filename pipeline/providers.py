@@ -11,6 +11,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
+from pipeline.adapters import GeminiText
+from pipeline.env import load_env
 from pipeline.media import write_tone_wav
 
 
@@ -72,10 +74,20 @@ class PlaceholderSpeech:
         return 0.0
 
 
+# Tried in order. gemini-3.8-flash answered only 503 "high demand" or 429 quota errors in the
+# first script run while gemini-3.5-flash drafted every line (FAILURES.md F1), so 3.5 goes first.
+TEXT_MODELS = ("gemini-3.5-flash", "gemini-3.8-flash")
+
+
 @dataclass(frozen=True)
 class Providers:
     speech: SpeechProvider
+    text: tuple[TextProvider, ...] = ()  # tried in order; empty means no drafting (no key)
 
 
-def default_providers() -> Providers:
-    return Providers(speech=PlaceholderSpeech())
+def default_providers(root: Path) -> Providers:
+    """Real adapters for every provider whose key is in `root/.env`; placeholders otherwise."""
+    env = load_env(root / ".env")
+    key = env.get("GEMINI_API_KEY")
+    text: tuple[TextProvider, ...] = tuple(GeminiText(key, model) for model in TEXT_MODELS) if key else ()
+    return Providers(speech=PlaceholderSpeech(), text=text)

@@ -5,7 +5,7 @@
   "description": "The single contract between every pipeline stage: shots, narration, cards, style, characters, narrator and music cue.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["title", "saying", "end_card", "style", "characters", "narrator", "music", "shots", "narration"],
+  "required": ["title", "saying", "end_card", "style", "characters", "script", "narrator", "music", "shots", "narration"],
   "properties": {
     "title": {
       "type": "object",
@@ -66,6 +66,16 @@
         "father": { "$ref": "#/$defs/character" },
         "son": { "$ref": "#/$defs/character" },
         "coffee_corner": { "$ref": "#/$defs/character" }
+      }
+    },
+    "script": {
+      "description": "How the script stage drafts the Amharic narration from the English.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["instruction", "seed"],
+      "properties": {
+        "instruction": { "description": "Translation instruction sent to the text model before each English line: tone, register, who is speaking.", "$ref": "#/$defs/text" },
+        "seed": { "$ref": "#/$defs/seed" }
       }
     },
     "narrator": {
@@ -197,7 +207,8 @@
         "en": { "description": "English text; also the burned-in subtitle.", "$ref": "#/$defs/text" },
         "am": { "description": "Amharic text spoken by the narrator; null until drafted.", "type": ["string", "null"] },
         "am_pinned": { "description": "True if the author wrote the Amharic; the script stage never overwrites it.", "type": "boolean" },
-        "am_reviewed": { "description": "True once the author has checked the Amharic. The final film refuses unreviewed lines.", "type": "boolean" }
+        "am_reviewed": { "description": "True once the author has checked the Amharic. The final film refuses unreviewed lines.", "type": "boolean" },
+        "am_from_en": { "description": "The English the Amharic was drafted from, written by the script stage. When `en` no longer matches, the line is redrafted and marked unreviewed.", "type": ["string", "null"] }
       }
     }
   }

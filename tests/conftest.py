@@ -46,6 +46,7 @@ TINY_STORYBOARD: dict[str, Any] = {
         "son": {"description": "a young man", "seed": 2},
         "coffee_corner": {"description": "a coffee corner", "seed": 3},
     },
+    "script": {"instruction": "Translate into Amharic.", "seed": 7},
     "narrator": {"voice": "TestVoice", "style": "warm", "seed": 42},
     "music": {"caption": "quiet", "duration_s": 67, "candidates": 1, "chosen": None, "reason": None,
               "volume_points": [{"t_s": 0, "gain": 1.0}]},
@@ -82,6 +83,22 @@ class FakeSpeech:
         return 0.001
 
 
+class FakeText:
+    """Records every prompt and answers with a recognisable fake 'translation'."""
+
+    model = "fake-text"
+
+    def __init__(self) -> None:
+        self.prompts: list[str] = []
+
+    def generate(self, prompt: str, *, seed: int) -> str:
+        self.prompts.append(prompt)
+        return "AM:" + prompt.rsplit("English: ", 1)[-1]
+
+    def cost_estimate_usd(self, prompt: str) -> float:
+        return 0.0
+
+
 class Project:
     def __init__(self, root: Path) -> None:
         self.root = root
@@ -112,8 +129,8 @@ def project(tmp_path: Path) -> Project:
     return Project(tmp_path)
 
 
-def providers(speech: FakeSpeech) -> Providers:
-    return Providers(speech=speech)
+def providers(speech: FakeSpeech, text: FakeText | None = None) -> Providers:
+    return Providers(speech=speech, text=(text,) if text else ())
 
 
 def no_sleep(_: float) -> None:

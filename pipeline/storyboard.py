@@ -50,6 +50,7 @@ class Line:
     am: str | None
     am_pinned: bool
     am_reviewed: bool
+    am_from_en: str | None
 
 
 @dataclass(frozen=True)
@@ -60,9 +61,18 @@ class Narrator:
 
 
 @dataclass(frozen=True)
+class Script:
+    """How the script stage drafts the Amharic: the translation instruction and seed."""
+
+    instruction: str
+    seed: int
+
+
+@dataclass(frozen=True)
 class Storyboard:
     shots: list[Shot]
     narration: list[Line]
+    script: Script
     narrator: Narrator
     saying_card_s: float
     end_card_s: float
@@ -207,6 +217,7 @@ def _to_storyboard(raw: dict[str, Any]) -> Storyboard:
             am=n["am"],
             am_pinned=n["am_pinned"],
             am_reviewed=n["am_reviewed"],
+            am_from_en=n.get("am_from_en"),
         )
         for n in raw["narration"]
     ]
@@ -214,6 +225,7 @@ def _to_storyboard(raw: dict[str, Any]) -> Storyboard:
     return Storyboard(
         shots=shots,
         narration=narration,
+        script=Script(instruction=raw["script"]["instruction"], seed=raw["script"]["seed"]),
         narrator=Narrator(voice=narrator["voice"], style=narrator["style"], seed=narrator["seed"]),
         saying_card_s=float(raw["saying"]["duration_s"]),
         end_card_s=float(raw["end_card"]["duration_s"]),

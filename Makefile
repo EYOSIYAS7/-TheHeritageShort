@@ -5,11 +5,15 @@
 VENV := .venv
 PY := $(VENV)/bin/python
 
-.PHONY: film test typecheck check
+.PHONY: film review test typecheck check
 
 ## Build the film into outputs/film/ (validates storyboard.json first)
 film: $(VENV)/.deps
 	$(PY) -m pipeline film
+
+## List narration lines whose Amharic is not reviewed yet (English beside Amharic)
+review: $(VENV)/.deps
+	$(PY) -m pipeline review
 
 ## Run the test suite (fake providers, real FFmpeg)
 test: $(VENV)/.dev-deps
