@@ -54,6 +54,11 @@
     "path": "outputs/narration/closing-09-54802c5e17c7.wav",
     "stage": "narration"
   },
+  "5ab21a95c239af06c7930eb7b8cd46125592298af51d4d2737738a6f5453c301": {
+    "item": "closing-04",
+    "path": "outputs/narration/closing-04-5ab21a95c239.wav",
+    "stage": "narration"
+  },
   "6402c1313c82e1df7577b8d1e318733153f1977fc24a8c064ddcadb3c050cfc4": {
     "item": "tomorrow-1",
     "path": "outputs/narration/tomorrow-1-6402c1313c82.wav",
@@ -162,6 +167,11 @@
   "e2bba96316a0ad9d612d5503d4d8db681f593898d36b22241d016f25701083c3": {
     "item": "closing-10",
     "path": "outputs/narration/closing-10-e2bba96316a0.wav",
+    "stage": "narration"
+  },
+  "ecfdba04e1ddda226ddb5a254058b7ddc97d02c667faec8dd29a0a8c09b8c99e": {
+    "item": "closing-09",
+    "path": "outputs/narration/closing-09-ecfdba04e1dd.wav",
     "stage": "narration"
   },
   "ed12d3bd7c7ef23acde7be90d9449b461289a4966971e4e222617d022abddef9": {
