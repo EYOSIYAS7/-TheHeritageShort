@@ -1,0 +1,680 @@
+{
+  "title": {
+    "en": "Tomorrow, Dad",
+    "am": "ነገ አባባ ነገ"
+  },
+  "saying": {
+    "am": "በእጅ የያዙት ወርቅ እንደ መዳብ ይቆጠራል",
+    "en": "Gold held in the hand is counted as copper.",
+    "duration_s": 4
+  },
+  "end_card": {
+    "text": "Made with AI. A composite story; no real person is depicted.",
+    "duration_s": 3
+  },
+  "style": {
+    "words": "warm illustrated film still, painterly brushwork, soft film grain, gentle diffused light, rich textured fabrics, quiet intimate composition, subject in the central third of a 16:9 frame",
+    "grades": {
+      "copper": "muted copper and grey-green palette, dull cool light, faded colours, only a faint warm glow near the coffee corner",
+      "gold": "full warm gold palette, honeyed morning sunlight, glowing amber highlights, soft warm shadows"
+    }
+  },
+  "characters": {
+    "father": {
+      "description": "an Ethiopian man of about seventy with a kind, deeply lined face, short grey hair and grey stubble, a white netela shawl over his shoulders",
+      "seed": 7001
+    },
+    "son": {
+      "description": "an Ethiopian man of about thirty, clean-shaven with short black hair, wearing a light blue office shirt, a smartphone in hand",
+      "seed": 7002
+    },
+    "coffee_corner": {
+      "description": "a traditional Ethiopian coffee ceremony corner on fresh green grass strewn on the floor: a black clay jebena, small white handleless cups on a low wooden tray, a small clay incense burner, a low wooden stool",
+      "seed": 7003
+    }
+  },
+  "narrator": {
+    "voice": "Charon",
+    "style": "slow, warm, quiet, reflective; a man in his thirties looking back",
+    "seed": 4242
+  },
+  "music": {
+    "caption": "slow reflective instrumental in the spirit of Ethiopian tizita, longing and nostalgia; krar and masenqo with soft piano; sparse at the start, warmer and fuller at the end; no vocals",
+    "duration_s": 80,
+    "candidates": 3,
+    "chosen": null,
+    "reason": null,
+    "volume_points": [
+      {
+        "t_s": 0,
+        "gain": 0.6
+      },
+      {
+        "t_s": 18.5,
+        "gain": 0.6
+      },
+      {
+        "t_s": 20,
+        "gain": 0.05
+      },
+      {
+        "t_s": 37,
+        "gain": 0.05
+      },
+      {
+        "t_s": 40,
+        "gain": 0.9
+      },
+      {
+        "t_s": 76,
+        "gain": 0.9
+      },
+      {
+        "t_s": 78,
+        "gain": 0.0
+      }
+    ]
+  },
+  "shots": [
+    {
+      "id": 1,
+      "act": "Mornings",
+      "duration_s": 4,
+      "type": "pan",
+      "characters": [
+        "father",
+        "coffee_corner"
+      ],
+      "keyframe_prompt": "Dawn in a modest Addis Ababa living room. The Father kneels at the coffee corner laying out the coffee ceremony: jebena, small handleless cups on a tray, incense smoke curling. His corner glows faintly warm while the rest of the room is muted.",
+      "motion_prompt": "Slow push in toward the Father's hands arranging the cups.",
+      "seed": 1001,
+      "grade": "copper",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.12
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.48,
+            "zoom": 1.08
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "act": "Mornings",
+      "duration_s": 6,
+      "type": "pan",
+      "characters": [
+        "father",
+        "son",
+        "coffee_corner"
+      ],
+      "keyframe_prompt": "The Son stands in the doorway, phone pressed to his ear, half-waving goodbye, while the Father, seated at the coffee corner, points gently to an empty low stool beside him.",
+      "motion_prompt": "Slow drift from the Father toward the Son in the doorway.",
+      "seed": 1002,
+      "grade": "copper",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.45,
+            "y": 0.5,
+            "zoom": 1.1
+          },
+          "end": {
+            "x": 0.55,
+            "y": 0.5,
+            "zoom": 1.1
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.46,
+            "y": 0.5,
+            "zoom": 1.05
+          },
+          "end": {
+            "x": 0.54,
+            "y": 0.5,
+            "zoom": 1.05
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "act": "Mornings",
+      "duration_s": 4,
+      "type": "pan",
+      "characters": [
+        "father",
+        "son",
+        "coffee_corner"
+      ],
+      "keyframe_prompt": "Another morning, the same framing as before: the Son is already halfway out of the door, back turned, the Father watching him go from the coffee corner.",
+      "motion_prompt": "Very slow pull out, the doorway growing smaller.",
+      "seed": 1003,
+      "grade": "copper",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.15
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.5,
+            "y": 0.48,
+            "zoom": 1.1
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "act": "Mornings",
+      "duration_s": 5,
+      "type": "moving",
+      "characters": [
+        "father",
+        "coffee_corner"
+      ],
+      "keyframe_prompt": "Close on the coffee corner: the Father pours coffee from the jebena into two small cups, a thin stream of coffee, steam rising. The second cup sits alone, untouched.",
+      "motion_prompt": "The Father pours coffee from the jebena in a slow steady stream; steam rises and drifts from both cups; camera nearly still.",
+      "seed": 1004,
+      "grade": "copper",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.12
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.48,
+            "zoom": 1.08
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "act": "The fall",
+      "duration_s": 4,
+      "type": "moving",
+      "characters": [
+        "coffee_corner"
+      ],
+      "keyframe_prompt": "The coffee corner from low down: the jebena tipping over on its side, dark coffee spilling across the fresh grass and the floor, a small cup rolling. Nobody in frame.",
+      "motion_prompt": "The jebena tips and falls onto its side; coffee spreads slowly across the floor; a cup rolls to a stop.",
+      "seed": 1005,
+      "grade": "copper",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.5,
+            "y": 0.42,
+            "zoom": 1.12
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.58,
+            "zoom": 1.12
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.5,
+            "y": 0.44,
+            "zoom": 1.06
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.56,
+            "zoom": 1.06
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "act": "The fall",
+      "duration_s": 6,
+      "type": "pan",
+      "characters": [
+        "son"
+      ],
+      "keyframe_prompt": "A hospital corridor under pale light. The Son sits alone on a metal bench, head in his hands, his phone dark on the bench beside him.",
+      "motion_prompt": "Slow push in on the Son, the corridor receding behind him.",
+      "seed": 1006,
+      "grade": "copper",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.12
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.48,
+            "zoom": 1.08
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "act": "After",
+      "duration_s": 5,
+      "type": "pan",
+      "characters": [
+        "father",
+        "coffee_corner"
+      ],
+      "keyframe_prompt": "Home again. Close on the Father's weak hand resting beside a jebena he can no longer lift; a wooden cane leans against his stool.",
+      "motion_prompt": "Slow drift along the Father's arm toward the jebena and the cane.",
+      "seed": 1007,
+      "grade": "copper",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.55,
+            "y": 0.5,
+            "zoom": 1.1
+          },
+          "end": {
+            "x": 0.45,
+            "y": 0.5,
+            "zoom": 1.1
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.54,
+            "y": 0.5,
+            "zoom": 1.05
+          },
+          "end": {
+            "x": 0.46,
+            "y": 0.5,
+            "zoom": 1.05
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "act": "After",
+      "duration_s": 5,
+      "type": "pan",
+      "characters": [
+        "coffee_corner"
+      ],
+      "keyframe_prompt": "The coffee corner, cold and empty: the tray bare, the incense burner unlit, the grass dry, morning light falling on nothing.",
+      "motion_prompt": "Very slow pull out from the empty coffee corner.",
+      "seed": 1008,
+      "grade": "copper",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.15
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.5,
+            "y": 0.48,
+            "zoom": 1.1
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "act": "Two cups",
+      "duration_s": 7,
+      "type": "pan",
+      "characters": [
+        "son",
+        "coffee_corner"
+      ],
+      "keyframe_prompt": "Before dawn. The Son kneels at the coffee corner roasting beans in a small pan over a charcoal stove, a little clumsily, smoke rising. The first light at the window begins to turn gold.",
+      "motion_prompt": "Slow push in on the Son's hands stirring the beans as the light warms.",
+      "seed": 1009,
+      "grade": "gold",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.12
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.48,
+            "zoom": 1.08
+          }
+        }
+      }
+    },
+    {
+      "id": 10,
+      "act": "Two cups",
+      "duration_s": 7,
+      "type": "pan",
+      "characters": [
+        "father",
+        "son",
+        "coffee_corner"
+      ],
+      "keyframe_prompt": "Two full cups on the tray, steam rising. The Son sits down on the stool beside the Father and lays his phone face-down on the floor.",
+      "motion_prompt": "Slow tilt down from the two faces to the phone placed face-down.",
+      "seed": 1010,
+      "grade": "gold",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.5,
+            "y": 0.42,
+            "zoom": 1.12
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.58,
+            "zoom": 1.12
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.5,
+            "y": 0.44,
+            "zoom": 1.06
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.56,
+            "zoom": 1.06
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "act": "Two cups",
+      "duration_s": 8,
+      "type": "moving",
+      "characters": [
+        "father",
+        "son"
+      ],
+      "keyframe_prompt": "Close on two hands: the Son takes the Father's weathered hand in his. Behind them, out of focus, the Father begins to speak, smiling.",
+      "motion_prompt": "The Son's hand closes gently around the Father's hand; the Father's fingers tighten slightly; soft steam drifts past; camera nearly still.",
+      "seed": 1011,
+      "grade": "gold",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.12
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.48,
+            "zoom": 1.08
+          }
+        }
+      }
+    },
+    {
+      "id": 12,
+      "act": "Two cups",
+      "duration_s": 10,
+      "type": "pan",
+      "characters": [
+        "father",
+        "son",
+        "coffee_corner"
+      ],
+      "keyframe_prompt": "Wide shot, everything bathed in gold morning light: the Father and the Son side by side at the coffee corner, two cups steaming, the Father talking, the Son listening.",
+      "motion_prompt": "Very slow pull out to the whole warm room.",
+      "seed": 1012,
+      "grade": "gold",
+      "pan": {
+        "16:9": {
+          "start": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.15
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          }
+        },
+        "9:16": {
+          "start": {
+            "x": 0.5,
+            "y": 0.48,
+            "zoom": 1.1
+          },
+          "end": {
+            "x": 0.5,
+            "y": 0.5,
+            "zoom": 1.0
+          }
+        }
+      }
+    }
+  ],
+  "narration": [
+    {
+      "id": "tomorrow-1",
+      "shot": 2,
+      "offset_s": 1.5,
+      "en": "Let's talk tomorrow, Dad.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "tomorrow-2",
+      "shot": 3,
+      "offset_s": 1.0,
+      "en": "Tomorrow, Dad.",
+      "am": "ነገ አባባ ነገ",
+      "am_pinned": true,
+      "am_reviewed": true
+    },
+    {
+      "id": "hospital",
+      "shot": 6,
+      "offset_s": 1.5,
+      "en": "I had always said tomorrow.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "closing-01",
+      "shot": 9,
+      "offset_s": 0.5,
+      "en": "We thought there would always be another morning.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "closing-02",
+      "shot": 9,
+      "offset_s": 3.5,
+      "en": "Another cup of coffee.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "closing-03",
+      "shot": 9,
+      "offset_s": 5.3,
+      "en": "Another story to hear.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "closing-04",
+      "shot": 10,
+      "offset_s": 0.3,
+      "en": "We kept postponing the moments that mattered, believing time would wait for us.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "closing-05",
+      "shot": 11,
+      "offset_s": 0.3,
+      "en": "But life does not promise us another tomorrow.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "closing-06",
+      "shot": 11,
+      "offset_s": 3.3,
+      "en": "Sometimes, we don't realize how precious an ordinary moment is until it becomes a memory.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "closing-07",
+      "shot": 12,
+      "offset_s": 1.0,
+      "en": "So love while you can.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "closing-08",
+      "shot": 12,
+      "offset_s": 2.8,
+      "en": "Listen while they can speak.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "closing-09",
+      "shot": 12,
+      "offset_s": 4.6,
+      "en": "Sit with them while they are still beside you.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    },
+    {
+      "id": "closing-10",
+      "shot": 12,
+      "offset_s": 7.3,
+      "en": "Because not every tomorrow is promised.",
+      "am": null,
+      "am_pinned": false,
+      "am_reviewed": false
+    }
+  ]
+}

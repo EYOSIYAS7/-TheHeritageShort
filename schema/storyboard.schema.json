@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://heritage-short/schema/storyboard.schema.json",
+  "title": "Storyboard",
+  "description": "The single contract between every pipeline stage: shots, narration, cards, style, characters, narrator and music cue.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["title", "saying", "end_card", "style", "characters", "narrator", "music", "shots", "narration"],
+  "properties": {
+    "title": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en", "am"],
+      "properties": {
+        "en": { "$ref": "#/$defs/text" },
+        "am": { "$ref": "#/$defs/text" }
+      }
+    },
+    "saying": {
+      "description": "The saying card: the Amharic saying and its English translation, shown just before the end card.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["am", "en", "duration_s"],
+      "properties": {
+        "am": { "$ref": "#/$defs/text" },
+        "en": { "$ref": "#/$defs/text" },
+        "duration_s": { "$ref": "#/$defs/duration" }
+      }
+    },
+    "end_card": {
+      "description": "The final card stating the film was made with AI.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "duration_s"],
+      "properties": {
+        "text": { "$ref": "#/$defs/text" },
+        "duration_s": { "$ref": "#/$defs/duration" }
+      }
+    },
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["words", "grades"],
+      "properties": {
+        "words": {
+          "description": "Global style, described by qualities; no artist names.",
+          "$ref": "#/$defs/text"
+        },
+        "grades": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["copper", "gold"],
+          "properties": {
+            "copper": { "$ref": "#/$defs/text" },
+            "gold": { "$ref": "#/$defs/text" }
+          }
+        }
+      }
+    },
+    "characters": {
+      "description": "Fixed descriptions reused word for word in every keyframe prompt.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["father", "son", "coffee_corner"],
+      "properties": {
+        "father": { "$ref": "#/$defs/character" },
+        "son": { "$ref": "#/$defs/character" },
+        "coffee_corner": { "$ref": "#/$defs/character" }
+      }
+    },
+    "narrator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["voice", "style", "seed"],
+      "properties": {
+        "voice": { "$ref": "#/$defs/text" },
+        "style": { "$ref": "#/$defs/text" },
+        "seed": { "$ref": "#/$defs/seed" }
+      }
+    },
+    "music": {
+      "description": "The music cue for the score.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["caption", "duration_s", "candidates", "chosen", "reason", "volume_points"],
+      "properties": {
+        "caption": { "$ref": "#/$defs/text" },
+        "duration_s": { "$ref": "#/$defs/duration" },
+        "candidates": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "chosen": {
+          "description": "Index (0-based) of the chosen candidate, or null before choosing.",
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "reason": { "type": ["string", "null"] },
+        "volume_points": {
+          "description": "Score gain over time on the film timeline; linear between points.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["t_s", "gain"],
+            "properties": {
+              "t_s": { "type": "number", "minimum": 0 },
+              "gain": { "type": "number", "minimum": 0, "maximum": 1.5 }
+            }
+          }
+        }
+      }
+    },
+    "shots": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/shot" }
+    },
+    "narration": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/line" }
+    }
+  },
+  "$defs": {
+    "text": { "type": "string", "minLength": 1 },
+    "duration": { "type": "number", "exclusiveMinimum": 0 },
+    "seed": { "type": "integer", "minimum": 0 },
+    "character": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "seed"],
+      "properties": {
+        "description": { "$ref": "#/$defs/text" },
+        "seed": { "$ref": "#/$defs/seed" }
+      }
+    },
+    "view": {
+      "description": "Centre of the view (x, y as fractions of the keyframe) and zoom (1 = whole frame for that aspect ratio).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "zoom"],
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1 },
+        "y": { "type": "number", "minimum": 0, "maximum": 1 },
+        "zoom": { "type": "number", "minimum": 1, "maximum": 3 }
+      }
+    },
+    "pan_path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "$ref": "#/$defs/view" },
+        "end": { "$ref": "#/$defs/view" }
+      }
+    },
+    "shot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "act", "duration_s", "type", "characters", "keyframe_prompt", "motion_prompt", "seed", "grade", "pan"],
+      "properties": {
+        "id": { "type": "integer", "minimum": 1 },
+        "act": { "enum": ["Mornings", "The fall", "After", "Two cups"] },
+        "duration_s": { "$ref": "#/$defs/duration" },
+        "type": {
+          "description": "pan: FFmpeg pan and zoom across the keyframe. moving: video model from the keyframe, falling back to the pan shot.",
+          "enum": ["pan", "moving"]
+        },
+        "characters": {
+          "description": "Which fixed character descriptions the keyframe prompt includes.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["father", "son", "coffee_corner"] }
+        },
+        "keyframe_prompt": { "$ref": "#/$defs/text" },
+        "motion_prompt": { "$ref": "#/$defs/text" },
+        "seed": { "$ref": "#/$defs/seed" },
+        "grade": { "enum": ["copper", "gold"] },
+        "pan": {
+          "description": "Pan path per aspect ratio. Every shot has one, so a moving shot can fall back to its pan shot.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["16:9", "9:16"],
+          "properties": {
+            "16:9": { "$ref": "#/$defs/pan_path" },
+            "9:16": { "$ref": "#/$defs/pan_path" }
+          }
+        }
+      }
+    },
+    "line": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "shot", "offset_s", "en", "am", "am_pinned", "am_reviewed"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "shot": { "description": "Id of the shot this line is anchored to.", "type": "integer", "minimum": 1 },
+        "offset_s": { "description": "Seconds after the anchored shot's start.", "type": "number", "minimum": 0 },
+        "en": { "description": "English text; also the burned-in subtitle.", "$ref": "#/$defs/text" },
+        "am": { "description": "Amharic text spoken by the narrator; null until drafted.", "type": ["string", "null"] },
+        "am_pinned": { "description": "True if the author wrote the Amharic; the script stage never overwrites it.", "type": "boolean" },
+        "am_reviewed": { "description": "True once the author has checked the Amharic. The final film refuses unreviewed lines.", "type": "boolean" }
+      }
+    }
+  }
+}

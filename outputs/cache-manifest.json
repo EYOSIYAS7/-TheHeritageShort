@@ -1,0 +1,67 @@
+{
+  "035d1d458280446b5f84f0412aa34590e2bd2aac346e40dedf61866d29db4583": {
+    "item": "tomorrow-1",
+    "path": "outputs/narration/tomorrow-1-035d1d458280.wav",
+    "stage": "narration"
+  },
+  "16151abe18381de8bee6974bfc12f80cc6649ee283e64e9f3b7e6fb4c3aade1d": {
+    "item": "closing-01",
+    "path": "outputs/narration/closing-01-16151abe1838.wav",
+    "stage": "narration"
+  },
+  "38086518423307d5513ba46e766193b11a62bb8c9682609156546864fbf65b84": {
+    "item": "closing-10",
+    "path": "outputs/narration/closing-10-380865184233.wav",
+    "stage": "narration"
+  },
+  "3b5554f5deaf922f0fef7d2e963aa404366378e3e11aa9aefdbd8f6628e69748": {
+    "item": "closing-06",
+    "path": "outputs/narration/closing-06-3b5554f5deaf.wav",
+    "stage": "narration"
+  },
+  "414ba9215f8f778ad04a01d6d368cc7a7bcea159d58909509fa284caf612da47": {
+    "item": "closing-08",
+    "path": "outputs/narration/closing-08-414ba9215f8f.wav",
+    "stage": "narration"
+  },
+  "46aad99d9248a11423a7eec0183b7d5fa1a4547ea817b222c9fd4daf23945243": {
+    "item": "hospital",
+    "path": "outputs/narration/hospital-46aad99d9248.wav",
+    "stage": "narration"
+  },
+  "70cd0d5f3f538feb77b69e31464026be9241cdfd176f43769ed575fd4997a3a9": {
+    "item": "closing-07",
+    "path": "outputs/narration/closing-07-70cd0d5f3f53.wav",
+    "stage": "narration"
+  },
+  "9ec3dc8623df773c669e391f83be0c3a304f38f4ae986ed55355d22ca42b027e": {
+    "item": "closing-09",
+    "path": "outputs/narration/closing-09-9ec3dc8623df.wav",
+    "stage": "narration"
+  },
+  "acce4c97e6275ca79338d955757fa282aa3c398da577be6b890e7aa8996cba20": {
+    "item": "closing-03",
+    "path": "outputs/narration/closing-03-acce4c97e627.wav",
+    "stage": "narration"
+  },
+  "b77305cc686bc65c97cd403370b21a00dc80d18a3e64a3a9614ebcd248d16bb5": {
+    "item": "closing-05",
+    "path": "outputs/narration/closing-05-b77305cc686b.wav",
+    "stage": "narration"
+  },
+  "c5664b144e99c0256c67b9b8b705afe9c4101e3b64132b4bfeaa419687b45b54": {
+    "item": "closing-04",
+    "path": "outputs/narration/closing-04-c5664b144e99.wav",
+    "stage": "narration"
+  },
+  "cc8a51d33d2b706b14a67af3d442e2a0db25c7eb7f8dd3fdfcbb6e6a21baf69b": {
+    "item": "closing-02",
+    "path": "outputs/narration/closing-02-cc8a51d33d2b.wav",
+    "stage": "narration"
+  },
+  "f0e05370aa2833fe4d91795d0922abb72cee84ac6e0ac76f656d3e91172367e8": {
+    "item": "tomorrow-2",
+    "path": "outputs/narration/tomorrow-2-f0e05370aa28.wav",
+    "stage": "narration"
+  }
+}

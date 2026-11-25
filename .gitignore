@@ -1,0 +1,15 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# agent scratch space (issues, specs)
+.scratch/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
