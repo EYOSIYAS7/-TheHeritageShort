@@ -38,9 +38,18 @@
     "seed": 3003
   },
   "narrator": {
-    "voice": "Charon",
+    "voice": "Enceladus",
+    "voice_reason": "Chosen by ear from the voice trial (Charon, Iapetus, Enceladus on closing-05): Enceladus feels like real talk, a man speaking to you rather than reading.",
     "style": "slow, warm, quiet, reflective; a man in his thirties looking back",
-    "seed": 4242
+    "seed": 4242,
+    "voice_trial": {
+      "line": "closing-05",
+      "voices": [
+        "Charon",
+        "Iapetus",
+        "Enceladus"
+      ]
+    }
   },
   "music": {
     "caption": "slow reflective instrumental in the spirit of Ethiopian tizita, longing and nostalgia; krar and masenqo with soft piano; sparse at the start, warmer and fuller at the end; no vocals",

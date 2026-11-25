@@ -58,6 +58,8 @@ class Narrator:
     voice: str
     style: str
     seed: int
+    trial_line: str  # `make voices`: this line spoken by each trial voice
+    trial_voices: list[str]
 
 
 @dataclass(frozen=True)
@@ -76,6 +78,7 @@ class Storyboard:
     narrator: Narrator
     saying_card_s: float
     end_card_s: float
+    music_volume: list[tuple[float, float]]  # (time s, gain) points; the gain is linear between them
 
     @property
     def shots_s(self) -> float:
@@ -180,6 +183,10 @@ def _check_consistency(raw: dict[str, Any]) -> None:
         if line["am_pinned"] and not line["am"]:
             problems.append(f"{where}.am: the line is pinned but has no Amharic text")
 
+    trial = raw["narrator"]["voice_trial"]["line"]
+    if trial not in seen_lines:
+        problems.append(f"narrator.voice_trial.line: there is no narration line {trial!r}")
+
     shots_s = sum(durations.values())
     saying_s = raw["saying"]["duration_s"]
     end_s = raw["end_card"]["duration_s"]
@@ -226,7 +233,9 @@ def _to_storyboard(raw: dict[str, Any]) -> Storyboard:
         shots=shots,
         narration=narration,
         script=Script(instruction=raw["script"]["instruction"], seed=raw["script"]["seed"]),
-        narrator=Narrator(voice=narrator["voice"], style=narrator["style"], seed=narrator["seed"]),
+        narrator=Narrator(voice=narrator["voice"], style=narrator["style"], seed=narrator["seed"],
+                          trial_line=narrator["voice_trial"]["line"], trial_voices=narrator["voice_trial"]["voices"]),
         saying_card_s=float(raw["saying"]["duration_s"]),
         end_card_s=float(raw["end_card"]["duration_s"]),
+        music_volume=[(float(p["t_s"]), float(p["gain"])) for p in raw["music"]["volume_points"]],
     )

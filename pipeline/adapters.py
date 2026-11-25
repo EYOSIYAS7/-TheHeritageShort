@@ -25,9 +25,10 @@ import wave
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from pipeline.runlog import PermanentError
+from pipeline.runlog import PermanentError, RateLimited
 
 TIMEOUT_S = 120
+MAX_WAIT_S = 120  # a rate limit asking for a longer wait than this is treated as permanent
 _RETRYABLE = {408, 429}
 
 
@@ -38,9 +39,15 @@ def _request(url: str, *, headers: dict[str, str], body: bytes | None = None, me
             data: bytes = resp.read()
             return data
     except urllib.error.HTTPError as e:
-        message = f"HTTP {e.code} from {url.split('?')[0]}: {_error_detail(e.read())}"
+        body = e.read()
+        message = f"HTTP {e.code} from {url.split('?')[0]}: {_error_detail(body)}"
         if 400 <= e.code < 500 and e.code not in _RETRYABLE:
             raise PermanentError(message) from None
+        retry_after = _retry_after_s(body)
+        if retry_after is not None and retry_after > MAX_WAIT_S:  # a daily quota: waiting won't help today
+            raise PermanentError(f"{message} (retry after {retry_after:.0f} s)") from None
+        if retry_after is not None:
+            raise RateLimited(message, retry_after) from None
         raise ConnectionError(message) from None
 
 
@@ -56,7 +63,13 @@ def _error_detail(body: bytes) -> str:
             text = "; ".join(str(e.get("message", e)) for e in errors)
     except ValueError:
         pass
-    return " ".join(text.split())[:300]
+    return " ".join(text.split())[:500]
+
+
+def _retry_after_s(body: bytes) -> float | None:
+    """Google's `RetryInfo.retryDelay` (e.g. "37s"), plus a second of margin; None if absent."""
+    match = re.search(rb'"retryDelay":\s*"([\d.]+)s"', body)
+    return float(match.group(1)) + 1.0 if match else None
 
 
 def _json_request(url: str, payload: dict[str, Any], headers: dict[str, str]) -> Any:
@@ -111,6 +124,8 @@ class GeminiSpeech:
         self.model = model
 
     def synthesize(self, text: str, *, language: str, voice: str, style: str, seed: int, out_path: Path) -> None:
+        if not self.api_key:
+            raise PermanentError("GEMINI_API_KEY is missing in .env, and this line has no cached audio")
         payload = {
             "contents": [{"parts": [{"text": self.prompt(text, language=language, style=style)}]}],
             "generationConfig": {

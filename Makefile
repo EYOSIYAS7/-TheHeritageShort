@@ -5,15 +5,23 @@
 VENV := .venv
 PY := $(VENV)/bin/python
 
-.PHONY: film review test typecheck check
+.PHONY: film radio-cut review voices test typecheck check
 
 ## Build the film into outputs/film/ (validates storyboard.json first)
 film: $(VENV)/.deps
 	$(PY) -m pipeline film
 
+## Radio cut (user test 1): narration, subtitles and placeholder music on a black screen; unreviewed Amharic allowed
+radio-cut: $(VENV)/.deps
+	$(PY) -m pipeline radio-cut
+
 ## List narration lines whose Amharic is not reviewed yet (English beside Amharic)
 review: $(VENV)/.deps
 	$(PY) -m pipeline review
+
+## Voice trial: the trial line spoken by each candidate voice (narrator.voice_trial in storyboard.json)
+voices: $(VENV)/.deps
+	$(PY) -m pipeline voices
 
 ## Run the test suite (fake providers, real FFmpeg)
 test: $(VENV)/.dev-deps

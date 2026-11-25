@@ -19,3 +19,9 @@ What broke, what was tried, what fixed it. Evidence for each entry is in `runs.j
 
 - **Cloudflare FLUX.2 klein** (`@cf/black-forest-labs/flux-2-klein-4b`): the adapter follows the model page (multipart form, base64 `result.image`), but the field names (`prompt`, `seed`, `width`, `height`, `input_image_0`…) are not on the model page and have not been checked against the live API yet. Whether it accepts reference images is also still open; the first keyframe-stage run will settle both.
 - **Kaggle**: the adapter authenticates against the REST API (`/api/v1/kernels/list?mine=true`) with basic auth, or bearer for the newer `KGAT_` tokens. Not yet run; the first GPU-stage run will settle it.
+
+## F3. Gemini TTS free tier: 10 requests per day per project (2026-11-25)
+
+- **What broke:** `make radio-cut` stopped at the first new narration line: `429 … generate_content_free_tier_requests, limit: 10, model: gemini-3.8-flash-tts … per day`. The new key shares its Google Cloud project, and so its daily quota, with the first key, which had already spent its requests on the smoke test and the TTS prompt experiment (E1).
+- **Also broke:** the run log retried quota errors after 2 s and 4 s, and the first fix (wait for Google's `retryDelay`) then slept for hours on a daily limit. Fixed: a `retryDelay` up to 120 s is waited out (per-minute limits); a longer one is treated as permanent and fails at once.
+- **Lesson:** at 10 TTS calls a day, every exploratory call costs a narration line. The full narration is 13 lines; the voice trial costs 3.

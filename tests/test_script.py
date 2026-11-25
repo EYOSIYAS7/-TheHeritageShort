@@ -9,7 +9,7 @@ from tests.conftest import FakeSpeech, FakeText, Project, no_sleep, providers
 def test_pinned_line_is_never_sent_or_overwritten_and_drafts_are_marked_unreviewed(project: Project) -> None:
     text = FakeText()
 
-    run.film(project.root, providers(FakeSpeech(), text), sleep=no_sleep)
+    run.film(project.root, providers(FakeSpeech(), text), cut="radio-cut", sleep=no_sleep)
 
     # Line b is pinned (ነገ አባባ ነገ): only a and c reach the text model.
     assert [p.rsplit("English: ", 1)[-1] for p in text.prompts] == [

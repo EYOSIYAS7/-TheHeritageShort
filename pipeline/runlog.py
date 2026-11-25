@@ -26,6 +26,14 @@ class PermanentError(Exception):
     """Raised by a provider for a failure that retrying cannot fix (bad key, rejected prompt)."""
 
 
+class RateLimited(ConnectionError):
+    """A transient failure where the service says how long to wait (e.g. a per-minute quota)."""
+
+    def __init__(self, message: str, retry_after_s: float) -> None:
+        super().__init__(message)
+        self.retry_after_s = retry_after_s
+
+
 @dataclass(frozen=True)
 class Call:
     """What is being asked of which model: the fields every log line shares."""
@@ -64,7 +72,8 @@ class RunLog:
                             "error" if final else "retry", f"{type(e).__name__}: {e}")
                 if final:
                     raise
-                self.sleep(self.base_delay_s * 2 ** (attempt - 1))
+                backoff = self.base_delay_s * 2 ** (attempt - 1)
+                self.sleep(max(backoff, e.retry_after_s) if isinstance(e, RateLimited) else backoff)
                 continue
             self._write(call, time.monotonic() - start, cost_usd, "miss", attempt, "ok", None)
             return result

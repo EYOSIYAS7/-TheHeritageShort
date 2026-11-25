@@ -1,4 +1,4 @@
-"""Command line: `python -m pipeline film|review [--root DIR]` (what `make film` / `make review` run)."""
+"""Command line: `python -m pipeline film|review|voices [--root DIR]` (what the make targets run)."""
 
 from __future__ import annotations
 
@@ -14,7 +14,8 @@ from pipeline.storyboard import StoryboardError
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m pipeline")
-    parser.add_argument("target", choices=["film", "review"], help="build the film, or list unreviewed Amharic")
+    parser.add_argument("target", choices=["film", "radio-cut", "review", "voices"],
+                        help="build the film or the radio cut, list unreviewed Amharic, or run the voice trial")
     parser.add_argument("--root", type=Path, default=Path.cwd(), help="project directory (default: current)")
     args = parser.parse_args(argv)
 
@@ -22,7 +23,12 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.target == "review":
             return _review(root)
-        result = run.film(root, default_providers(root))
+        if args.target == "voices":
+            for voice, path in run.voice_trial(root, default_providers(root)).items():
+                print(f"{voice}: {path.relative_to(root)}")
+            print("Listen, then set narrator.voice and narrator.voice_reason in storyboard.json.")
+            return 0
+        result = run.film(root, default_providers(root), cut="radio-cut" if args.target == "radio-cut" else "film")
     except StoryboardError as e:
         print(e, file=sys.stderr)
         return 2

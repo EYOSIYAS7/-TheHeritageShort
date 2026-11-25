@@ -11,9 +11,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
-from pipeline.adapters import GeminiText
+from pipeline.adapters import GeminiSpeech, GeminiText
 from pipeline.env import load_env
-from pipeline.media import write_tone_wav
 
 
 class SpeechProvider(Protocol):
@@ -55,25 +54,6 @@ class GpuJobs(Protocol):
     def authenticate(self) -> str: ...
 
 
-class PlaceholderSpeech:
-    """Offline stand-in for TTS: a quiet tone as long as the line would take to speak.
-
-    Not a model: it is logged under the model name "placeholder-tone" so the run
-    log never passes it off as real TTS. Used until the Gemini TTS adapter
-    exists. Length assumes about 2.5 words per second.
-    """
-
-    model = "placeholder-tone"
-    WORDS_PER_S = 2.5
-
-    def synthesize(self, text: str, *, language: str, voice: str, style: str, seed: int, out_path: Path) -> None:
-        words = len(text.split())
-        write_tone_wav(out_path, max(0.8, words / self.WORDS_PER_S))
-
-    def cost_estimate_usd(self, text: str) -> float:
-        return 0.0
-
-
 # Tried in order. gemini-3.8-flash answered only 503 "high demand" or 429 quota errors in the
 # first script run while gemini-3.5-flash drafted every line (FAILURES.md F1), so 3.5 goes first.
 TEXT_MODELS = ("gemini-3.5-flash", "gemini-3.8-flash")
@@ -86,8 +66,13 @@ class Providers:
 
 
 def default_providers(root: Path) -> Providers:
-    """Real adapters for every provider whose key is in `root/.env`; placeholders otherwise."""
+    """Real adapters, with the keys in `root/.env`.
+
+    Without GEMINI_API_KEY, narration still builds from cached audio; a line
+    that needs new audio fails with a message naming the missing key. Text
+    drafting is skipped (lines without Amharic are narrated in English).
+    """
     env = load_env(root / ".env")
     key = env.get("GEMINI_API_KEY")
     text: tuple[TextProvider, ...] = tuple(GeminiText(key, model) for model in TEXT_MODELS) if key else ()
-    return Providers(speech=PlaceholderSpeech(), text=text)
+    return Providers(speech=GeminiSpeech(key or ""), text=text)

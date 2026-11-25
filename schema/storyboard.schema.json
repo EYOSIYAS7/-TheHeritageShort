@@ -81,11 +81,22 @@
     "narrator": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["voice", "style", "seed"],
+      "required": ["voice", "style", "seed", "voice_trial"],
       "properties": {
         "voice": { "$ref": "#/$defs/text" },
+        "voice_reason": { "description": "Why this voice was chosen, after listening to the voice trial.", "type": ["string", "null"] },
         "style": { "$ref": "#/$defs/text" },
-        "seed": { "$ref": "#/$defs/seed" }
+        "seed": { "$ref": "#/$defs/seed" },
+        "voice_trial": {
+          "description": "`make voices`: the same narration line spoken by each candidate voice, to pick the narrator by ear.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["line", "voices"],
+          "properties": {
+            "line": { "description": "Id of the narration line to speak.", "type": "string" },
+            "voices": { "type": "array", "items": { "$ref": "#/$defs/text" }, "minItems": 1 }
+          }
+        }
       }
     },
     "music": {

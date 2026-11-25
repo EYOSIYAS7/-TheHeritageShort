@@ -23,7 +23,7 @@ REQUIRED_LOG_FIELDS = {"ts", "stage", "item", "model", "params", "seed", "latenc
 
 
 def build(project: Project, speech: FakeSpeech) -> run.FilmResult:
-    return run.film(project.root, providers(speech), sleep=no_sleep)
+    return run.film(project.root, providers(speech), cut="radio-cut", sleep=no_sleep)
 
 
 # --- validation happens before any provider call --------------------------------------------
@@ -159,7 +159,7 @@ def test_transient_failure_is_retried_and_every_attempt_is_logged(project: Proje
     speech = FakeSpeech(fail_first=1)
     delays: list[float] = []
 
-    run.film(project.root, providers(speech), sleep=delays.append)
+    run.film(project.root, providers(speech), cut="radio-cut", sleep=delays.append)
 
     assert len(speech.calls) == 4  # line a twice, then b and c
     assert [(r["item"], r["attempt"], r["outcome"]) for r in project.runs] == [
@@ -227,7 +227,32 @@ def test_film_is_a_black_screen_mp4_at_the_storyboard_length_with_narration_audi
 
 
 def test_each_line_is_placed_at_its_shot_start_plus_offset(project: Project) -> None:
+    def mute_music(d: dict[str, Any]) -> None:  # so only the voice breaks the silence
+        d["music"]["volume_points"] = [{"t_s": 0, "gain": 0.0}]
+
+    project.edit(mute_music)
     result = build(project, FakeSpeech())
 
     # a: shot 1 (0 s) + 1.0; b: shot 2 (20 s) + 2.0; c: shot 3 (40 s) + 0.5
     assert sound_starts(result.video) == pytest.approx([1.0, 22.0, 40.5], abs=0.1)
+
+
+def test_burned_subtitles_come_from_the_storyboard_english(project: Project) -> None:
+    result = build(project, FakeSpeech())
+
+    srt = result.video.with_suffix(".en.srt").read_text(encoding="utf-8")
+    cue_texts = [block.splitlines()[2] for block in srt.strip().split("\n\n")]
+    assert cue_texts == ["Let's talk tomorrow, Dad.", "Tomorrow, Dad.", "Not every tomorrow is promised."]
+
+
+def test_line_that_overlaps_the_next_fails_naming_both_lines_and_the_overrun(project: Project) -> None:
+    def crowd(d: dict[str, Any]) -> None:  # b starts 0.4 s after a, but every fake line is 1 s long
+        d["narration"][1]["shot"] = 1
+        d["narration"][1]["offset_s"] = 1.4
+
+    project.edit(crowd)
+
+    with pytest.raises(StoryboardError) as err:
+        build(project, FakeSpeech())
+
+    assert "narration line 'a' (1.00 s of audio) overlaps line 'b' by 0.60 s" in str(err.value)
