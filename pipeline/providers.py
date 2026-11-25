@@ -1,8 +1,8 @@
 """Provider interfaces, one per capability, and the offline placeholder adapters.
 
 Providers are chosen at the pipeline entry point and injected into the stages,
-so tests use fakes and real adapters (Gemini, Cloudflare, Kaggle) plug in
-without changing any stage.
+so tests use fakes and real adapters (`pipeline.adapters`: Gemini, Cloudflare,
+Kaggle) plug in without changing any stage.
 """
 
 from __future__ import annotations
@@ -22,6 +22,35 @@ class SpeechProvider(Protocol):
     def synthesize(self, text: str, *, language: str, voice: str, style: str, seed: int, out_path: Path) -> None: ...
 
     def cost_estimate_usd(self, text: str) -> float: ...
+
+
+class TextProvider(Protocol):
+    """Text generation: drafts (e.g. the Amharic narration) from a prompt."""
+
+    model: str
+
+    def generate(self, prompt: str, *, seed: int) -> str: ...
+
+    def cost_estimate_usd(self, prompt: str) -> float: ...
+
+
+class ImageProvider(Protocol):
+    """Text (plus optional reference images) to one image file (PNG)."""
+
+    model: str
+
+    def generate(self, prompt: str, *, seed: int, width: int, height: int, out_path: Path,
+                 references: tuple[Path, ...] = ()) -> None: ...
+
+    def cost_estimate_usd(self, prompt: str) -> float: ...
+
+
+class GpuJobs(Protocol):
+    """Remote GPU jobs (Kaggle notebooks). Push and poll arrive with the GPU stages."""
+
+    model: str
+
+    def authenticate(self) -> str: ...
 
 
 class PlaceholderSpeech:

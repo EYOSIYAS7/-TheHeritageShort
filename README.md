@@ -31,4 +31,4 @@ Every model call (and every cache hit) is logged as one JSON line in `runs.jsonl
 
 ## Secrets
 
-Copy `.env.example` to `.env` (git-ignored) and fill in the keys you have. Every key is optional.
+Copy `.env.example` to `.env` (git-ignored) and fill in the keys you have. Every key is optional. Keys are read only from `.env`, never from the shell environment.
