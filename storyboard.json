@@ -570,7 +570,7 @@
       "en": "Let's talk tomorrow, Dad.",
       "am": "አባባ ነገ እንነጋገር።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "Let's talk tomorrow, Dad."
     },
     {
@@ -589,7 +589,7 @@
       "en": "I had always said tomorrow.",
       "am": "ሁልጊዜ ነገ ነበር የምለው።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "I had always said tomorrow."
     },
     {
@@ -599,7 +599,7 @@
       "en": "We thought there would always be another morning.",
       "am": "ሁልጊዜ ሌላ ጠዋት የሚኖር ይመስለን ነበር።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "We thought there would always be another morning."
     },
     {
@@ -609,7 +609,7 @@
       "en": "Another cup of coffee.",
       "am": "ሌላ ሲኒ ቡና።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "Another cup of coffee."
     },
     {
@@ -619,7 +619,7 @@
       "en": "Another story to hear.",
       "am": "ሌላ የምሰማው ታሪክ።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "Another story to hear."
     },
     {
@@ -629,7 +629,7 @@
       "en": "We kept postponing the moments that mattered, believing time would wait for us.",
       "am": "ጊዜ የሚጠብቀን መስሎን፣ ትርጉም ያላቸውን አጋጣሚዎች ወደ ነገ እናስተላልፍ ነበር።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "We kept postponing the moments that mattered, believing time would wait for us."
     },
     {
@@ -639,7 +639,7 @@
       "en": "But life does not promise us another tomorrow.",
       "am": "ግን ህይወት ሌላ ነገን ቃል አትገባልንም።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "But life does not promise us another tomorrow."
     },
     {
@@ -649,7 +649,7 @@
       "en": "Sometimes, we don't realize how precious an ordinary moment is until it becomes a memory.",
       "am": "አንዳንዴ ተራ የሚመስል ቅጽበት ትዝታ እስኪሆን ድረስ ምን ያህል ውድ እንደሆነ አይገባንም።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "Sometimes, we don't realize how precious an ordinary moment is until it becomes a memory."
     },
     {
@@ -659,7 +659,7 @@
       "en": "So love while you can.",
       "am": "ስለዚህ እድሉ እያለ ውደዱ።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "So love while you can."
     },
     {
@@ -669,7 +669,7 @@
       "en": "Listen while they can speak.",
       "am": "መናገር በሚችሉበት ጊዜ አዳምጧቸው።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "Listen while they can speak."
     },
     {
@@ -679,7 +679,7 @@
       "en": "Sit with them while they are still beside you.",
       "am": "ገና ከጎናችሁ እያሉ ከእነሱ ጋር ተቀመጡ።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "Sit with them while they are still beside you."
     },
     {
@@ -689,7 +689,7 @@
       "en": "Because not every tomorrow is promised.",
       "am": "ምክንያቱም ነገ ለሁላችንም የተረጋገጠ አይደለም።",
       "am_pinned": false,
-      "am_reviewed": false,
+      "am_reviewed": true,
       "am_from_en": "Because not every tomorrow is promised."
     }
   ]
