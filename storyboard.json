@@ -576,11 +576,11 @@
       "id": "tomorrow-1",
       "shot": 2,
       "offset_s": 1.5,
-      "en": "Let's talk tomorrow, Dad.",
-      "am": "አባባ ነገ እንነጋገር።",
+      "en": "Dad, we'll have coffee together tomorrow.",
+      "am": "አባባ ነገ እንጠጣለን አብረን።",
       "am_pinned": false,
       "am_reviewed": true,
-      "am_from_en": "Let's talk tomorrow, Dad."
+      "am_from_en": "Dad, we'll have coffee together tomorrow."
     },
     {
       "id": "tomorrow-2",
@@ -655,21 +655,21 @@
       "id": "closing-08",
       "shot": 12,
       "offset_s": 4.2,
-      "en": "Listen while they can speak.",
-      "am": "መናገር በሚችሉበት ጊዜ አዳምጧቸው።",
+      "en": "Talk with them while they can still talk.",
+      "am": "መጫወት በምችሉበት ሰእት ተጫወቱ።",
       "am_pinned": false,
       "am_reviewed": true,
-      "am_from_en": "Listen while they can speak."
+      "am_from_en": "Talk with them while they can still talk."
     },
     {
       "id": "closing-09",
       "shot": 12,
       "offset_s": 8.8,
-      "en": "Sit with them while they are still beside you.",
-      "am": "ገና ከጎናችሁ እያሉ ከእነሱ ጋር ተቀመጡ።",
+      "en": "Spend time with them while they are still beside you.",
+      "am": "ገና ከጎናችሁ እያሉ ጊዜ አሳልፉ።",
       "am_pinned": false,
       "am_reviewed": true,
-      "am_from_en": "Sit with them while they are still beside you."
+      "am_from_en": "Spend time with them while they are still beside you."
     },
     {
       "id": "closing-10",
