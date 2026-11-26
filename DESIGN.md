@@ -60,3 +60,23 @@ Four acts, 12 shots, 82.5 s, then the saying card (4 s) and the AI end card (3 s
 - The author rewrote three lines' Amharic to sound more like natural speech. tomorrow-1 became an invitation to coffee ("Dad, we'll have coffee together tomorrow."), which ties the Son's promise to the coffee ceremony. closing-08 became "Talk with them while they can still talk." and closing-09 became "Spend time with them while they are still beside you."
 
 **Limits of this test:** the reactions are short and all positive, from friends. The rough-cut test (user test 2) should ask specific questions: which moment hit hardest, whether the pictures make the fall and the hospital clear without words, and whether the gold grade in Act 4 reads as the turn.
+
+### User test 2: final film (2026-11-26)
+
+**What they saw:** the final film (`make film`, 16:9, 89.5 s). That's the full picture: keyframes, pan shots, and the three Wan 2.2 moving shots (the pour, the fall, the hand-hold). Plus the ACE-Step score (candidate 1), the Amharic narration with English subtitles, the saying card and the AI end card.
+
+**Who:** two viewers.
+
+**What they said:** both called it **eye-opening**, and both made the same point. The wording below is a paraphrase written for this record, not their exact words:
+- *"It made me think about the people at home I keep putting off: the 'tomorrow' is the mistake."*
+
+That is the film's intent (want to call someone you love tonight), and it now comes through with the pictures, as it did with sound alone in user test 1.
+
+**What changed:** nothing, as a result of this test. Both viewers took the intended meaning, and neither reported confusion. The changes in this cut were made before the test:
+- the real score replaced the placeholder pad
+- moving shots for 4, 5 and 11
+- the click at the start and end of every narration line was removed (FAILURES.md F11)
+
+**Limits of this test:**
+- **Small and unstructured.** Two viewers on the deadline day, with no structured questions, so the specific questions suggested after user test 1 were not asked (whether the pictures alone make the fall and the hospital clear; whether the gold grade in Act 4 reads as the turn). Those remain open.
+- **Paraphrased.** The reaction above is a paraphrase, not a quote.
