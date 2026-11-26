@@ -5,11 +5,15 @@
 VENV := .venv
 PY := $(VENV)/bin/python
 
-.PHONY: film rough-cut radio-cut review voices test typecheck check
+.PHONY: film costs rough-cut radio-cut review voices test typecheck check
 
 ## Build the film into outputs/film/ (validates storyboard.json first)
 film: $(VENV)/.deps
 	$(PY) -m pipeline film
+
+## Per-stage summary of runs.jsonl: calls, cache hits, latency, image list price
+costs: $(VENV)/.deps
+	$(PY) -m pipeline costs
 
 ## Rough cut: character sheet, keyframes and pan shots with narration, subtitles and music; 16:9 and 9:16
 rough-cut: $(VENV)/.deps

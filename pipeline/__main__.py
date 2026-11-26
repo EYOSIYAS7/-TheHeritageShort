@@ -6,7 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from pipeline import run, storyboard
+from pipeline import costs, run, storyboard
 from pipeline.providers import default_providers
 from pipeline.stages import script
 from pipeline.storyboard import StoryboardError
@@ -14,7 +14,7 @@ from pipeline.storyboard import StoryboardError
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m pipeline")
-    parser.add_argument("target", choices=["film", "rough-cut", "radio-cut", "review", "voices"],
+    parser.add_argument("target", choices=["film", "rough-cut", "radio-cut", "review", "voices", "costs"],
                         help="build a cut, list unreviewed Amharic, or run the voice trial")
     parser.add_argument("--root", type=Path, default=Path.cwd(), help="project directory (default: current)")
     args = parser.parse_args(argv)
@@ -23,6 +23,9 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.target == "review":
             return _review(root)
+        if args.target == "costs":
+            print(costs.report(costs.load(root / "runs.jsonl")), end="")
+            return 0
         if args.target == "voices":
             for voice, path in run.voice_trial(root, default_providers(root)).items():
                 print(f"{voice}: {path.relative_to(root)}")

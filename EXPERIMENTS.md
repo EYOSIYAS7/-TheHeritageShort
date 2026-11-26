@@ -38,3 +38,64 @@ Hypothesis → change → result. Every call made for an experiment is in `runs.
 - **Result 2:** shots 3, 6, 11 and 12 now compose correctly (the hospital bed with the Son beside it; the hand-hold; side by side). Shot 10 still failed (two old men in a garden).
 - **Change 3:** shot 10 with no references, descriptions only (1 image). **Result:** correct staging (the Son laying his phone face-down beside the Father). The cost is likeness: the Father is drawn in a blue shirt.
 - **Conclusion:** on Workers AI FLUX.2 klein 4B, one reference image keeps a character; two or three make the model copy instead of compose. Total for the keyframes so far: 36 images (3 + 12, then 13, 7 and 1).
+
+## E4. Narrator voice trial (2026-11-25)
+
+- **Hypothesis:** one of three male Gemini TTS voices will suit "the older Son looking back" in Amharic better than the default (Charon).
+- **Change:** `make voices` spoke the same line, closing-05 (ግን ህይወት ሌላ ነገን ቃል አትገባልንም።), in Charon, Iapetus and Enceladus, with the same style instruction and seed. Logged as stage `voices`.
+- **Result:** Charon 3.43 s, Iapetus 4.07 s, Enceladus 3.99 s. The author listened and chose **Enceladus**, because "it feels like real talk": a man speaking to you rather than reading. This is recorded in `narrator.voice_reason`.
+- **Reuse:** the trial clip in the chosen voice became closing-05's narration (cache hit), so the trial cost one call fewer.
+
+## E5. Which text model drafts the Amharic (2026-11-25)
+
+- **Hypothesis:** the newest Flash (`gemini-3.8-flash`) gives the best Amharic, with `gemini-3.5-flash` as a fallback.
+- **Change:** the script stage tries the models in order and logs which one answered.
+- **Result:** `gemini-3.8-flash` drafted **0 of 12** lines (36 attempts: 503 "high demand", then 429 quota). `gemini-3.5-flash` drafted **12 of 12**, at 7–46 s per line.
+- **Decision:** `gemini-3.5-flash` goes first. The quality of the two models was never compared, because 3.8 never answered. The author reviewed every line and rewrote four (E7).
+
+## E6. Does the storyboard timing survive the real voice? (2026-11-25/26)
+
+- **Hypothesis:** the timing planned with the placeholder narration (about 2.5 words per second) fits the real Amharic narration.
+- **Change:** the real Enceladus audio was measured, and the timing check ran on it.
+- **Result:** no. **7 overlaps**, all in the closing passage. closing-06 alone is 8.67 s and overlapped closing-07 by 1.97 s. The full closing would need about 43 s of speech, in about 37 s of room.
+- **What changed:**
+  - The author cut closing-02 and closing-03 ("Another cup of coffee." / "Another story to hear.").
+  - The narration-free shots 7–8 went from 5 s to 4 s.
+  - Act 4 was retimed from the measured lengths: each cut lands 0.3 s before its first line, with 0.5 s between lines, and the music volume points moved with it.
+  - The film went from 84 s to 89.5 s. Retiming made no model calls.
+
+## E7. Author's Amharic vs the Gemini drafts (2026-11-26)
+
+- **Hypothesis:** the reviewed Gemini drafts are good enough to speak as they are.
+- **Change:** the author edited four lines.
+  - **closing-04:** "postpone *to tomorrow*" (ወደ ነገ እናስተላልፍ), tying the line to the film's word.
+  - **closing-09:** the plural "you" (ከጎናችሁ), to match closing-07 and 08.
+  - **tomorrow-1, closing-08, closing-09:** rewritten as more natural speech. The coffee invitation "አባባ ነገ እንጠጣለን አብረን።" ties the Son's promise to the ceremony, and "chat with them while they can" replaces a literal "listen". The English subtitles were updated to match, and `am_from_en` kept the drafts from being regenerated.
+- **Result:** exactly 3 TTS calls, for the three changed lines; everything else was a cache hit.
+- **Measured lengths:**
+
+| Line | Before | After |
+|---|---|---|
+| tomorrow-1 | 2.64 s | 3.17 s |
+| closing-08 | 4.07 s | 2.84 s |
+| closing-09 | 4.87 s | 4.98 s |
+
+All three still pass the timing check.
+
+## E8. Mix headroom (2026-11-26)
+
+- **Hypothesis:** a limiter on the final mix keeps voice plus music from clipping.
+- **Change 1:** an `alimiter` at 0.89 (about -1 dBFS) on the final mix. **Result:** the export still peaked at 0.0 dB. The Gemini TTS clips are themselves normalised to 0 dBFS (all 13 measured), and AAC encoding overshoots.
+- **Change 2:** the voice lowered by 2 dB before mixing, plus the limiter. **Result:** the peak dropped to -0.9 dB, with no clipping.
+
+## E9. Loudness target (2026-11-26)
+
+- **Hypothesis:** one pass of FFmpeg `loudnorm` (I=-14 LUFS, TP=-1.5 dBTP, LRA=11), as the last audio step, lands both exports on -14 LUFS, the usual target for phones and social platforms.
+- **Result:** measured with `ebur128`, both exports are **-15.0 LUFS** integrated. Single-pass loudnorm in dynamic mode undershoots on this quiet, speech-led mix. That's accepted, being 1 LU under the target. A two-pass (measured) loudnorm would close the gap.
+
+## E10. 9:16 framing: centre crop vs aimed pans (2026-11-26)
+
+- **Hypothesis:** the 9:16 version can crop the middle of each 16:9 keyframe (x = 0.5), because the style words ask for "subject in the central third".
+- **Result:** no. The 9:16 window is only a third of the keyframe's width, and the model rarely kept people in the centre. In shot 2 the centre crop showed an empty stool, with the Father and the Son both cut off.
+- **Change:** each shot's 9:16 pan path now aims at where its people are in the final keyframe, from looking at each one. In two-person shots it travels from one person to the other (shot 2: Father → Son; shot 6: the bed → the Son; shot 10: Son → Father). The change is in `storyboard.json` (`pan["9:16"]`), and it cost no model calls.
+- **Cost:** mid-pan frames in two-person shots briefly show the wall between the two people.
