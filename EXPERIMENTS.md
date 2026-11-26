@@ -92,6 +92,7 @@ All three still pass the timing check.
 
 - **Hypothesis:** one pass of FFmpeg `loudnorm` (I=-14 LUFS, TP=-1.5 dBTP, LRA=11), as the last audio step, lands both exports on -14 LUFS, the usual target for phones and social platforms.
 - **Result:** measured with `ebur128`, both exports are **-15.0 LUFS** integrated. Single-pass loudnorm in dynamic mode undershoots on this quiet, speech-led mix. That's accepted, being 1 LU under the target. A two-pass (measured) loudnorm would close the gap.
+- **Update (final film, with the ACE-Step score and the click fix):** -14.2 LUFS integrated, measured the same way.
 
 ## E10. 9:16 framing: centre crop vs aimed pans (2026-11-26)
 

@@ -81,6 +81,7 @@ All measured numbers are in `COSTS.md` (`make costs` prints them from `runs.json
 
 | File | What's in it |
 |---|---|
+| `REPORT.md` | the submission report: intent, audience, hardest problem, practices tested, ceiling work, what's next |
 | `DESIGN.md` | audience, intent, story, structure, look, and the user tests with what changed |
 | `ARCHITECTURE.md` | stages, the storyboard contract, caching, failure handling |
 | `EXPERIMENTS.md` | hypothesis → change → result |
