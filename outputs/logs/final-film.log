@@ -1,0 +1,6 @@
+python3 -m venv .venv
+.venv/bin/python -m pip install -q -r requirements.txt
+touch .venv/.deps
+.venv/bin/python -m pipeline film
+make: *** [Makefile:12: film] Terminated
+exit 2

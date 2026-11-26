@@ -20,8 +20,9 @@ from pipeline.providers import Providers
 from pipeline.runlog import RunLog
 from pipeline.storyboard import ASPECTS, Aspect, StoryboardError
 
+from pipeline.stages import assemble, cards, characters, keyframes, moving, music, narration, pans, script, voices
+
 Cut = Literal["film", "rough-cut", "radio-cut"]
-from pipeline.stages import assemble, cards, characters, keyframes, narration, pans, script, voices
 
 
 def voice_trial(root: Path, providers: Providers, *, sleep: Callable[[float], None] = time.sleep) -> dict[str, Path]:
@@ -31,6 +32,17 @@ def voice_trial(root: Path, providers: Providers, *, sleep: Callable[[float], No
     return voices.run(board, providers.speech, Cache(root), log, root / "outputs")
 
 
+def gpu_stages(root: Path, providers: Providers, *, sleep: Callable[[float], None] = time.sleep
+               ) -> tuple[music.Score, dict[int, Path]]:
+    """`make gpu`: only the Kaggle stages (score candidates, moving shots), filling the cache; nothing is rendered."""
+    board = storyboard.load(root / "storyboard.json")
+    outputs, cache, log = root / "outputs", Cache(root), RunLog(root / "runs.jsonl", sleep=sleep)
+    score = music.run(board, providers.gpu, cache, log, outputs)
+    sheet = characters.run(board, providers.image, cache, log, outputs)
+    frames = keyframes.run(board, providers.image, sheet, cache, log, outputs)
+    return score, moving.run(board, frames, providers.gpu, cache, log, outputs)
+
+
 @dataclass(frozen=True)
 class FilmResult:
     videos: dict[Aspect, Path]
@@ -38,6 +50,8 @@ class FilmResult:
     missing_keyframes: list[int]  # shots shown as a labelled placeholder (no keyframe, no image keys)
     drafted: list[str]  # narration lines whose Amharic was just drafted (need review)
     undrafted: list[str]  # narration lines still without Amharic (no text model available)
+    score: music.Score
+    moving_shots: list[int]  # moving shots with a generated clip (the rest of the moving shots are pan shots)
 
     @property
     def video(self) -> Path:
@@ -73,17 +87,21 @@ def film(root: Path, providers: Providers, *, cut: Cut = "film",
     placed = timing.place(board, audio)
     timing.check(board, placed)
     card_clips = cards.run(board, outputs)
+    score = music.run(board, providers.gpu, cache, log, outputs)
     if cut == "radio-cut":
-        video = assemble.run(board, placed, outputs, name=cut, aspect="16:9", clips=None, cards=card_clips["16:9"])
+        video = assemble.run(board, placed, outputs, name=cut, aspect="16:9", clips=None, cards=card_clips["16:9"],
+                             score=score.track)
         return FilmResult(videos={"16:9": video}, duration_s=board.total_s, missing_keyframes=[],
-                          drafted=drafts.drafted, undrafted=drafts.undrafted)
+                          drafted=drafts.drafted, undrafted=drafts.undrafted, score=score, moving_shots=[])
 
     sheet = characters.run(board, providers.image, cache, log, outputs)
     frames = keyframes.run(board, providers.image, sheet, cache, log, outputs)
-    clips = pans.run(board, frames, outputs)
+    raw_clips = moving.run(board, frames, providers.gpu, cache, log, outputs)
+    clips = moving.place(board, pans.run(board, frames, outputs), raw_clips, outputs)
     videos = {aspect: assemble.run(board, placed, outputs, name=cut, aspect=aspect, clips=clips[aspect],
-                                   cards=card_clips[aspect])
+                                   cards=card_clips[aspect], score=score.track)
               for aspect in ASPECTS}
     return FilmResult(videos=videos, duration_s=board.total_s,
                       missing_keyframes=[s.id for s in board.shots if s.id not in frames],
-                      drafted=drafts.drafted, undrafted=drafts.undrafted)
+                      drafted=drafts.drafted, undrafted=drafts.undrafted, score=score,
+                      moving_shots=sorted(raw_clips))

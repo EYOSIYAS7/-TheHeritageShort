@@ -1,0 +1,22 @@
+[{"stream_name":"stderr","time":34.520335009,"data":"/usr/local/lib/python3.13/dist-packages/huggingface_hub/utils/_validators.py:206: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.\n"}
+,{"stream_name":"stderr","time":34.520373681,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":34.566341366,"data":"Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n"}
+,{"stream_name":"stderr","time":52.412592815,"data":"The config attributes {'clip_output': False} were passed to AutoencoderKLWan, but are not expected and will be ignored. Please verify your config.json configuration file.\n"}
+,{"stream_name":"stderr","time":107.170028768,"data":"\rFetching 3 files:   0%|          | 0/3 [00:00\u003c?, ?it/s]\rFetching 3 files:  33%|███▎      | 1/3 [00:21\u003c00:42, 21.01s/it]\rFetching 3 files:  67%|██████▋   | 2/3 [00:54\u003c00:28, 28.21s/it]\rFetching 3 files: 100%|██████████| 3/3 [00:54\u003c00:00, 18.08s/it]\n"}
+,{"stream_name":"stderr","time":107.434213198,"data":"\rLoading weights:   0%|          | 0/242 [00:00\u003c?, ?it/s]\rLoading weights: 100%|██████████| 242/242 [00:00\u003c00:00, 2509.68it/s]\n"}
+,{"stream_name":"stderr","time":202.671021665,"data":"\rFetching 5 files:   0%|          | 0/5 [00:00\u003c?, ?it/s]\rFetching 5 files:  20%|██        | 1/5 [00:29\u003c01:57, 29.39s/it]\rFetching 5 files:  40%|████      | 2/5 [01:34\u003c02:31, 50.64s/it]\rFetching 5 files: 100%|██████████| 5/5 [01:34\u003c00:00, 18.98s/it]\n"}
+,{"stream_name":"stderr","time":266.036872734,"data":"\rLoading checkpoint shards:   0%|          | 0/5 [00:00\u003c?, ?it/s]\rLoading checkpoint shards:  20%|██        | 1/5 [00:12\u003c00:51, 12.86s/it]\rLoading checkpoint shards:  40%|████      | 2/5 [00:23\u003c00:34, 11.46s/it]\rLoading checkpoint shards:  60%|██████    | 3/5 [00:42\u003c00:29, 14.98s/it]\rLoading checkpoint shards:  80%|████████  | 4/5 [01:01\u003c00:16, 16.68s/it]\rLoading checkpoint shards: 100%|██████████| 5/5 [01:03\u003c00:00, 11.18s/it]\rLoading checkpoint shards: 100%|██████████| 5/5 [01:03\u003c00:00, 12.64s/it]\n"}
+,{"stream_name":"stderr","time":279.452899508,"data":"/usr/local/lib/python3.13/dist-packages/diffusers/utils/deprecation_utils.py:23: FutureWarning: `torch_dtype` is deprecated and will be removed in version 1.0.0. Please use `dtype` instead.\n"}
+,{"stream_name":"stderr","time":279.453405541,"data":"  deprecate(\"torch_dtype\", \"1.0.0\", _TORCH_DTYPE_DEPRECATION_MESSAGE)\n"}
+,{"stream_name":"stderr","time":280.169989374,"data":"\rFetching 6 files:   0%|          | 0/6 [00:00\u003c?, ?it/s]\rFetching 6 files:  50%|█████     | 3/6 [00:00\u003c00:00, 20.47it/s]\rFetching 6 files: 100%|██████████| 6/6 [00:00\u003c00:00, 12.69it/s]\rFetching 6 files: 100%|██████████| 6/6 [00:00\u003c00:00, 13.40it/s]\n"}
+,{"stream_name":"stderr","time":285.617162497,"data":"\rLoading pipeline components...:   0%|          | 0/5 [00:00\u003c?, ?it/s]\rLoading pipeline components...:  20%|██        | 1/5 [00:03\u003c00:12,  3.14s/it]\rLoading pipeline components...:  40%|████      | 2/5 [00:05\u003c00:07,  2.61s/it]\rLoading pipeline components...: 100%|██████████| 5/5 [00:05\u003c00:00,  1.09s/it]\n"}
+,{"stream_name":"stderr","time":285.618622038,"data":"The module 'UMT5EncoderModel' is group offloaded and moving it to cuda via `.to()` is not supported.\n"}
+,{"stream_name":"stderr","time":285.618800154,"data":"The module 'WanTransformer3DModel' is group offloaded and moving it to cuda via `.to()` is not supported.\n"}
+,{"stream_name":"stderr","time":361.350466483,"data":"Killed\n"}
+,{"stream_name":"stderr","time":363.971288233,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":363.971318708,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":364.233040526,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":364.233068527,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":365.663038663,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":366.58681933,"data":"[NbConvertApp] Writing 713665 bytes to __results__.html\n"}
+]

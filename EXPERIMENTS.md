@@ -99,3 +99,18 @@ All three still pass the timing check.
 - **Result:** no. The 9:16 window is only a third of the keyframe's width, and the model rarely kept people in the centre. In shot 2 the centre crop showed an empty stool, with the Father and the Son both cut off.
 - **Change:** each shot's 9:16 pan path now aims at where its people are in the final keyframe, from looking at each one. In two-person shots it travels from one person to the other (shot 2: Father → Son; shot 6: the bed → the Son; shot 10: Son → Father). The change is in `storyboard.json` (`pan["9:16"]`), and it cost no model calls.
 - **Cost:** mid-pan frames in two-person shots briefly show the wall between the two people.
+
+## E11. Score: three ACE-Step 1.5 candidates from one caption (2026-11-26)
+
+- **Hypothesis:** the turbo model (8 steps, shift 3.0) can make a 92 s instrumental in the spirit of tizita from the storyboard's caption alone (krar, masenqo, soft piano; sparse to fuller; no vocals). Three seeds (3001–3003) give enough choice without a second round.
+- **Result:** one Kaggle job made all three on a T4.
+  - **Time:** 7–10 s of GPU time per candidate. The job took 8 min in all, nearly all of it installing ACE-Step and downloading its weights.
+  - **Length:** every candidate is exactly 92.0 s.
+  - **Loudness:** -15.6, -13.7 and -17.0 LUFS (`ebur128`). That's 10 LU or more above the old pad, so assembly first brings the track to -26 LUFS, then applies the volume points and ducking.
+- **Choice:** the author picked **candidate 1**: "it feels close to tizita". It's recorded as `music.chosen` / `music.reason` and copied to `outputs/music/chosen.wav` as the fallback track.
+
+## E12. Moving shots vs pan shots (2026-11-26)
+
+- **Plan (ADR 0001):** compare Wan 2.2 TI2V-5B clips against the pan shots of the same three shots (4 the pour, 5 the jebena falls, 11 the hand-hold).
+- **Result:** no comparison was possible, because no clip came back. Both Kaggle T4 attempts failed on memory (FAILURES.md F10). The first ran out of GPU memory at 121 frames; with group offloading and 81 frames, the second ran out of CPU memory.
+- **What the film uses:** the pan shots for all three shots, through the planned fallback, logged as `fallback` lines. The deadline rule (finish over polish) stopped a third attempt.

@@ -1,0 +1,9 @@
+{
+ "_device": {
+  "gpu": "Tesla T4",
+  "transformer_dtype": "torch.float16"
+ },
+ "_load": {
+  "seconds": 295.9
+ }
+}

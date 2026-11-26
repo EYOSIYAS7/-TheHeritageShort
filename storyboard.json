@@ -57,8 +57,9 @@
     "caption": "slow reflective instrumental in the spirit of Ethiopian tizita, longing and nostalgia; krar and masenqo with soft piano; sparse at the start, warmer and fuller at the end; no vocals",
     "duration_s": 92,
     "candidates": 3,
-    "chosen": null,
-    "reason": null,
+    "seed": 3001,
+    "chosen": 1,
+    "reason": "it feels close to tizita",
     "volume_points": [
       {
         "t_s": 0,

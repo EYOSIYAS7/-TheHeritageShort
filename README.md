@@ -25,11 +25,13 @@ On Ubuntu: `sudo apt install make python3-venv ffmpeg fonts-noto-core`. The firs
 1. **Validate** `storyboard.json` against `schema/storyboard.schema.json`. It also checks shot references and that the film is 60–90 s long. Any problem stops the run before a single model call, naming the shot or line and the field.
 2. **Script:** Gemini drafts the Amharic for every narration line that isn't pinned, from its English and the translation instruction in the storyboard. Drafts are written back marked unreviewed. A line is redrafted only when its English changes. `make film` refuses to continue while any line is unreviewed (`make review` lists them).
 3. **Narration:** Gemini TTS (`gemini-3.8-flash-tts`, voice Enceladus) speaks each line into its own file. Each line's audio is measured: one that overlaps the next line or runs past the last shot stops the run, with the overrun in seconds.
-4. **Character sheet:** Cloudflare Workers AI, FLUX.2 klein 4B, makes one reference image each for the Father, the Son and the coffee corner.
-5. **Keyframes:** one 16:9 image per shot (12). The prompt is built only from storyboard text, and each shot can be conditioned on its main character's reference image.
-6. **Pan shots:** FFmpeg slowly pans and zooms across each keyframe, for exactly the shot's length, along its own path for 16:9 and for 9:16.
-7. **Cards:** the saying (Amharic in Noto Sans Ethiopic, plus the English) and the end card stating the film was made with AI.
-8. **Assembly:** each line is placed at its shot's start plus offset, and the English subtitles are burned in. A placeholder music bed is ducked under the voice. Loudness is normalised (-14 LUFS target), then both MP4s are exported.
+4. **Score:** ACE-Step 1.5 on Kaggle makes three candidates from the music cue; the chosen one plays (fallbacks: the last chosen track, then a placeholder pad).
+5. **Character sheet:** Cloudflare Workers AI, FLUX.2 klein 4B, makes one reference image each for the Father, the Son and the coffee corner.
+6. **Keyframes:** one 16:9 image per shot (12). The prompt is built only from storyboard text, and each shot can be conditioned on its main character's reference image.
+7. **Pan shots:** FFmpeg slowly pans and zooms across each keyframe, for exactly the shot's length, along its own path for 16:9 and for 9:16.
+8. **Moving shots:** Wan 2.2 TI2V-5B on Kaggle animates shots 4, 5 and 11 from their keyframes; any shot without a clip keeps its pan shot.
+9. **Cards:** the saying (Amharic in Noto Sans Ethiopic, plus the English) and the end card stating the film was made with AI.
+10. **Assembly:** each line is placed at its shot's start plus offset, and the English subtitles are burned in. The score is ducked under the voice. Loudness is normalised (-14 LUFS target), then both MP4s are exported.
 
 **Logging and caching:**
 - Every model call, every retry and every cache hit is one JSON line in `runs.jsonl`.
@@ -43,7 +45,7 @@ Copy `.env.example` to `.env` (git-ignored) and fill it in. Keys are read only f
 |---|---|---|
 | `GEMINI_API_KEY` | Amharic drafts, narration | aistudio.google.com/apikey (free tier) |
 | `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN` | character sheet, keyframes | dash.cloudflare.com: the Workers AI page, then API Tokens with the "Workers AI" template |
-| `KAGGLE_USERNAME`, `KAGGLE_KEY` | moving shots and score (not used yet) | kaggle.com → Settings → API |
+| `KAGGLE_USERNAME`, `KAGGLE_KEY` | moving shots and score (GPU notebooks) | kaggle.com → Settings → API (the account needs phone verification for GPU and internet) |
 
 **No media in the repo** (ADR 0003): images, audio and video are git-ignored, so the repo holds code, text, logs and docs, and the finished film is submitted separately. On a fresh clone, `make film` therefore regenerates the media with your keys and caches it in `outputs/`.
 - Without the Cloudflare keys, shots show labelled placeholders.
@@ -66,6 +68,7 @@ All measured numbers are in `COSTS.md` (`make costs` prints them from `runs.json
 
 | Command | What it does |
 |---|---|
+| `make gpu` | only the two Kaggle stages: three score candidates (ACE-Step 1.5) and the moving shots 4, 5 and 11 (Wan 2.2), into the cache; renders nothing. `make film` runs them too. |
 | `make review` | lists narration lines whose Amharic isn't reviewed, English beside Amharic. Fix `am` in `storyboard.json`, then set `am_reviewed: true`. |
 | `make voices` | the voice trial: one narration line in each candidate voice (`narrator.voice_trial`), to pick the narrator by ear |
 | `make radio-cut` | narration, subtitles and music on a black screen (16:9), for user test 1. Allows unreviewed Amharic. |
@@ -86,5 +89,4 @@ All measured numbers are in `COSTS.md` (`make costs` prints them from `runs.json
 | `ETHICS.md` | consent (composite story), licences, labelling |
 | `docs/adr/` | decisions: pan shots by default, GPU fallbacks, no media in the repo |
 
-**Not done yet:**
-- The moving shots (Wan 2.2 on Kaggle, ticket 07) and the ACE-Step score (06). Until they land, shots 4, 5 and 11 are pan shots, and the music is a generated placeholder pad (ADR 0001).
+**Moving shots fell back to pan shots.** The score is ACE-Step 1.5 (candidate 1 of 3, chosen by ear). Wan 2.2 moving shots for 4, 5 and 11 are built and wired in, but both Kaggle T4 runs ran out of memory (FAILURES.md F10), so those three shots use their pan shots: the planned fallback (ADR 0001). A job that failed isn't resent with the same inputs; delete `outputs/moving/job/failed.json` to try again.

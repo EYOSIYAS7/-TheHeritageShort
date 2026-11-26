@@ -111,11 +111,12 @@
       "description": "The music cue for the score.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["caption", "duration_s", "candidates", "chosen", "reason", "volume_points"],
+      "required": ["caption", "duration_s", "candidates", "seed", "chosen", "reason", "volume_points"],
       "properties": {
-        "caption": { "$ref": "#/$defs/text" },
+        "caption": { "$ref": "#/$defs/text", "maxLength": 512 },
         "duration_s": { "$ref": "#/$defs/duration" },
         "candidates": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "seed": { "description": "Seed of candidate 0; candidate i uses seed + i.", "type": "integer", "minimum": 0 },
         "chosen": {
           "description": "Index (0-based) of the chosen candidate, or null before choosing.",
           "type": ["integer", "null"],

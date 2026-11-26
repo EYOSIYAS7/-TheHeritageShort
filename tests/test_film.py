@@ -103,7 +103,7 @@ def test_first_run_narrates_every_line_and_logs_one_line_per_call(project: Proje
 
     # The pinned Amharic is spoken; lines without Amharic yet fall back to English.
     assert speech.calls == ["Let's talk tomorrow, Dad.", "ነገ አባባ ነገ", "Not every tomorrow is promised."]
-    runs = project.runs
+    runs = project.narration_runs
     assert [r["item"] for r in runs] == ["a", "b", "c"]
     for r in runs:
         assert REQUIRED_LOG_FIELDS <= r.keys()
@@ -124,7 +124,7 @@ def test_second_run_with_no_changes_makes_zero_calls(project: Project) -> None:
     build(project, second)
 
     assert second.calls == []
-    new_lines = project.runs[3:]
+    new_lines = project.narration_runs[3:]
     assert [(r["item"], r["cache"]) for r in new_lines] == [("a", "hit"), ("b", "hit"), ("c", "hit")]
 
 
@@ -140,7 +140,7 @@ def test_changing_one_narration_line_makes_exactly_one_speech_call(project: Proj
     build(project, second)
 
     assert second.calls == ["Because not every tomorrow is promised."]
-    misses = [r["item"] for r in project.runs[3:] if r["cache"] == "miss"]
+    misses = [r["item"] for r in project.narration_runs[3:] if r["cache"] == "miss"]
     assert misses == ["c"]
 
 
@@ -162,10 +162,10 @@ def test_transient_failure_is_retried_and_every_attempt_is_logged(project: Proje
     run.film(project.root, providers(speech), cut="radio-cut", sleep=delays.append)
 
     assert len(speech.calls) == 4  # line a twice, then b and c
-    assert [(r["item"], r["attempt"], r["outcome"]) for r in project.runs] == [
+    assert [(r["item"], r["attempt"], r["outcome"]) for r in project.narration_runs] == [
         ("a", 1, "retry"), ("a", 2, "ok"), ("b", 1, "ok"), ("c", 1, "ok"),
     ]
-    assert "fake transient failure" in project.runs[0]["error"]
+    assert "fake transient failure" in project.narration_runs[0]["error"]
     assert delays == [2.0]
 
 
@@ -176,7 +176,7 @@ def test_call_that_keeps_failing_is_logged_as_an_error_and_stops_the_run(project
         build(project, speech)
 
     assert len(speech.calls) == 3
-    assert [(r["item"], r["attempt"], r["outcome"]) for r in project.runs] == [
+    assert [(r["item"], r["attempt"], r["outcome"]) for r in project.narration_runs] == [
         ("a", 1, "retry"), ("a", 2, "retry"), ("a", 3, "error"),
     ]
 
@@ -188,7 +188,7 @@ def test_permanent_failure_is_not_retried(project: Project) -> None:
         build(project, speech)
 
     assert len(speech.calls) == 1
-    assert [(r["item"], r["attempt"], r["outcome"]) for r in project.runs] == [("a", 1, "error")]
+    assert [(r["item"], r["attempt"], r["outcome"]) for r in project.narration_runs] == [("a", 1, "error")]
 
 
 # --- the exported film ------------------------------------------------------------------------

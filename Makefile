@@ -5,11 +5,15 @@
 VENV := .venv
 PY := $(VENV)/bin/python
 
-.PHONY: film costs rough-cut radio-cut review voices test typecheck check
+.PHONY: film gpu costs rough-cut radio-cut review voices test typecheck check
 
 ## Build the film into outputs/film/ (validates storyboard.json first)
 film: $(VENV)/.deps
 	$(PY) -m pipeline film
+
+## Only the Kaggle GPU stages (score candidates, moving shots): fills the cache, renders nothing
+gpu: $(VENV)/.deps
+	$(PY) -m pipeline gpu
 
 ## Per-stage summary of runs.jsonl: calls, cache hits, latency, image list price
 costs: $(VENV)/.deps

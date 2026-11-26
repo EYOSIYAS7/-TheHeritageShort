@@ -7,12 +7,14 @@ Kaggle) plug in without changing any stage.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol
 
-from pipeline.adapters import CloudflareImage, GeminiSpeech, GeminiText
+from pipeline.adapters import CloudflareImage, GeminiSpeech, GeminiText, KaggleJobs
 from pipeline.env import load_env
+from pipeline.jobs import JobResult
+from pipeline.runlog import PermanentError
 
 
 class SpeechProvider(Protocol):
@@ -48,11 +50,22 @@ class ImageProvider(Protocol):
 
 
 class GpuJobs(Protocol):
-    """Remote GPU jobs (Kaggle notebooks). Push and poll arrive with the GPU stages."""
+    """Remote GPU jobs (Kaggle notebooks): run one notebook over a batch of items, return each item's file."""
 
     model: str
+    available: bool  # False without credentials: GPU stages use their fallbacks
 
-    def authenticate(self) -> str: ...
+    def run(self, notebook: Path, job: dict[str, Any], files: dict[str, Path], out_dir: Path) -> JobResult: ...
+
+
+class NoGpu:
+    """No GPU provider: every GPU item falls back (pan shot, last chosen track)."""
+
+    model = "none"
+    available = False
+
+    def run(self, notebook: Path, job: dict[str, Any], files: dict[str, Path], out_dir: Path) -> JobResult:
+        raise PermanentError("no GPU provider configured")
 
 
 # Tried in order. gemini-3.8-flash answered only 503 "high demand" or 429 quota errors in the
@@ -65,12 +78,14 @@ class Providers:
     speech: SpeechProvider
     image: ImageProvider
     text: tuple[TextProvider, ...] = ()  # tried in order; empty means no drafting (no key)
+    gpu: GpuJobs = field(default_factory=NoGpu)
 
 
 def default_providers(root: Path) -> Providers:
     """Real adapters, with the keys in `root/.env`.
 
-    Without GEMINI_API_KEY, narration still builds from cached audio; a line
+    Without Kaggle keys, moving shots fall back to pan shots and the score to the
+    last chosen track (ADR 0002). Without GEMINI_API_KEY, narration still builds from cached audio; a line
     that needs new audio fails with a message naming the missing key. Text
     drafting is skipped (lines without Amharic are narrated in English).
     """
@@ -78,4 +93,5 @@ def default_providers(root: Path) -> Providers:
     key = env.get("GEMINI_API_KEY")
     text: tuple[TextProvider, ...] = tuple(GeminiText(key, model) for model in TEXT_MODELS) if key else ()
     image = CloudflareImage(env.get("CLOUDFLARE_ACCOUNT_ID", ""), env.get("CLOUDFLARE_API_TOKEN", ""))
-    return Providers(speech=GeminiSpeech(key or ""), image=image, text=text)
+    gpu = KaggleJobs(env.get("KAGGLE_USERNAME", ""), env.get("KAGGLE_KEY", ""))
+    return Providers(speech=GeminiSpeech(key or ""), image=image, text=text, gpu=gpu)

@@ -14,6 +14,11 @@
     "path": "outputs/narration/closing-04-03972fea6c5f.wav",
     "stage": "narration"
   },
+  "097a65e7f9bb889c08ce2df327a4cc9f0d15c19ad9e51ff5f84e412f00fb7656": {
+    "item": "candidate-0",
+    "path": "outputs/music/candidate-0-097a65e7f9bb.wav",
+    "stage": "music"
+  },
   "0a522f18d4af50806e1001f800eca418069d6aceb8036aaf92a2d71d723c2632": {
     "item": "shot-12",
     "path": "outputs/keyframes/shot-12-0a522f18d4af.jpg",
@@ -123,6 +128,11 @@
     "item": "closing-06",
     "path": "outputs/narration/closing-06-3b5554f5deaf.wav",
     "stage": "narration"
+  },
+  "3be4217e9d55ed08421abd73f7bfcd0ec32086e4bac3d00ed1c3aaa4af3f00a9": {
+    "item": "candidate-2",
+    "path": "outputs/music/candidate-2-3be4217e9d55.wav",
+    "stage": "music"
   },
   "3fda18b1151af91eee93f708dd83f1b898f3430a0dbde0a38e67482c22503515": {
     "item": "closing-04",
@@ -328,6 +338,11 @@
     "item": "closing-04",
     "path": "outputs/narration/closing-04-c5664b144e99.wav",
     "stage": "narration"
+  },
+  "c64a4402c8e59a12c9a2bf93f4d57fb5f4b00d2820567641897551eb1422a847": {
+    "item": "candidate-1",
+    "path": "outputs/music/candidate-1-c64a4402c8e5.wav",
+    "stage": "music"
   },
   "cb7788231a6865d67130040b39483f33bbac724936e8317de894bfc7cd9b052f": {
     "item": "closing-02",

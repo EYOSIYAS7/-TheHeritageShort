@@ -19,7 +19,7 @@ from typing import Any, Literal, TypeVar
 
 T = TypeVar("T")
 
-Outcome = Literal["ok", "retry", "error"]
+Outcome = Literal["ok", "retry", "error", "fallback"]
 
 
 class PermanentError(Exception):
@@ -81,6 +81,14 @@ class RunLog:
 
     def cache_hit(self, call: Call) -> None:
         self._write(call, 0.0, 0.0, "hit", 0, "ok", None)
+
+    def fallback(self, call: Call, reason: str) -> None:
+        """The item was not generated and a fallback is used instead (pan shot, last chosen track)."""
+        self._write(call, 0.0, 0.0, "miss", 0, "fallback", reason)
+
+    def record(self, call: Call, *, latency_s: float, outcome: Outcome, error: str | None = None) -> None:
+        """One item of a remote batch job, timed where it ran (the Kaggle notebook measures each clip)."""
+        self._write(call, latency_s, 0.0, "miss", 1, outcome, error)
 
     def _write(
         self,

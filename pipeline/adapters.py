@@ -7,7 +7,7 @@ unknown model, rejected input: retrying cannot help); anything else is left
 to the run log to retry.
 
 Not unit-tested (they are thin wrappers over live APIs); `GeminiText` and
-`GeminiSpeech` have been called live, `CloudflareImage` and `KaggleJobs` not yet
+`GeminiSpeech` and `CloudflareImage` have been called live; `KaggleJobs` not yet
 (see FAILURES.md).
 Cost estimates are 0.0 because every call here runs on a free tier; list-price
 equivalents are worked out in COSTS.md.
@@ -16,14 +16,24 @@ equivalents are worked out in COSTS.md.
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
+import os
 import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
 import urllib.error
 import urllib.request
 import uuid
 import wave
+from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+
+from pipeline.jobs import JobResult, read_results
 
 from pipeline.runlog import PermanentError, RateLimited
 
@@ -219,33 +229,98 @@ def _multipart(fields: list[tuple[str, str | tuple[str, bytes]]]) -> tuple[bytes
 
 # --- Kaggle -----------------------------------------------------------------------------------
 
-KAGGLE_API = "https://www.kaggle.com/api/v1"
+KAGGLE_POLL_S = 60
+KAGGLE_MAX_WAIT_S = 4 * 3600  # a GPU session is capped at 12 h; give up long before
 
 
 class KaggleJobs:
-    """GPU jobs as Kaggle notebooks. Implements `GpuJobs`.
+    """GPU jobs as Kaggle script kernels, through the Kaggle CLI. Implements `GpuJobs`.
 
-    For now only authentication; pushing and polling notebooks (Wan 2.2, ACE-Step)
-    arrive with the moving-shot and score stages. Accepts both the legacy
-    username + key (HTTP basic auth) and the newer KGAT_ API tokens (bearer).
+    `run` embeds the job (items and input files as base64) at the top of the
+    notebook template in `kaggle/`, pushes it as a private GPU kernel with
+    internet on (`kaggle kernels push`), polls `kaggle kernels status` until it
+    completes or fails, then downloads `/kaggle/working` (`kaggle kernels
+    output`). Accepts the legacy username + key and the newer KGAT_ API tokens.
     """
 
-    model = "kaggle-api-v1"
+    model = "kaggle-cli"
 
-    def __init__(self, username: str, key: str) -> None:
+    def __init__(self, username: str, key: str, *, sleep: Callable[[float], None] = time.sleep) -> None:
         self.username = username
         self.key = key
+        self.sleep = sleep
+        self.cli = shutil.which("kaggle") or str(Path(sys.executable).parent / "kaggle")
+        self.available = bool(username and key) and Path(self.cli).exists()
 
-    def authenticate(self) -> str:
-        """Make one authenticated read; return what the account can see."""
-        if self.key.startswith("KGAT_"):
-            auth = f"Bearer {self.key}"
-        else:
-            auth = "Basic " + base64.b64encode(f"{self.username}:{self.key}".encode()).decode()
-        raw = _request(f"{KAGGLE_API}/kernels/list?mine=true&pageSize=1",
-                       headers={"Authorization": auth}, method="GET")
-        kernels = json.loads(raw) if raw.strip() else []
-        return f"authenticated as {self.username} ({len(kernels)} notebook(s) on the first page)"
+    def run(self, notebook: Path, job: dict[str, Any], files: dict[str, Path], out_dir: Path) -> JobResult:
+        slug = f"tomorrow-dad-{notebook.stem.replace('_', '-')}"
+        ref = f"{self.username}/{slug}"
+        payload = {**job, "files": {name: base64.b64encode(path.read_bytes()).decode() for name, path in files.items()}}
+        encoded = base64.b64encode(json.dumps(payload).encode()).decode()
+        script = f"import base64, json\nJOB = json.loads(base64.b64decode('{encoded}'))\n\n" + notebook.read_text()
+        digest = hashlib.sha256(script.encode("utf-8")).hexdigest()
+        record = out_dir / "pushed.json"
+        failed = out_dir / "failed.json"
+        if failed.exists() and json.loads(failed.read_text(encoding="utf-8")) == {"ref": ref, "digest": digest}:
+            raise PermanentError(f"this exact job already failed on Kaggle (FAILURES.md); "
+                                 f"delete {failed.name} in {out_dir} to send it again")
+        if not self._still_running(record, ref, digest):  # an interrupted run resumes the job it pushed
+            with tempfile.TemporaryDirectory() as tmp:
+                folder = Path(tmp)
+                (folder / "main.py").write_text(script, encoding="utf-8")
+                (folder / "kernel-metadata.json").write_text(json.dumps({
+                    "id": ref, "title": slug, "code_file": "main.py", "language": "python", "kernel_type": "script",
+                    "is_private": True, "enable_gpu": True, "enable_internet": True,
+                    "dataset_sources": [], "competition_sources": [], "kernel_sources": [],
+                }))
+                self._cli("kernels", "push", "-p", str(folder))
+            out_dir.mkdir(parents=True, exist_ok=True)
+            record.write_text(json.dumps({"ref": ref, "digest": digest}))
+        status = self._wait(ref)
+        for old in out_dir.iterdir():  # no stale results.json or clips from an earlier run
+            if old not in (record, failed) and old.is_file():
+                old.unlink()
+        self._cli("kernels", "output", ref, "-p", str(out_dir), "-o")
+        record.unlink()
+        results_path = out_dir / "results.json"
+        results = json.loads(results_path.read_text(encoding="utf-8")) if results_path.exists() else {}
+        result = read_results(results, out_dir, [str(item["id"]) for item in job["items"]])
+        if not result.files:  # nothing came back: don't resend the same job on every `make film`
+            failed.write_text(json.dumps({"ref": ref, "digest": digest}))
+        if status != "complete" and not results:
+            raise PermanentError(f"Kaggle job {ref} ended with status {status!r} and no results; "
+                                 f"its log is in {out_dir}")
+        return result
+
+    def _still_running(self, record: Path, ref: str, digest: str) -> bool:
+        """True if this exact job was already pushed and Kaggle is still queueing or running it."""
+        if not record.exists() or json.loads(record.read_text(encoding="utf-8")) != {"ref": ref, "digest": digest}:
+            return False
+        status = self._cli("kernels", "status", ref).lower()
+        return "queued" in status or "running" in status
+
+    def _wait(self, ref: str) -> str:
+        waited = 0.0
+        while waited < KAGGLE_MAX_WAIT_S:
+            self.sleep(KAGGLE_POLL_S)  # first wait before the first check, so the new version is the one polled
+            waited += KAGGLE_POLL_S
+            text = self._cli("kernels", "status", ref).lower()
+            for status in ("complete", "error", "cancel"):
+                if status in text:
+                    return status
+        raise PermanentError(f"Kaggle job {ref} still running after {KAGGLE_MAX_WAIT_S / 3600:.0f} h")
+
+    def _cli(self, *args: str) -> str:
+        env = {**os.environ, "KAGGLE_USERNAME": self.username}
+        env["KAGGLE_API_TOKEN" if self.key.startswith("KGAT_") else "KAGGLE_KEY"] = self.key
+        result = subprocess.run([self.cli, *args], capture_output=True, text=True, env=env, timeout=600)
+        out = (result.stdout + result.stderr).strip()
+        if result.returncode != 0:
+            message = f"kaggle {args[0]} {args[1]} failed: {' '.join(out.split())[:500]}"
+            if re.search(r"\b(401|403|404)\b|unauthori[sz]ed|forbidden|phone", out, re.I):
+                raise PermanentError(message)
+            raise ConnectionError(message)
+        return out
 
 
 if TYPE_CHECKING:  # mypy checks each adapter against the interface it claims

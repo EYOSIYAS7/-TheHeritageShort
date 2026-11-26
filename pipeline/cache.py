@@ -39,6 +39,9 @@ class Cache:
         return path if path.exists() else None
 
     def put(self, key: str, *, stage: str, item: str, path: Path) -> None:
+        # Re-read first: another run (e.g. a GPU job and `make film` at once) may have added entries since.
+        if self.manifest_path.exists():
+            self.entries = {**json.loads(self.manifest_path.read_text(encoding="utf-8")), **self.entries}
         self.entries[key] = {"stage": stage, "item": item, "path": path.relative_to(self.root).as_posix()}
         self.manifest_path.parent.mkdir(parents=True, exist_ok=True)
         # Saved after every item, so a crash mid-run keeps everything already generated.

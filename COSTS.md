@@ -10,9 +10,13 @@ Everything below is measured from `runs.jsonl` (2026-11-25 to 2026-11-26). Regen
 
 | Stage | Model | Attempts | OK | Retried | Failed | Cache hits | Skipped | Latency (s) | Mean per attempt (s) | Image list price ($) |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| characters | `@cf/black-forest-labs/flux-2-klein-4b` | 4 | 4 | 0 | 0 | 17 | 0 | 59.4 | 14.8 | 0.0046 |
-| keyframes | `@cf/black-forest-labs/flux-2-klein-4b` | 32 | 32 | 0 | 0 | 40 | 0 | 436.3 | 13.6 | 0.0871 |
-| narration | `gemini-3.8-flash-tts` | 22 | 15 | 5 | 2 | 139 | 0 | 71.7 | 3.3 | - |
+| characters | `@cf/black-forest-labs/flux-2-klein-4b` | 4 | 4 | 0 | 0 | 32 | 0 | 59.4 | 14.8 | 0.0046 |
+| keyframes | `@cf/black-forest-labs/flux-2-klein-4b` | 32 | 32 | 0 | 0 | 100 | 0 | 436.3 | 13.6 | 0.0871 |
+| moving | `Wan-AI/Wan2.2-TI2V-5B-Diffusers` | 9 | 0 | 0 | 9 | 0 | 12 | 79.4 | 8.8 | - |
+| moving | `kaggle-cli` | 4 | 3 | 0 | 1 | 0 | 0 | 3464.6 | 866.1 | - |
+| music | `ACE-Step-1.5/acestep-v15-turbo` | 3 | 3 | 0 | 0 | 6 | 0 | 25.2 | 8.4 | - |
+| music | `kaggle-cli` | 1 | 1 | 0 | 0 | 0 | 0 | 482.7 | 482.7 | - |
+| narration | `gemini-3.8-flash-tts` | 22 | 15 | 5 | 2 | 161 | 0 | 71.7 | 3.3 | - |
 | narration | `placeholder-tone` | 27 | 27 | 0 | 0 | 25 | 0 | 0.7 | 0.0 | - |
 | script | `gemini-3.5-flash` | 13 | 12 | 1 | 0 | 0 | 0 | 279.0 | 21.5 | - |
 | script | `gemini-3.8-flash` | 36 | 0 | 24 | 12 | 0 | 0 | 261.4 | 7.3 | - |
@@ -23,12 +27,16 @@ Everything below is measured from `runs.jsonl` (2026-11-25 to 2026-11-26). Regen
 | tts-prompt-experiment | `gemini-3.5-flash` | 4 | 4 | 0 | 0 | 0 | 0 | 94.8 | 23.7 | - |
 | tts-prompt-experiment | `gemini-3.8-flash-tts` | 4 | 3 | 1 | 0 | 0 | 0 | 54.0 | 13.5 | - |
 | voices | `gemini-3.8-flash-tts` | 3 | 3 | 0 | 0 | 0 | 0 | 34.9 | 11.6 | - |
-| **total** | | 166 | 107 | 42 | 17 | 221 | 10 | 1613.5 | | 0.0916 |
+| **total** | | 183 | 114 | 42 | 27 | 324 | 22 | 5665.4 | | 0.0916 |
 
-Image calls used 8,331 Workers AI neurons (free allowance: 10,000 per day). GPU minutes: 0 (no Kaggle job has run).
+Image calls used 8,331 Workers AI neurons (free allowance: 10,000 per day). Kaggle GPU minutes: 1.7 (free quota: about 30 GPU hours a week).
 How to read the stages:
 - `smoke` and `tts-prompt-experiment` come from the dropped smoke test and the TTS prompt experiment (EXPERIMENTS.md E1).
 - `placeholder-tone` is the local sine-tone stand-in used before Gemini TTS: not a model, and free.
+- **`kaggle-cli` rows** are whole Kaggle jobs: wall time from push to download, which includes queueing for a T4, installing and downloading weights. The model rows under them are per item, timed in the notebook.
+  - **music:** one job, 482.7 s, made all three candidates in 25.2 s of GPU time.
+  - **moving:** three Wan 2.2 jobs, all failed on memory (FAILURES.md F10). That's 9 failed clip attempts and 12 fallbacks (pan shot kept). The extra job came from a `make film` started while a job was still running. The last `kaggle-cli` line is a job refused locally because the same job had already failed.
+- **GPU minutes:** "Kaggle GPU minutes" sums only the per-item generation time (1.7 min). The GPU sessions themselves ran longer: 8 min for the music and about 10–22 min for each Wan job, mostly model download and loading, which is about 1 hour of the 30-hour weekly quota at most.
 - The 36 failed or retried `gemini-3.8-flash` script attempts are FAILURES.md F1: 503 "high demand" and 429 quota errors. The fallback `gemini-3.5-flash` drafted all 12 lines.
 
 **Not in the log:** one Gemini TTS request made by hand with `curl` on 2026-11-25, around 20:55 UTC, to read the full quota error (FAILURES.md F3). It succeeded and used one of the day's 10 TTS requests.
@@ -42,7 +50,7 @@ What the same successful calls would cost on paid tiers. Prices as published on 
 | Cloudflare Workers AI, FLUX.2 klein 4B | 36 images: 32 keyframes at 1920×1088 (8 output tiles each) and 4 character sheets at 1024×1024 (4 tiles), plus 1024×1024 reference inputs. Total 8,331 neurons. | 26.05 neurons per 512×512 output tile, 5.37 per input tile, $0.011 per 1,000 neurons | **$0.092** |
 | Gemini 3.8 Flash TTS | 18 kept clips (15 narration + 3 voice trial), 69.5 s of audio, measured from the WAV files. The 8 smoke/experiment clips (about 37 s more) are not included. | $9.00 per 1M audio tokens through 2026, 25 tokens per second of audio | **$0.016** |
 | Gemini 3.5 / 3.8 Flash (text) | 12 successful Amharic drafts plus the smoke and experiment calls, each a few hundred tokens | not priced here: well under $0.01 in total at any current Flash rate | **< $0.01** |
-| Kaggle GPU (Wan 2.2, ACE-Step) | 0 GPU minutes: not run yet | free quota, about 30 GPU hours a week | **$0** |
+| Kaggle GPU (ACE-Step 1.5, Wan 2.2) | 4 T4 sessions, under 1 GPU hour in all; 1.7 min of it generating | free quota, about 30 GPU hours a week. The nearest paid equivalent, a cloud T4 at about $0.35/h, would be under $0.35 | **$0** (under $0.35 at cloud rates) |
 | **Total** | | | **about $0.11** |
 
 The image figure comes from `make costs`, computed from each call's logged size and references; the TTS figure from the measured audio.

@@ -10,8 +10,9 @@ from typing import Any
 
 import pytest
 
+from pipeline.jobs import JobResult
 from pipeline.media import write_tone_wav
-from pipeline.providers import Providers
+from pipeline.providers import GpuJobs, NoGpu, Providers
 from pipeline.runlog import PermanentError
 
 REPO = Path(__file__).resolve().parent.parent
@@ -50,7 +51,7 @@ TINY_STORYBOARD: dict[str, Any] = {
     "script": {"instruction": "Translate into Amharic.", "seed": 7},
     "narrator": {"voice": "TestVoice", "style": "warm", "seed": 42,
                  "voice_trial": {"line": "c", "voices": ["VoiceA", "VoiceB"]}},
-    "music": {"caption": "quiet", "duration_s": 67, "candidates": 1, "chosen": None, "reason": None,
+    "music": {"caption": "quiet", "duration_s": 67, "candidates": 1, "seed": 5, "chosen": None, "reason": None,
               "volume_points": [{"t_s": 0, "gain": 1.0}]},
     "shots": [_shot(1, 20), _shot(2, 20), _shot(3, 20)],
     "narration": [
@@ -120,6 +121,28 @@ class FakeImage:
         return 0.0
 
 
+class FakeGpu:
+    """Records every job's items; writes a 1 s tone per item (enough for the music stage), or fails."""
+
+    model = "fake-gpu"
+
+    def __init__(self, fail: bool = False) -> None:
+        self.available = True
+        self.fail = fail
+        self.jobs: list[list[str]] = []
+
+    def run(self, notebook: Path, job: dict[str, Any], files: dict[str, Path], out_dir: Path) -> JobResult:
+        items = [str(item["id"]) for item in job["items"]]
+        self.jobs.append(items)
+        if self.fail:
+            raise PermanentError("fake Kaggle job failed")
+        made = {}
+        for item in items:
+            made[item] = out_dir / f"{item}.wav"
+            write_tone_wav(made[item], 1.0, freq_hz=330.0)
+        return JobResult(files=made, seconds={item: 60.0 for item in items})
+
+
 class Project:
     def __init__(self, root: Path) -> None:
         self.root = root
@@ -131,6 +154,11 @@ class Project:
         if not path.exists():
             return []
         return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+
+    @property
+    def narration_runs(self) -> list[dict[str, Any]]:
+        """Log lines of the narration stage only (other stages, e.g. the music fallback, log too)."""
+        return [r for r in self.runs if r["stage"] == "narration"]
 
     def read(self) -> dict[str, Any]:
         data: dict[str, Any] = json.loads((self.root / "storyboard.json").read_text(encoding="utf-8"))
@@ -150,8 +178,10 @@ def project(tmp_path: Path) -> Project:
     return Project(tmp_path)
 
 
-def providers(speech: FakeSpeech, text: FakeText | None = None, image: FakeImage | None = None) -> Providers:
-    return Providers(speech=speech, image=image or FakeImage(available=False), text=(text,) if text else ())
+def providers(speech: FakeSpeech, text: FakeText | None = None, image: FakeImage | None = None,
+              gpu: GpuJobs | None = None) -> Providers:
+    return Providers(speech=speech, image=image or FakeImage(available=False), text=(text,) if text else (),
+                     gpu=gpu or NoGpu())
 
 
 def no_sleep(_: float) -> None:

@@ -18,7 +18,7 @@ What broke, what was tried, what fixed it. Evidence for each entry is in `runs.j
 ## Not yet verified (keys missing in `.env`; the smoke test was dropped)
 
 - **Cloudflare FLUX.2 klein** (`@cf/black-forest-labs/flux-2-klein-4b`): the adapter follows the model page (multipart form, base64 `result.image`), but the field names (`prompt`, `seed`, `width`, `height`, `input_image_0`…) are not on the model page and have not been checked against the live API yet. Whether it accepts reference images is also still open; the first keyframe-stage run will settle both.
-- **Kaggle**: the adapter authenticates against the REST API (`/api/v1/kernels/list?mine=true`) with basic auth, or bearer for the newer `KGAT_` tokens. Not yet run; the first GPU-stage run will settle it.
+- **Kaggle**: replaced by the Kaggle CLI (F9); the key was checked with `kaggle kernels list --mine` on 2026-11-26.
 
 ## F3. Gemini TTS free tier: 10 requests per day per project (2026-11-25)
 
@@ -55,10 +55,30 @@ What broke, what was tried, what fixed it. Evidence for each entry is in `runs.j
 - **Fixed (decision):** the author ruled that no media goes to GitHub (ADR 0003). All images, audio and video are git-ignored, and the unpushed commit was amended so the MP4s never entered history.
 - **Trade-off:** a fresh clone needs keys to regenerate the media.
 
+## F9. The Kaggle CLI wouldn't start: undeclared dependency (2026-11-26)
+
+- **What broke:** `pip install kaggle` installed 2.2.5, and every `kaggle` command then died on import: `ModuleNotFoundError: No module named 'six'` (from `kaggle/models/upload_file.py`). The package imports `six` but doesn't declare it.
+- **Fixed:** `six` is pinned next to `kaggle==2.2.5` in `requirements.txt`. The adapter drives the CLI (push, status, output) instead of the hand-written REST calls, because the CLI is what the brief names and it tracks Kaggle's API changes.
+
+## F10. Wan 2.2 TI2V-5B ran out of memory on the Kaggle T4 (2026-11-26)
+
+- **What broke:** the first moving-shot job loaded in 273 s on a Tesla T4 (14.56 GiB, fp16 transformer), then shot 4 failed after 78 s: `CUDA out of memory. Tried to allocate 332.00 MiB … 94.81 MiB is free`. That was inside the transformer's feed-forward layer, with model CPU offload holding the whole 10 GB transformer on the GPU. Shots 5 and 11 then failed within a second each, because the failed clip's memory was never freed.
+- **The fallback worked as designed:** three `fallback` lines in `runs.jsonl`, and the film kept its pan shots.
+- **Tried (one attempt, by the deadline rule):**
+  - Group offloading: the transformer streams from CPU memory layer by layer, and the text encoder block by block. This is the diffusers docs' recipe for Wan in about 13 GB.
+  - VAE tiling.
+  - `expandable_segments`.
+  - Freeing GPU memory after a failed clip.
+  - Clips capped at 81 frames (3.4 s) instead of 121.
+- **Result:** the second job loaded in 296 s, then the Kaggle machine killed the process (`Killed`, no Python error) as shot 4 started. Leaf-level group offloading with `use_stream=True` keeps pinned copies of the transformer and text encoder in CPU memory, which is more than the session's ~29 GB of RAM. So the GPU ran out first, then the CPU memory ran out instead.
+- **Decision:** stop here, by the deadline rule (finishing over polish). Shots 4, 5 and 11 stay pan shots in the final film, as ADR 0001 planned for. Each attempt left three `fallback` lines in `runs.jsonl`.
+- **Next time:** block-level offloading without streams (less pinned memory), or a GPU with 24 GB or more, the model card's stated minimum for a single GPU.
+
 ## Moved or changed from the brief
 
 - **Gemini models:** the brief's "Gemini 3.8 Flash" exists (`gemini-3.8-flash`, `gemini-3.8-flash-tts`). But on the free tier the text model was unusable for these two days (F1), and TTS allows only 10 requests a day per project (F3).
 - **Cloudflare FLUX.2 klein:** the model page documents only an opaque `multipart` input. The field names (`prompt`, `seed`, `width`, `height`, `input_image_N`) were confirmed by the first real run.
   - Reference images are accepted (EXPERIMENTS.md E2), but more than one per keyframe hurts composition (E3).
   - Output is JPEG (F7).
-- **Kaggle:** not used yet (tickets 06 and 07). The adapter authenticates with either legacy username+key or the newer `KGAT_` bearer tokens; neither has been tried live.
+- **Kaggle:** driven through the Kaggle CLI 2.2.5 (F9), with a legacy username + key. A `KGAT_` token is passed as `KAGGLE_API_TOKEN` instead (untested).
+- **Wan 2.2 TI2V-5B in diffusers:** the model card's diffusers example is text-to-video only (`WanPipeline`). The notebook uses `WanImageToVideoPipeline` for image input.

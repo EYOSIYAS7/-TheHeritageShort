@@ -1,1 +1,3 @@
 jsonschema==4.25.1
+kaggle==2.2.5  # GPU stages: push, poll and download Kaggle notebooks
+six==1.17.0  # kaggle 2.2.5 imports it but doesn't declare it

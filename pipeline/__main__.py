@@ -1,4 +1,4 @@
-"""Command line: `python -m pipeline film|review|voices [--root DIR]` (what the make targets run)."""
+"""Command line: `python -m pipeline film|gpu|review|voices|costs [--root DIR]` (what the make targets run)."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from pipeline.storyboard import StoryboardError
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m pipeline")
-    parser.add_argument("target", choices=["film", "rough-cut", "radio-cut", "review", "voices", "costs"],
+    parser.add_argument("target", choices=["film", "rough-cut", "radio-cut", "review", "voices", "costs", "gpu"],
                         help="build a cut, list unreviewed Amharic, or run the voice trial")
     parser.add_argument("--root", type=Path, default=Path.cwd(), help="project directory (default: current)")
     args = parser.parse_args(argv)
@@ -31,6 +31,14 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"{voice}: {path.relative_to(root)}")
             print("Listen, then set narrator.voice and narrator.voice_reason in storyboard.json.")
             return 0
+        if args.target == "gpu":
+            score, clips = run.gpu_stages(root, default_providers(root))
+            for i, path in sorted(score.candidates.items()):
+                print(f"music candidate {i}: {path.relative_to(root)}")
+            for shot, path in sorted(clips.items()):
+                print(f"moving shot {shot}: {path.relative_to(root)}")
+            print("Anything missing fell back; the reason is the `fallback` line in runs.jsonl.")
+            return 0
         cut: run.Cut = "radio-cut" if args.target == "radio-cut" else "rough-cut" if args.target == "rough-cut" else "film"
         result = run.film(root, default_providers(root), cut=cut)
     except StoryboardError as e:
@@ -40,6 +48,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{aspect}: {video.relative_to(root)} ({result.duration_s:g} s)")
     if result.missing_keyframes:
         print(f"No keyframe for shot(s) {result.missing_keyframes} (no Cloudflare keys): labelled placeholders.")
+    score = result.score
+    if score.track is None:
+        print("Music: placeholder pad (no score track yet; needs Kaggle keys).")
+    elif score.chosen is None and score.candidates:
+        names = ", ".join(str(p.relative_to(root)) for p in score.candidates.values())
+        print(f"Music: candidate 0 for now. Listen to {names}, then set music.chosen and music.reason.")
     if result.drafted:
         print(f"Amharic drafted for {len(result.drafted)} line(s); review them with `make review`.")
     if result.undrafted:

@@ -1,0 +1,14 @@
+{
+ "candidate-0": {
+  "file": "candidate-0.wav",
+  "seconds": 10.4
+ },
+ "candidate-1": {
+  "file": "candidate-1.wav",
+  "seconds": 7.4
+ },
+ "candidate-2": {
+  "file": "candidate-2.wav",
+  "seconds": 7.4
+ }
+}

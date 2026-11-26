@@ -93,6 +93,18 @@ class Style:
 
 
 @dataclass(frozen=True)
+class Music:
+    """The score cue: what ACE-Step is asked for, and which candidate the author chose."""
+
+    caption: str
+    duration_s: float
+    candidates: int
+    seed: int  # candidate i uses seed + i
+    chosen: int | None
+    reason: str | None
+
+
+@dataclass(frozen=True)
 class Script:
     """How the script stage drafts the Amharic: the translation instruction and seed."""
 
@@ -116,6 +128,7 @@ class Storyboard:
     title_en: str
     end_card_text: str
     music_volume: list[tuple[float, float]]  # (time s, gain) points; the gain is linear between them
+    music: Music
 
     @property
     def shots_s(self) -> float:
@@ -220,6 +233,11 @@ def _check_consistency(raw: dict[str, Any]) -> None:
         if line["am_pinned"] and not line["am"]:
             problems.append(f"{where}.am: the line is pinned but has no Amharic text")
 
+    music = raw["music"]
+    if music["chosen"] is not None and music["chosen"] >= music["candidates"]:
+        problems.append(f"music.chosen: candidate {music['chosen']} doesn't exist "
+                        f"(there are {music['candidates']}, numbered from 0)")
+
     trial = raw["narrator"]["voice_trial"]["line"]
     if trial not in seen_lines:
         problems.append(f"narrator.voice_trial.line: there is no narration line {trial!r}")
@@ -286,4 +304,7 @@ def _to_storyboard(raw: dict[str, Any]) -> Storyboard:
         title_en=raw["title"]["en"],
         end_card_text=raw["end_card"]["text"],
         music_volume=[(float(p["t_s"]), float(p["gain"])) for p in raw["music"]["volume_points"]],
+        music=Music(caption=raw["music"]["caption"], duration_s=float(raw["music"]["duration_s"]),
+                    candidates=raw["music"]["candidates"], seed=raw["music"]["seed"],
+                    chosen=raw["music"]["chosen"], reason=raw["music"]["reason"]),
     )

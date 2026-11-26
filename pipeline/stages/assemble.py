@@ -3,9 +3,10 @@
 The picture is the shot clips in storyboard order (or a black screen for the
 radio cut), then the saying card and the end card. Each narration
 line plays at its shot's start plus offset; English subtitles are timed from
-the measured audio and burned in. A placeholder music bed (a soft generated
-chord, no third-party audio) follows the storyboard's volume points and is
-ducked under the voice by sidechain compression. Loudness is normalised as
+the measured audio and burned in. The score (the chosen ACE-Step track,
+brought to a quiet bed level first; or, with no track, a placeholder pad: a
+soft generated chord) follows the storyboard's volume points and is ducked
+under the voice by sidechain compression. Loudness is normalised as
 the last audio step (-14 LUFS integrated, -1.5 dBTP: the usual target for
 phones and social platforms).
 """
@@ -31,22 +32,28 @@ PAD_SWELL = "(0.75+0.25*sin(2*PI*t/9))"
 
 
 LOUDNESS = "loudnorm=I=-14:TP=-1.5:LRA=11"
+# A mastered track is far louder than the pad: bring it to a bed level before the volume points.
+SCORE_LEVEL = "loudnorm=I=-26:TP=-6:LRA=11"
 
 
 def run(storyboard: Storyboard, placed: list[Placed], outputs: Path, *, name: str, aspect: Aspect,
-        clips: list[Path] | None, cards: list[Path]) -> Path:
-    """Export one cut at one aspect ratio. `clips` None means a black picture under the shots (the radio cut)."""
+        clips: list[Path] | None, cards: list[Path], score: Path | None = None) -> Path:
+    """Export one cut at one aspect ratio. `clips` None means a black picture under the shots (the radio cut);
+    `score` None means the placeholder pad."""
     out = outputs / "film" / f"{name}-{aspect.replace(':', 'x')}.mp4"
     out.parent.mkdir(parents=True, exist_ok=True)
     srt = write_subtitles(placed, out.with_suffix(".en.srt"))
     width, height = SIZE[aspect]
     total = f"{storyboard.total_s:.3f}"
 
-    # Inputs: 0 silent bed, 1 music pad, then the narration lines, then the picture.
-    inputs = [
-        "-f", "lavfi", "-t", total, "-i", f"anullsrc=r={AUDIO_RATE}:cl=stereo",
-        "-f", "lavfi", "-t", total, "-i", f"aevalsrc=({PAD})*{PAD_SWELL}:s={AUDIO_RATE}:c=stereo",
-    ]
+    # Inputs: 0 silent bed, 1 music (score looped if short, or the pad), then the narration lines, then the picture.
+    inputs = ["-f", "lavfi", "-t", total, "-i", f"anullsrc=r={AUDIO_RATE}:cl=stereo"]
+    if score is not None:
+        inputs += ["-stream_loop", "-1", "-t", total, "-i", str(score)]
+        music_in = f"[1:a]aresample={AUDIO_RATE},aformat=channel_layouts=stereo,{SCORE_LEVEL},aresample={AUDIO_RATE}"
+    else:
+        inputs += ["-f", "lavfi", "-t", total, "-i", f"aevalsrc=({PAD})*{PAD_SWELL}:s={AUDIO_RATE}:c=stereo"]
+        music_in = "[1:a]lowpass=f=1800"
     filters: list[str] = []
     voice = ["[0:a]"]
     n = 2
@@ -77,7 +84,7 @@ def run(storyboard: Storyboard, placed: list[Placed], outputs: Path, *, name: st
     # under about -1 dBFS, so AAC encoding doesn't clip.
     filters += [
         f"{''.join(voice)}amix=inputs={len(voice)}:duration=first:normalize=0,volume=-2dB,asplit[voice][key]",
-        f"[1:a]lowpass=f=1800,volume='{volume_expression(storyboard)}':eval=frame[music]",
+        f"{music_in},volume='{volume_expression(storyboard)}':eval=frame[music]",
         "[music][key]sidechaincompress=threshold=0.015:ratio=10:attack=30:release=600[ducked]",
         f"[voice][ducked]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.89:level=false,"
         f"{LOUDNESS},aresample={AUDIO_RATE}[aout]",

@@ -14,11 +14,17 @@ storyboard.json ──validate (schema/ + consistency)──▶ Storyboard
       ├─ characters ──── FLUX.2 klein ─▶ outputs/characters/<name>-<hash>.jpg
       ├─ keyframes ───── FLUX.2 klein ─▶ outputs/keyframes/shot-NN-<hash>.jpg   (one reference image per shot)
       ├─ pans ────────── FFmpeg ───────▶ outputs/shots/shot-NN-<aspect>-<hash>.mp4  (placeholder if no keyframe)
+      ├─ moving ──────── Wan 2.2 TI2V-5B on Kaggle ─▶ outputs/moving/shot-NN-<hash>.mp4 (shots 4, 5, 11)
+      │                                   └─ fitted per aspect and length; no clip → the pan shot is kept
       ├─ cards ───────── FFmpeg ───────▶ outputs/cards/{saying,end}-<aspect>-<hash>.mp4
+      ├─ music ───────── ACE-Step 1.5 on Kaggle ────▶ outputs/music/candidate-N-<hash>.wav, chosen.wav
+      │                                   └─ no candidate → last chosen track → placeholder pad
       └─ assemble ────── FFmpeg ───────▶ outputs/film/film-{16x9,9x16}.mp4 + .en.srt
 ```
 
-Model-calling stages: script, narration (and the voice trial), characters, keyframes. Pans, cards and assembly are pure FFmpeg: the same inputs give the same output. Not yet built: the score (ACE-Step 1.5) and moving shots (Wan 2.2), both on Kaggle (tickets 06, 07).
+Model-calling stages: script, narration (and the voice trial), characters, keyframes, and the two GPU stages, moving shots and music. Pans, cards and assembly are pure FFmpeg: the same inputs give the same output.
+
+**GPU stages (Kaggle).** Each GPU stage sends every item that missed the cache to one Kaggle job, because loading the model takes minutes. The notebook templates are in `kaggle/` (`wan22_i2v.py`, `acestep_score.py`). `KaggleJobs` embeds the job (items, plus inputs such as the 480p keyframes, as base64) at the top of the template, pushes it with `kaggle kernels push` as a private GPU script kernel with internet on, polls `kaggle kernels status` every minute, and downloads `/kaggle/working`. The notebook saves each item as soon as it finishes and rewrites `results.json` after each one, so a session that dies part-way still returns what it finished. The log gets one line for the job, plus one per item with the GPU seconds measured in the notebook. `make gpu` runs only these two stages.
 
 ## The contract: `storyboard.json`
 
@@ -31,7 +37,7 @@ Validated against `schema/storyboard.schema.json` (JSON Schema 2020-12) before a
 | `characters` | fixed description + seed for the Father, the Son, the coffee corner | characters, keyframes |
 | `script` | translation instruction + seed | script |
 | `narrator` | voice, `voice_reason`, style instruction, seed, `voice_trial` | narration, voices |
-| `music` | caption, volume points (time → gain) | assemble (pad now, ACE-Step later) |
+| `music` | caption, duration, candidate count + seed, `chosen` + `reason`, volume points (time → gain) | music, assemble |
 | `shots[]` | id, act, duration, `pan`/`moving`, keyframe and motion prompts, seed, grade, characters, `references`, pan path per aspect | keyframes, pans, assemble |
 | `narration[]` | id, anchored shot + offset, `en` (= subtitle), `am`, `am_pinned`, `am_reviewed`, `am_from_en` | script, narration, assemble |
 
@@ -42,7 +48,7 @@ The script stage is the only one that writes to the storyboard (Amharic drafts),
 `pipeline/providers.py` defines one small interface per capability: `TextProvider`, `SpeechProvider`, `ImageProvider` and `GpuJobs`. The real adapters live in `pipeline/adapters.py`. They are thin wrappers that use the standard library only:
 - `GeminiText` and `GeminiSpeech` call the Gemini API (`generateContent`).
 - `CloudflareImage` calls Workers AI with a multipart form.
-- `KaggleJobs` calls the Kaggle REST API (authentication only so far).
+- `KaggleJobs` drives the Kaggle CLI (`kaggle==2.2.5`): push, poll, download.
 
 `default_providers()` reads the keys from `.env` only. Tests inject fakes that write tiny real media and record their calls.
 
@@ -52,6 +58,8 @@ The script stage is the only one that writes to the storyboard (Amharic drafts),
 - **TTS:** model, text, language, voice, style and seed.
 - **Image:** model, prompt (which already contains the style, grade and character descriptions), seed, size and reference images.
 - **Amharic draft:** prompt and seed.
+- **Moving shot:** model, the keyframe's bytes, motion prompt, seed, size, frame count, steps, guidance and flow shift.
+- **Score candidate:** model, caption, duration, steps, shift and seed (`music.seed + i`).
 
 The manifest `outputs/cache-manifest.json` maps hash → file. A stage asks the cache first, and a hit is logged too. So an unchanged re-run makes zero model calls, and a one-line edit makes exactly one. That is pinned by seam tests for narration and keyframes.
 
@@ -71,8 +79,8 @@ Media never goes to git (ADR 0003): the manifest is committed, the files it poin
 - **Fallback models.** Text models are tried in order (`gemini-3.5-flash`, then `gemini-3.8-flash`), and the log shows which one answered (FAILURES.md F1).
 - **Missing keys.** Without Cloudflare keys, a shot with no cached keyframe becomes a labelled placeholder, so the film always renders.
 - **Timing.** Narration that overlaps or runs past the shots stops the run with the overrun in seconds. Nothing is auto-stretched.
-- **Pan shots by default (ADR 0001).** Every shot is a pan shot first. The three moving shots (4, 5, 11) fall back to their pan shot, and the score to the placeholder pad, when Kaggle is unavailable (ADR 0002).
-- **Crash safety.** The cache manifest is saved after every item, so a crash mid-run keeps everything already generated.
+- **Pan shots by default (ADR 0001).** Every shot is a pan shot first. A moving shot (4, 5, 11) with no clip (no keyframe, no Kaggle keys, or the job failed) keeps its pan shot. A missing score candidate falls back to the last chosen track (`outputs/music/chosen.wav`), then to the placeholder pad (ADR 0002). Each fallback is a `"outcome": "fallback"` line in `runs.jsonl` with the reason.
+- **Crash safety.** The cache manifest is saved after every item, so a crash mid-run keeps everything already generated. Each save re-reads the manifest first, so two runs at once (a GPU job and `make film`) don't drop each other's entries.
 
 ## Decisions
 
