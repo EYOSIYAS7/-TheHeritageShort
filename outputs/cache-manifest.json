@@ -134,6 +134,11 @@
     "path": "outputs/keyframes/shot-10-391846c1908e.jpg",
     "stage": "keyframes"
   },
+  "391b9dcdf9f2dd42ada5b3b06dd5cec312fadd23556314856f94bb3f24cc2d66": {
+    "item": "shot-03",
+    "path": "outputs/keyframes/shot-03-391b9dcdf9f2.jpg",
+    "stage": "keyframes"
+  },
   "3aedf834472b722db86a0628cb38828519962b8e95262566134fd495ad8ef33b": {
     "item": "shot-10",
     "path": "outputs/keyframes/shot-10-3aedf834472b.jpg",
@@ -168,6 +173,11 @@
     "item": "closing-08",
     "path": "outputs/narration/closing-08-enceladus-426e86d784ae.wav",
     "stage": "narration"
+  },
+  "450a4a09036801690370c1aad1a07a9fb9a3a033db72c18734e1fc39c85757c9": {
+    "item": "shot-03",
+    "path": "outputs/keyframes/shot-03-450a4a090368.jpg",
+    "stage": "keyframes"
   },
   "468f43e5ad617269a91313fbbe8fed42ef51424a7aa5955f8e2a2a0535cb93b9": {
     "item": "shot-07",
@@ -338,6 +348,11 @@
     "item": "closing-05",
     "path": "outputs/narration/closing-05-b77305cc686b.wav",
     "stage": "narration"
+  },
+  "b845f055ca1f6d15d4c8d23a2fe0ac0a7d6abdebcfea4e5394d4e47174b392f1": {
+    "item": "shot-03",
+    "path": "outputs/keyframes/shot-03-b845f055ca1f.jpg",
+    "stage": "keyframes"
   },
   "bb04807a3106b0bd6b2305427fb7932594b5703e522b305f40574a7a42d37660": {
     "item": "closing-07",
