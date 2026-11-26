@@ -36,4 +36,5 @@ Every model, tool and output used, with its terms. "Used" means it produced some
 - The film ends with a visible **end card** stating it was made with AI. It reads "Made with AI. A composite story; no real person is depicted." in both exports.
 - When posting publicly, the platform's AI-generated-content label is switched **on**.
 - SynthID / C2PA watermarks and metadata are left intact. No step strips them deliberately: the pipeline re-encodes media (pans, mixing, AAC audio), but nothing removes watermarks on purpose.
+  - Gemini TTS clips carry a C2PA content-credentials chunk. The narration WAVs are kept byte-for-byte as Gemini returned them, chunk included (FAILURES.md F11). Mixing them into the film's AAC track does not carry the chunk into the MP4, which is one more reason the film is posted with the platform AI label and ends with the AI card.
 - The repo and README say plainly which models made what (this table, `runs.jsonl`).

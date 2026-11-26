@@ -126,7 +126,8 @@ class GeminiSpeech:
     """Gemini TTS: one WAV per line. Implements `SpeechProvider`.
 
     The style instruction goes in a "director's notes" block, separate from the
-    transcript, which is how Gemini TTS is steered. The response is raw 16-bit mono PCM; its sample rate is read from the MIME type.
+    transcript, which is how Gemini TTS is steered. The response is a complete WAV (with a C2PA chunk), saved as-is; raw PCM, if
+    returned instead, is wrapped as 16-bit mono at the MIME type's sample rate.
     """
 
     def __init__(self, api_key: str, model: str = "gemini-3.8-flash-tts") -> None:
@@ -148,13 +149,20 @@ class GeminiSpeech:
         audio = next((p["inlineData"] for p in _gemini_parts(response) if "inlineData" in p), None)
         if audio is None:
             raise RuntimeError(f"Gemini TTS returned no audio: {json.dumps(response)[:400]}")
-        rate = re.search(r"rate=(\d+)", audio.get("mimeType", ""))
+        data = base64.b64decode(audio["data"])
         out_path.parent.mkdir(parents=True, exist_ok=True)
+        if data[:4] == b"RIFF":
+            # A complete WAV: header, speech, then a C2PA content-credentials chunk. Saved as-is, so the
+            # credentials stay intact; wrapping it as raw PCM played the header and the C2PA chunk as
+            # clicks at the start and end of every line (FAILURES.md F11).
+            out_path.write_bytes(data)
+            return
+        rate = re.search(r"rate=(\d+)", audio.get("mimeType", ""))
         with wave.open(str(out_path), "wb") as w:
             w.setnchannels(1)
             w.setsampwidth(2)
             w.setframerate(int(rate.group(1)) if rate else 24_000)
-            w.writeframes(base64.b64decode(audio["data"]))
+            w.writeframes(data)
 
     def prompt(self, text: str, *, language: str, style: str) -> str:
         # Director's notes kept apart from the transcript: with a one-line "Say this ...:" prefix

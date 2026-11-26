@@ -77,6 +77,17 @@ What broke, what was tried, what fixed it. Evidence for each entry is in `runs.j
   - **Result:** all three clips came back on the T4 at 832×480, 81 frames (3.4 s) each, about 880 s of GPU time per clip.
 - **Lesson:** the real problem was holding the parts of the model at once, not the size of the model. Looking at which component is needed when beat both a smaller model and cleverer offloading.
 
+## F11. A click at the start and end of every narration line (2026-11-26)
+
+- **What broke:** the author heard a "crack" at scene changes. The film's audio had sample-to-sample jumps above 20,000 at the start and end of every narration line, 52 places in all.
+- **Misread first:** the end of each clip looked like two bursts of noise after the speech (40 ms, a 30 ms gap, then 90 ms). Trimming them as noise removed the end clicks but not the start ones.
+- **Real cause:** the first samples of every clip were 18770, 17990, which are the bytes `RIFF`. Gemini TTS returns a **complete WAV file**: a 44-byte header, the speech, then a 7,664-byte **C2PA content-credentials chunk** (exactly 160 ms at 24 kHz, 16-bit). The adapter treated the whole file as raw PCM and wrapped it in a second WAV, so the header played as a click at the start of each line and the C2PA chunk as a buzz at the end.
+- **Fixed:**
+  - The adapter now saves Gemini's WAV as-is when it starts with `RIFF`, so players read only the speech and the C2PA credentials stay intact (CLAUDE.md: keep watermarks and metadata).
+  - The 18 cached clips were unwrapped back to Gemini's original bytes, with no new TTS calls.
+  - The trimming workaround was removed.
+- **Lesson:** check what an API returns before deciding what it means. The sample values were ASCII.
+
 ## Moved or changed from the brief
 
 - **Gemini models:** the brief's "Gemini 3.8 Flash" exists (`gemini-3.8-flash`, `gemini-3.8-flash-tts`). But on the free tier the text model was unusable for these two days (F1), and TTS allows only 10 requests a day per project (F3).
