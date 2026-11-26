@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -39,11 +40,13 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"moving shot {shot}: {path.relative_to(root)}")
             print("Anything missing fell back; the reason is the `fallback` line in runs.jsonl.")
             return 0
+        log_lines = _log_length(root)
         cut: run.Cut = "radio-cut" if args.target == "radio-cut" else "rough-cut" if args.target == "rough-cut" else "film"
         result = run.film(root, default_providers(root), cut=cut)
     except StoryboardError as e:
         print(e, file=sys.stderr)
         return 2
+    _print_run_summary(root, log_lines)
     for aspect, video in result.videos.items():
         print(f"{aspect}: {video.relative_to(root)} ({result.duration_s:g} s)")
     if result.missing_keyframes:
@@ -59,6 +62,20 @@ def main(argv: list[str] | None = None) -> int:
     if result.undrafted:
         print(f"No Amharic yet for {', '.join(result.undrafted)} (no GEMINI_API_KEY in .env): narrated in English.")
     return 0
+
+
+def _log_length(root: Path) -> int:
+    path = root / "runs.jsonl"
+    return len(path.read_text(encoding="utf-8").splitlines()) if path.exists() else 0
+
+
+def _print_run_summary(root: Path, start: int) -> None:
+    """What this run made new and what it reused, read back from the lines it added to runs.jsonl."""
+    path = root / "runs.jsonl"
+    lines = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()[start:]] if path.exists() else []
+    made = [f"{r['stage']} {r['item']}" for r in lines if r["cache"] == "miss" and r["outcome"] == "ok"]
+    reused = sum(1 for r in lines if r["cache"] == "hit")
+    print(f"This run: {len(made)} made new ({', '.join(made) or 'nothing'}); {reused} reused from the cache.")
 
 
 def _review(root: Path) -> int:
