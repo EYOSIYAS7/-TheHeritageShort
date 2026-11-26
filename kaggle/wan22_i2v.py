@@ -7,7 +7,7 @@
 #   JOB["model"], JOB["diffusers"]: the HF repo and the diffusers pip spec
 # Each clip is saved to /kaggle/working as soon as it finishes, and results.json is rewritten
 # after every item, so a session that dies part-way keeps the clips it finished.
-# Not run yet at the time of writing: see FAILURES.md for what happened on Kaggle.
+# Attempts 1 and 2 ran out of memory on a Kaggle T4; this is attempt 3 (FAILURES.md F10).
 
 import os
 import subprocess
@@ -35,10 +35,11 @@ def main():
     subprocess.run([sys.executable, "-m", "pip", "install", "-q", JOB["diffusers"], "ftfy", "imageio",
                     "imageio-ffmpeg"], check=True)
 
+    import gc
+
     import numpy as np
     import torch
-    from diffusers import AutoencoderKLWan, UniPCMultistepScheduler, WanImageToVideoPipeline, WanTransformer3DModel
-    from diffusers.hooks import apply_group_offloading
+    from diffusers import AutoencoderKLWan, UniPCMultistepScheduler, WanImageToVideoPipeline
     from diffusers.utils import export_to_video, load_image
     from transformers import UMT5EncoderModel
 
@@ -48,21 +49,29 @@ def main():
     dtype = torch.bfloat16 if major >= 8 else torch.float16
     results["_device"] = {"gpu": torch.cuda.get_device_name(0), "transformer_dtype": str(dtype)}
     save()
-
     model = JOB["model"]
-    vae = AutoencoderKLWan.from_pretrained(model, subfolder="vae", torch_dtype=torch.float32)
+
+    # Attempt 3 (FAILURES.md F10): never hold the 11 GB text encoder and the 10 GB transformer at once.
+    # Step 1: encode every prompt with the text encoder alone on the GPU, keep the embeddings, free it.
     text_encoder = UMT5EncoderModel.from_pretrained(model, subfolder="text_encoder", torch_dtype=torch.bfloat16)
-    transformer = WanTransformer3DModel.from_pretrained(model, subfolder="transformer", torch_dtype=dtype)
-    # First run: model CPU offload put the whole 10 GB transformer on the 14.5 GB T4 and ran out of
-    # memory in its feed-forward layers. Group offloading streams it from CPU memory layer by layer
-    # (the diffusers docs' recipe for Wan in ~13 GB); the VAE decodes in tiles.
-    cuda, cpu = torch.device("cuda"), torch.device("cpu")
-    apply_group_offloading(text_encoder, onload_device=cuda, offload_device=cpu, offload_type="block_level",
-                           num_blocks_per_group=4)
-    transformer.enable_group_offload(onload_device=cuda, offload_device=cpu, offload_type="leaf_level", use_stream=True)
-    pipe = WanImageToVideoPipeline.from_pretrained(model, vae=vae, text_encoder=text_encoder, transformer=transformer,
-                                                   torch_dtype=dtype)
-    pipe.to("cuda")
+    encoder = WanImageToVideoPipeline.from_pretrained(model, text_encoder=text_encoder, transformer=None, vae=None,
+                                                      torch_dtype=torch.bfloat16).to("cuda")
+    embeds = {}
+    with torch.no_grad():
+        for item in JOB["items"]:
+            positive, negative = encoder.encode_prompt(prompt=item["prompt"], negative_prompt=item["negative_prompt"],
+                                                       do_classifier_free_guidance=True, device="cuda")
+            embeds[item["id"]] = (positive.to("cpu", dtype), negative.to("cpu", dtype))
+    del encoder, text_encoder
+    gc.collect()
+    torch.cuda.empty_cache()
+    results["_encode"] = {"seconds": round(time.time() - started, 1)}
+    save()
+
+    # Step 2: the transformer and VAE only, with model CPU offload (attempt 1 failed at 121 frames; now 81).
+    vae = AutoencoderKLWan.from_pretrained(model, subfolder="vae", torch_dtype=torch.float32)
+    pipe = WanImageToVideoPipeline.from_pretrained(model, vae=vae, text_encoder=None, tokenizer=None, torch_dtype=dtype)
+    pipe.enable_model_cpu_offload()
     try:
         pipe.vae.enable_tiling()
     except Exception:
@@ -76,8 +85,8 @@ def main():
             pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config, flow_shift=item["flow_shift"])
             frames = pipe(
                 image=load_image(str(INPUTS / item["image"])),
-                prompt=item["prompt"],
-                negative_prompt=item["negative_prompt"],
+                prompt_embeds=embeds[item["id"]][0].to("cuda"),
+                negative_prompt_embeds=embeds[item["id"]][1].to("cuda"),
                 height=item["height"],
                 width=item["width"],
                 num_frames=item["num_frames"],

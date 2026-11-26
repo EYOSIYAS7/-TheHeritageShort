@@ -71,8 +71,11 @@ What broke, what was tried, what fixed it. Evidence for each entry is in `runs.j
   - Freeing GPU memory after a failed clip.
   - Clips capped at 81 frames (3.4 s) instead of 121.
 - **Result:** the second job loaded in 296 s, then the Kaggle machine killed the process (`Killed`, no Python error) as shot 4 started. Leaf-level group offloading with `use_stream=True` keeps pinned copies of the transformer and text encoder in CPU memory, which is more than the session's ~29 GB of RAM. So the GPU ran out first, then the CPU memory ran out instead.
-- **Decision:** stop here, by the deadline rule (finishing over polish). Shots 4, 5 and 11 stay pan shots in the final film, as ADR 0001 planned for. Each attempt left three `fallback` lines in `runs.jsonl`.
-- **Next time:** block-level offloading without streams (less pinned memory), or a GPU with 24 GB or more, the model card's stated minimum for a single GPU.
+- **Fixed (third attempt, at the author's request):** never hold the 11 GB text encoder and the 10 GB transformer at once.
+  - **Step 1:** load the text encoder alone, encode all three motion prompts on the GPU, keep the embeddings and free the encoder (110 s, including the download).
+  - **Step 2:** load the transformer and VAE with plain model CPU offload, plus VAE tiling, at 81 frames instead of 121, and pass the stored embeddings in.
+  - **Result:** all three clips came back on the T4 at 832×480, 81 frames (3.4 s) each, about 880 s of GPU time per clip.
+- **Lesson:** the real problem was holding the parts of the model at once, not the size of the model. Looking at which component is needed when beat both a smaller model and cleverer offloading.
 
 ## Moved or changed from the brief
 

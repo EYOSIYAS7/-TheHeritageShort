@@ -1,0 +1,9 @@
+.venv/bin/python -m pipeline gpu
+music candidate 0: outputs/music/candidate-0-097a65e7f9bb.wav
+music candidate 1: outputs/music/candidate-1-c64a4402c8e5.wav
+music candidate 2: outputs/music/candidate-2-3be4217e9d55.wav
+moving shot 4: outputs/moving/shot-04-00c82d7bedae.mp4
+moving shot 5: outputs/moving/shot-05-0d6c800fdafc.mp4
+moving shot 11: outputs/moving/shot-11-177a6adca78f.mp4
+Anything missing fell back; the reason is the `fallback` line in runs.jsonl.
+exit 0

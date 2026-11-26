@@ -89,4 +89,7 @@ All measured numbers are in `COSTS.md` (`make costs` prints them from `runs.json
 | `ETHICS.md` | consent (composite story), licences, labelling |
 | `docs/adr/` | decisions: pan shots by default, GPU fallbacks, no media in the repo |
 
-**Moving shots fell back to pan shots.** The score is ACE-Step 1.5 (candidate 1 of 3, chosen by ear). Wan 2.2 moving shots for 4, 5 and 11 are built and wired in, but both Kaggle T4 runs ran out of memory (FAILURES.md F10), so those three shots use their pan shots: the planned fallback (ADR 0001). A job that failed isn't resent with the same inputs; delete `outputs/moving/job/failed.json` to try again.
+**GPU stages:**
+- **Score:** ACE-Step 1.5, candidate 1 of 3, chosen by ear.
+- **Moving shots:** shots 4, 5 and 11 are Wan 2.2 TI2V-5B clips from a Kaggle T4. It took three attempts (FAILURES.md F10).
+- **Fallbacks:** without Kaggle keys, the moving shots fall back to their pan shots and the score to the last chosen track (ADR 0001, 0002). A job that failed isn't resent with the same inputs; to try again, delete `outputs/moving/job/failed.json`.

@@ -1,4 +1,9 @@
 {
+  "00c82d7bedae824ec0b2b6afb180eddb1625221ce96d9186a0f8079edd141a21": {
+    "item": "shot-04",
+    "path": "outputs/moving/shot-04-00c82d7bedae.mp4",
+    "stage": "moving"
+  },
   "02d06f9d1bde52d21d7240fd7daf1619f0c75e46f93ccbd1b00ad85343694fb6": {
     "item": "shot-08",
     "path": "outputs/keyframes/shot-08-02d06f9d1bde.jpg",
@@ -29,6 +34,11 @@
     "path": "outputs/script/tomorrow-1-0d28989d3c51.json",
     "stage": "script"
   },
+  "0d6c800fdafcae8d83e294bacadce5095c0854993e6ac2444fe8af7940a44f78": {
+    "item": "shot-05",
+    "path": "outputs/moving/shot-05-0d6c800fdafc.mp4",
+    "stage": "moving"
+  },
   "0da6fade42a366c95419d7a48a70b50a879e062b92a0f3567d681a5ac7f778c4": {
     "item": "closing-03",
     "path": "outputs/narration/closing-03-enceladus-0da6fade42a3.wav",
@@ -53,6 +63,11 @@
     "item": "closing-01",
     "path": "outputs/narration/closing-01-16151abe1838.wav",
     "stage": "narration"
+  },
+  "177a6adca78faa1f7bd0ea058ace080c3916168809f8b9b2061de41ce456ac8b": {
+    "item": "shot-11",
+    "path": "outputs/moving/shot-11-177a6adca78f.mp4",
+    "stage": "moving"
   },
   "1872d93e3176ff47f175fdcd093fd81a00abded1c4216950cb2a8490b71e1127": {
     "item": "shot-05",

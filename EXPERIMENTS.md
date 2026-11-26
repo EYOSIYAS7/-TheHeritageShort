@@ -112,5 +112,12 @@ All three still pass the timing check.
 ## E12. Moving shots vs pan shots (2026-11-26)
 
 - **Plan (ADR 0001):** compare Wan 2.2 TI2V-5B clips against the pan shots of the same three shots (4 the pour, 5 the jebena falls, 11 the hand-hold).
-- **Result:** no comparison was possible, because no clip came back. Both Kaggle T4 attempts failed on memory (FAILURES.md F10). The first ran out of GPU memory at 121 frames; with group offloading and 81 frames, the second ran out of CPU memory.
-- **What the film uses:** the pan shots for all three shots, through the planned fallback, logged as `fallback` lines. The deadline rule (finish over polish) stopped a third attempt.
+- **Result:** the first two Kaggle T4 attempts failed on memory, and the third worked: encode the prompts first, then free the text encoder (FAILURES.md F10). All three clips came back at 832×480, 3.4 s each, about 15 min of T4 time per clip.
+- **Comparison, first and last frame of each clip against its pan shot:**
+  - **Shot 4:** the Father's hand moves to the jebena; the pan only drifts toward the cups.
+  - **Shot 5:** a cup tips and the spill spreads across the mat. This is the fall itself, which the pan could only imply.
+  - **Shot 11:** the hands close and the faces shift slightly.
+- **Costs:**
+  - **Resolution:** 480p clips are upscaled about 2.3× for 16:9, and about 4× from a 270-pixel-wide crop for 9:16, so they're softer than the pan shots.
+  - **Length:** clips are 3.4 s, so shorter shots hold the last frame briefly, and shot 11 (13.7 s) moves for 3.4 s and then holds still for about 10 s.
+- **Kept:** the movement in shots 5 and 11 carries the story's two turning points; by the deadline rule, no second pass.

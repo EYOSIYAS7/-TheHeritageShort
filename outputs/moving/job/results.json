@@ -3,7 +3,22 @@
   "gpu": "Tesla T4",
   "transformer_dtype": "torch.float16"
  },
+ "_encode": {
+  "seconds": 110.4
+ },
  "_load": {
-  "seconds": 295.9
+  "seconds": 297.5
+ },
+ "shot-04": {
+  "file": "shot-04.mp4",
+  "seconds": 889.9
+ },
+ "shot-05": {
+  "file": "shot-05.mp4",
+  "seconds": 877.0
+ },
+ "shot-11": {
+  "file": "shot-11.mp4",
+  "seconds": 874.9
  }
 }
