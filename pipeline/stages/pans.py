@@ -45,7 +45,7 @@ def render(shot: Shot, keyframe: Path | None, aspect: Aspect, out_dir: Path) -> 
               "-pix_fmt", "yuv420p", str(out)]
 
     if keyframe is None:
-        label = f"Shot {shot.id}: keyframe missing"
+        label = f"Shot {shot.id} - keyframe missing"  # no colon: it would end the drawtext option
         run_ffmpeg(["-f", "lavfi", "-i", f"color=c=0x202020:s={width}x{height}:r={FPS}",
                     "-vf", f"drawtext=font='Noto Sans':text='{label}':fontcolor=0xBBBBBB:fontsize={height // 24}"
                            ":x=(w-text_w)/2:y=(h-text_h)/2", *encode])

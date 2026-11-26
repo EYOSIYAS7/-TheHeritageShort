@@ -33,3 +33,8 @@ def write_tone_wav(path: Path, duration_s: float, *, freq_hz: float = 220.0, amp
         w.setsampwidth(2)
         w.setframerate(TTS_SAMPLE_RATE)
         w.writeframes(bytes(frames))
+
+
+def filter_path(path: Path) -> str:
+    """A path inside a quoted FFmpeg filter argument: escape the characters FFmpeg treats specially."""
+    return str(path).replace("\\", "\\\\").replace("'", "\\'").replace(":", "\\:")

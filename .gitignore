@@ -16,3 +16,22 @@ __pycache__/
 
 # rendered pan clips: rebuilt locally from the committed keyframes (no model calls)
 outputs/shots/
+outputs/cards/
+# working cuts (user tests): rebuilt locally with `make radio-cut` / `make rough-cut`, no model calls
+outputs/film/radio-cut-*
+outputs/film/rough-cut-*
+
+# Media is never committed: the repo holds code, text, logs and docs only.
+# Generated media lives in outputs/ locally; the cache manifest (text) records it.
+*.mp4
+*.mov
+*.webm
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.gif

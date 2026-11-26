@@ -16,7 +16,7 @@ import pytest
 
 from pipeline import run
 from pipeline.runlog import PermanentError
-from pipeline.storyboard import StoryboardError
+from pipeline.storyboard import Aspect, StoryboardError
 from tests.conftest import FakeSpeech, Project, no_sleep, providers
 
 REQUIRED_LOG_FIELDS = {"ts", "stage", "item", "model", "params", "seed", "latency_s", "cost_usd", "cache", "attempt", "outcome"}
@@ -256,3 +256,37 @@ def test_line_that_overlaps_the_next_fails_naming_both_lines_and_the_overrun(pro
         build(project, FakeSpeech())
 
     assert "narration line 'a' (1.00 s of audio) overlaps line 'b' by 0.60 s" in str(err.value)
+
+
+# --- the final film ---------------------------------------------------------------------------
+
+
+def test_final_film_refuses_unreviewed_amharic_before_any_speech_call(project: Project) -> None:
+    speech = FakeSpeech()
+
+    with pytest.raises(StoryboardError) as err:
+        run.film(project.root, providers(speech), cut="film", sleep=no_sleep)
+
+    assert "narration line 'a': Amharic not reviewed yet" in str(err.value)
+    assert speech.calls == []
+
+
+def test_final_film_exports_16x9_and_9x16_with_cards_at_the_storyboard_length(project: Project) -> None:
+    def review_all(d: dict[str, Any]) -> None:
+        for line in d["narration"]:
+            line["am"] = line["am"] or "ሙከራ"
+            line["am_reviewed"] = True
+
+    project.edit(review_all)
+
+    result = run.film(project.root, providers(FakeSpeech()), cut="film", sleep=no_sleep)
+
+    sizes: dict[Aspect, tuple[int, int]] = {"16:9": (1920, 1080), "9:16": (1080, 1920)}
+    for aspect, size in sizes.items():
+        info = ffprobe(result.videos[aspect])
+        video = [s for s in info["streams"] if s["codec_type"] == "video"]
+        audio = [s for s in info["streams"] if s["codec_type"] == "audio"]
+        assert (video[0]["width"], video[0]["height"]) == size
+        assert len(audio) == 1
+        # 3 x 20 s shots (labelled placeholders: no image keys) + 4 s saying card + 3 s end card
+        assert float(info["format"]["duration"]) == pytest.approx(67.0, abs=0.1)

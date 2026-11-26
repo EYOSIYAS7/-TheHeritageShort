@@ -21,7 +21,7 @@ from pipeline.runlog import RunLog
 from pipeline.storyboard import ASPECTS, Aspect, StoryboardError
 
 Cut = Literal["film", "rough-cut", "radio-cut"]
-from pipeline.stages import assemble, characters, keyframes, narration, pans, script, voices
+from pipeline.stages import assemble, cards, characters, keyframes, narration, pans, script, voices
 
 
 def voice_trial(root: Path, providers: Providers, *, sleep: Callable[[float], None] = time.sleep) -> dict[str, Path]:
@@ -72,15 +72,17 @@ def film(root: Path, providers: Providers, *, cut: Cut = "film",
     audio = narration.run(board, providers.speech, cache, log, outputs)
     placed = timing.place(board, audio)
     timing.check(board, placed)
+    card_clips = cards.run(board, outputs)
     if cut == "radio-cut":
-        video = assemble.run(board, placed, outputs, name=cut, aspect="16:9", clips=None)
+        video = assemble.run(board, placed, outputs, name=cut, aspect="16:9", clips=None, cards=card_clips["16:9"])
         return FilmResult(videos={"16:9": video}, duration_s=board.total_s, missing_keyframes=[],
                           drafted=drafts.drafted, undrafted=drafts.undrafted)
 
     sheet = characters.run(board, providers.image, cache, log, outputs)
     frames = keyframes.run(board, providers.image, sheet, cache, log, outputs)
     clips = pans.run(board, frames, outputs)
-    videos = {aspect: assemble.run(board, placed, outputs, name=cut, aspect=aspect, clips=clips[aspect])
+    videos = {aspect: assemble.run(board, placed, outputs, name=cut, aspect=aspect, clips=clips[aspect],
+                                   cards=card_clips[aspect])
               for aspect in ASPECTS}
     return FilmResult(videos=videos, duration_s=board.total_s,
                       missing_keyframes=[s.id for s in board.shots if s.id not in frames],

@@ -110,6 +110,11 @@ class Storyboard:
     characters: dict[str, Character]
     saying_card_s: float
     end_card_s: float
+    saying_am: str
+    saying_en: str
+    title_am: str
+    title_en: str
+    end_card_text: str
     music_volume: list[tuple[float, float]]  # (time s, gain) points; the gain is linear between them
 
     @property
@@ -275,5 +280,10 @@ def _to_storyboard(raw: dict[str, Any]) -> Storyboard:
                           trial_line=narrator["voice_trial"]["line"], trial_voices=narrator["voice_trial"]["voices"]),
         saying_card_s=float(raw["saying"]["duration_s"]),
         end_card_s=float(raw["end_card"]["duration_s"]),
+        saying_am=raw["saying"]["am"],
+        saying_en=raw["saying"]["en"],
+        title_am=raw["title"]["am"],
+        title_en=raw["title"]["en"],
+        end_card_text=raw["end_card"]["text"],
         music_volume=[(float(p["t_s"]), float(p["gain"])) for p in raw["music"]["volume_points"]],
     )
